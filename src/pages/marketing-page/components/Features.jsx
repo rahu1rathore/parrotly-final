@@ -18,8 +18,8 @@ const items = [
     title: "Dashboard",
     description:
       "This item could provide a snapshot of the most important metrics or data points related to the product.",
-    imageLight: `url("${process.env.TEMPLATE_IMAGE_URL || "https://mui.com"}/static/images/templates/templates-images/dash-light.png")`,
-    imageDark: `url("${process.env.TEMPLATE_IMAGE_URL || "https://mui.com"}/static/images/templates/templates-images/dash-dark.png")`,
+    imageLight: `url("${import.meta.env.VITE_TEMPLATE_IMAGE_URL || "https://mui.com"}/static/images/templates/templates-images/dash-light.png")`,
+    imageDark: `url("${import.meta.env.VITE_TEMPLATE_IMAGE_URL || "https://mui.com"}/static/images/templates/templates-images/dash-dark.png")`,
   },
   {
     icon: <EdgesensorHighRoundedIcon />,
