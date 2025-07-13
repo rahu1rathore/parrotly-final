@@ -175,7 +175,12 @@ const AdminOverview: React.FC = () => {
         <Typography variant="h5" gutterBottom>
           Quick Actions
         </Typography>
-        <Typography variant="body2" color="text.secondary" paragraph>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          paragraph
+          component="div"
+        >
           Commonly used administrative tasks
         </Typography>
 
