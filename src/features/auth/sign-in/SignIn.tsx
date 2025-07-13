@@ -68,11 +68,13 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignIn(props: { disableCustomTheme?: boolean }) {
+  const navigate = useNavigate();
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
   const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -83,15 +85,41 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     if (emailError || passwordError) {
-      event.preventDefault();
       return;
     }
+
+    if (!validateInputs()) {
+      return;
+    }
+
+    setLoading(true);
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    const email = data.get("email") as string;
+    const password = data.get("password") as string;
+
+    // Mock authentication - replace with actual API call
+    setTimeout(() => {
+      // Simulate successful login
+      localStorage.setItem("authToken", "mock-token-" + Date.now());
+      localStorage.setItem("userEmail", email);
+
+      // Redirect to dashboard or admin panel based on email
+      if (email.includes("admin") || email === "admin@example.com") {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
+      setLoading(false);
+    }, 1000);
+  };
+
+  const handleAdminAccess = () => {
+    // Direct admin access for demo purposes
+    localStorage.setItem("authToken", "admin-demo-token-" + Date.now());
+    localStorage.setItem("userEmail", "admin@demo.com");
+    navigate("/admin");
   };
 
   const validateInputs = () => {
