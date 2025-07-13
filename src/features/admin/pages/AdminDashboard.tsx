@@ -12,6 +12,7 @@ import AdminHeader from "../components/AdminHeader";
 import AdminSideMenu from "../components/AdminSideMenu";
 import ModuleManagement from "../components/ModuleManagement";
 import SubscriptionManagement from "../components/SubscriptionManagement";
+import OrganizationManagement from "../components/OrganizationManagement";
 import AdminOverview from "../components/AdminOverview";
 import AppTheme from "../../../themes/AppTheme";
 import {
