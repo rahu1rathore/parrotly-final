@@ -39,6 +39,16 @@ const StyledBox = styled("div")(({ theme }) => ({
 }));
 
 export default function Hero() {
+  const navigate = useNavigate();
+
+  const handleDemoAccess = () => {
+    navigate("/demo");
+  };
+
+  const handleGetStarted = () => {
+    navigate("/login");
+  };
+
   return (
     <Box
       id="hero"
