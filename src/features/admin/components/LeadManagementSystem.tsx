@@ -45,6 +45,7 @@ import {
   taskAPI,
   agentAPI,
   bulkUploadAPI,
+  activityLogAPI,
 } from "../services/api";
 
 interface NotificationState {
