@@ -18,6 +18,7 @@ import BusinessRoundedIcon from "@mui/icons-material/BusinessRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
 import MessageRoundedIcon from "@mui/icons-material/MessageRounded";
+import CampaignRoundedIcon from "@mui/icons-material/CampaignRounded";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import HelpOutlineRoundedIcon from "@mui/icons-material/HelpOutlineRounded";
 import ExitToAppRoundedIcon from "@mui/icons-material/ExitToAppRounded";
