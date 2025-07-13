@@ -223,9 +223,20 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
               type="submit"
               fullWidth
               variant="contained"
-              onClick={validateInputs}
+              disabled={loading}
             >
-              Sign in
+              {loading ? "Signing in..." : "Sign in"}
+            </Button>
+            <Button
+              fullWidth
+              variant="outlined"
+              color="secondary"
+              startIcon={<AdminPanelSettingsIcon />}
+              onClick={handleAdminAccess}
+              disabled={loading}
+              sx={{ mt: 1 }}
+            >
+              Admin Demo Access
             </Button>
             <Link
               component="button"
