@@ -260,6 +260,21 @@ export default function LeadManagementSystem() {
     }
   };
 
+  const handleUnassignLead = async (leadId: string) => {
+    try {
+      setActionLoading(true);
+      await leadAPI.update(leadId, { assignedTo: undefined });
+      // Refresh leads to get updated assignments
+      const updatedLeads = await leadAPI.getAll();
+      setLeads(updatedLeads);
+      showNotification("Lead unassigned successfully!", "success");
+    } catch (error) {
+      showNotification("Failed to unassign lead", "error");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   const handleLeadFilterChange = async (filter: LeadFilter) => {
     try {
       const filteredLeads = await leadAPI.getAll(filter);
