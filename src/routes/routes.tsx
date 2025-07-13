@@ -67,6 +67,14 @@ export default function AppRoutes() {
 
       {/* Protected routes */}
       <Route
+        path="/admin"
+        element={
+          <RouteGuard requireAuth={true}>
+            <AdminDashboard />
+          </RouteGuard>
+        }
+      />
+      <Route
         path="/*"
         element={
           <RouteGuard requireAuth={true}>
