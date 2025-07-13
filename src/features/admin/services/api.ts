@@ -2,8 +2,10 @@ import api from "../../../lib/axios";
 import {
   Module,
   Subscription,
+  Organization,
   ModuleFormData,
   SubscriptionFormData,
+  OrganizationFormData,
 } from "../types";
 
 // Module API endpoints
