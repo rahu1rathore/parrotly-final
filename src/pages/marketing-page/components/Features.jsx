@@ -26,8 +26,8 @@ const items = [
     title: "Mobile integration",
     description:
       "This item could provide information about the mobile app version of the product.",
-    imageLight: `url("${process.env.TEMPLATE_IMAGE_URL || "https://mui.com"}/static/images/templates/templates-images/mobile-light.png")`,
-    imageDark: `url("${process.env.TEMPLATE_IMAGE_URL || "https://mui.com"}/static/images/templates/templates-images/mobile-dark.png")`,
+    imageLight: `url("${import.meta.env.VITE_TEMPLATE_IMAGE_URL || "https://mui.com"}/static/images/templates/templates-images/mobile-light.png")`,
+    imageDark: `url("${import.meta.env.VITE_TEMPLATE_IMAGE_URL || "https://mui.com"}/static/images/templates/templates-images/mobile-dark.png")`,
   },
   {
     icon: <DevicesRoundedIcon />,
