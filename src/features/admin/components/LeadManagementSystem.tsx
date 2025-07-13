@@ -250,12 +250,96 @@ export default function LeadManagementSystem() {
     }
   };
 
-  const handleLeadFilterChange = async (filter: any) => {
+  const handleLeadFilterChange = async (filter: LeadFilter) => {
     try {
       const filteredLeads = await leadAPI.getAll(filter);
       setLeads(filteredLeads);
     } catch (error) {
       showNotification("Failed to filter leads", "error");
+    }
+  };
+
+  const handleBulkUpload = async (
+    file: File,
+    campaignId: string,
+    fieldMapping: Record<string, string>,
+  ): Promise<BulkUploadResult> => {
+    try {
+      const result = await bulkUploadAPI.upload(file, campaignId);
+      // Refresh leads after upload
+      await loadAllData();
+      showNotification(
+        `Bulk upload completed! ${result.successCount} leads imported successfully.`,
+        result.errorCount > 0 ? "warning" : "success",
+      );
+      return result;
+    } catch (error) {
+      showNotification("Bulk upload failed", "error");
+      throw error;
+    }
+  };
+
+  const handleBulkDownload = async (
+    format: "csv" | "excel",
+    filters: LeadFilter,
+    fields: string[],
+  ) => {
+    try {
+      // Get filtered leads
+      const leadsToExport = await leadAPI.getAll(filters);
+
+      // Prepare CSV content
+      const headers = fields;
+      const rows = leadsToExport.map((lead) => {
+        return fields.map((field) => {
+          switch (field) {
+            case "phoneNumber":
+              return lead.phoneNumber;
+            case "status":
+              return lead.status;
+            case "priority":
+              return lead.priority;
+            case "source":
+              return lead.source;
+            case "campaignName":
+              return lead.campaignName || "";
+            case "assignedTo":
+              return agents.find((a) => a.id === lead.assignedTo)?.name || "";
+            case "createdDate":
+              return lead.createdDate;
+            default:
+              return lead.data[field] || "";
+          }
+        });
+      });
+
+      // Create CSV content
+      const csvContent = [
+        headers.join(","),
+        ...rows.map((row) => row.map((cell) => `"${cell}"`).join(",")),
+      ].join("\n");
+
+      // Download file
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute(
+        "download",
+        `leads_export_${new Date().toISOString().split("T")[0]}.${format}`,
+      );
+      link.style.visibility = "hidden";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      showNotification(
+        `${leadsToExport.length} leads exported successfully!`,
+        "success",
+      );
+    } catch (error) {
+      showNotification("Export failed", "error");
+      throw error;
     }
   };
 
