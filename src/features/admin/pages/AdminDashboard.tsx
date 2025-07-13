@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import type {} from "@mui/x-date-pickers/themeAugmentation";
-import type {} from "@mui/x-charts/themeAugmentation";
 import type {} from "@mui/x-data-grid-pro/themeAugmentation";
 import type {} from "@mui/x-tree-view/themeAugmentation";
 import { alpha } from "@mui/material/styles";
