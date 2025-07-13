@@ -58,7 +58,9 @@ import {
   DynamicForm,
   Agent,
   LeadStats,
+  BulkUploadResult,
 } from "../types";
+import BulkLeadOperations from "./BulkLeadOperations";
 
 interface LeadManagementProps {
   leads: Lead[];
