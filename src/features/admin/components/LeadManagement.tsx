@@ -392,18 +392,14 @@ export default function LeadManagement({
             <Button
               variant="outlined"
               startIcon={<UploadIcon />}
-              onClick={() => {
-                /* Open bulk upload */
-              }}
+              onClick={() => setBulkUploadOpen(true)}
             >
               Bulk Upload
             </Button>
             <Button
               variant="outlined"
               startIcon={<DownloadIcon />}
-              onClick={() => {
-                /* Export leads */
-              }}
+              onClick={() => setBulkDownloadOpen(true)}
             >
               Export
             </Button>
