@@ -133,4 +133,48 @@ export interface CustomerFormData {
   data: { [key: string]: any };
 }
 
+export interface ChatUser {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  avatar?: string;
+  status: "online" | "offline" | "away";
+  last_seen?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  chat_id: string;
+  sender_id: string;
+  sender_type: "admin" | "user";
+  message: string;
+  timestamp: string;
+  read: boolean;
+  message_type: "text" | "image" | "file";
+  attachment_url?: string;
+}
+
+export interface Chat {
+  id: string;
+  user_id: string;
+  user_name: string;
+  user_avatar?: string;
+  last_message?: string;
+  last_message_time?: string;
+  unread_count: number;
+  messages: ChatMessage[];
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface ChatUserFormData {
+  name: string;
+  email: string;
+  phone: string;
+  avatar: string;
+}
+
 export type FilterStatus = "all" | "active" | "inactive";
