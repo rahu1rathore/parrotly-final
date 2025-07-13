@@ -15,6 +15,7 @@ export default function AdminNavbarBreadcrumbs() {
     admin: "Admin",
     modules: "Module Management",
     subscriptions: "Subscriptions",
+    organizations: "Organizations",
     analytics: "Analytics",
     users: "Users",
     settings: "Settings",
