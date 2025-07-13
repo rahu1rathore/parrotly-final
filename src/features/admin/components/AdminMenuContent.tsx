@@ -31,6 +31,11 @@ const mainListItems = [
     path: "/admin/subscriptions",
   },
   {
+    text: "Organizations",
+    icon: <BusinessRoundedIcon />,
+    path: "/admin/organizations",
+  },
+  {
     text: "Analytics",
     icon: <AnalyticsRoundedIcon />,
     path: "/admin/analytics",
