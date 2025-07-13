@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
 import AppRoutes from "../routes/routes";
