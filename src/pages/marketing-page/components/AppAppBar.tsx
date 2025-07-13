@@ -103,8 +103,22 @@ export default function AppAppBar() {
               alignItems: "center",
             }}
           >
-            <Button color="primary" variant="text" size="small">
+            <Button
+              color="primary"
+              variant="text"
+              size="small"
+              onClick={handleSignIn}
+            >
               Sign in
+            </Button>
+            <Button
+              color="secondary"
+              variant="outlined"
+              size="small"
+              startIcon={<AdminPanelSettingsIcon />}
+              onClick={handleAdminAccess}
+            >
+              Admin
             </Button>
             <Button color="primary" variant="contained" size="small">
               Sign up
