@@ -16,14 +16,13 @@ import SubscriptionManagement from "../components/SubscriptionManagement";
 import AdminOverview from "../components/AdminOverview";
 import AppTheme from "../../../themes/AppTheme";
 import {
-  chartsCustomizations,
   dataGridCustomizations,
   datePickersCustomizations,
   treeViewCustomizations,
 } from "../../dashboard/theme/customizations";
 
+// Exclude chart customizations to avoid prop warnings since we don't use charts in admin
 const xThemeComponents = {
-  ...chartsCustomizations,
   ...dataGridCustomizations,
   ...datePickersCustomizations,
   ...treeViewCustomizations,
