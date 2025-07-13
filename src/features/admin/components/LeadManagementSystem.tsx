@@ -171,6 +171,91 @@ export default function LeadManagementSystem() {
     showNotification(`Viewing campaign: ${campaign.name}`, "info");
   };
 
+  // Lead handlers
+  const handleCreateLead = async (leadData: LeadFormData) => {
+    try {
+      setActionLoading(true);
+      const newLead = await leadAPI.create(leadData);
+      setLeads((prev) => [newLead, ...prev]);
+      showNotification("Lead created successfully!", "success");
+    } catch (error) {
+      showNotification("Failed to create lead", "error");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleUpdateLead = async (
+    id: string,
+    leadData: Partial<LeadFormData>,
+  ) => {
+    try {
+      setActionLoading(true);
+      const updatedLead = await leadAPI.update(id, leadData);
+      setLeads((prev) => prev.map((l) => (l.id === id ? updatedLead : l)));
+      showNotification("Lead updated successfully!", "success");
+    } catch (error) {
+      showNotification("Failed to update lead", "error");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleDeleteLead = async (id: string) => {
+    try {
+      setActionLoading(true);
+      await leadAPI.delete(id);
+      setLeads((prev) => prev.filter((l) => l.id !== id));
+      showNotification("Lead deleted successfully", "success");
+    } catch (error) {
+      showNotification("Failed to delete lead", "error");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleAssignLead = async (leadId: string, agentId: string) => {
+    try {
+      setActionLoading(true);
+      await leadAPI.assign(leadId, agentId);
+      // Refresh leads to get updated assignment
+      const updatedLeads = await leadAPI.getAll();
+      setLeads(updatedLeads);
+      showNotification("Lead assigned successfully!", "success");
+    } catch (error) {
+      showNotification("Failed to assign lead", "error");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleBulkAssign = async (leadIds: string[], agentId: string) => {
+    try {
+      setActionLoading(true);
+      await leadAPI.bulkAssign(leadIds, agentId);
+      // Refresh leads to get updated assignments
+      const updatedLeads = await leadAPI.getAll();
+      setLeads(updatedLeads);
+      showNotification(
+        `${leadIds.length} leads assigned successfully!`,
+        "success",
+      );
+    } catch (error) {
+      showNotification("Failed to assign leads", "error");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleLeadFilterChange = async (filter: any) => {
+    try {
+      const filteredLeads = await leadAPI.getAll(filter);
+      setLeads(filteredLeads);
+    } catch (error) {
+      showNotification("Failed to filter leads", "error");
+    }
+  };
+
   // Dynamic Form handlers
   const handleCreateForm = async (formData: Partial<DynamicForm>) => {
     try {
