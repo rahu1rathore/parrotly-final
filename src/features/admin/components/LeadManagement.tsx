@@ -75,6 +75,16 @@ interface LeadManagementProps {
   onAssignLead: (leadId: string, agentId: string) => void;
   onBulkAssign: (leadIds: string[], agentId: string) => void;
   onFilterChange: (filter: LeadFilter) => void;
+  onBulkUpload: (
+    file: File,
+    campaignId: string,
+    fieldMapping: Record<string, string>,
+  ) => Promise<BulkUploadResult>;
+  onBulkDownload: (
+    format: "csv" | "excel",
+    filters: LeadFilter,
+    fields: string[],
+  ) => void;
   onRefresh?: () => void;
 }
 
