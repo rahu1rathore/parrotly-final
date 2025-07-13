@@ -36,6 +36,7 @@ const getPageTitle = (pathname: string) => {
   if (pathname.includes("/subscriptions")) return "Subscription Management";
   if (pathname.includes("/organizations")) return "Organization Management";
   if (pathname.includes("/customers")) return "Customer Management";
+  if (pathname.includes("/chat")) return "Admin Chat";
   if (pathname.includes("/analytics")) return "Analytics Dashboard";
   if (pathname.includes("/users")) return "User Management";
   if (pathname.includes("/settings")) return "Admin Settings";
@@ -51,6 +52,8 @@ const getPageSubtitle = (pathname: string) => {
     return "Manage organizations and their information";
   if (pathname.includes("/customers"))
     return "Manage customers with dynamic forms and configurations";
+  if (pathname.includes("/chat"))
+    return "Communicate with customers through WhatsApp-style interface";
   if (pathname.includes("/analytics"))
     return "View analytics and performance metrics";
   if (pathname.includes("/users"))
