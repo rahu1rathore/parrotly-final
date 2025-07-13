@@ -80,4 +80,57 @@ export interface OrganizationFormData {
   subscription_id: string;
 }
 
+export interface FormField {
+  id: string;
+  name: string;
+  label: string;
+  type:
+    | "text"
+    | "email"
+    | "phone"
+    | "number"
+    | "date"
+    | "select"
+    | "textarea"
+    | "boolean";
+  required: boolean;
+  options?: string[]; // For select fields
+  placeholder?: string;
+  validation?: {
+    minLength?: number;
+    maxLength?: number;
+    pattern?: string;
+  };
+  order: number;
+}
+
+export interface FormConfiguration {
+  id: string;
+  organization_id: string;
+  organization_name?: string;
+  name: string;
+  description?: string;
+  fields: FormField[];
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface Customer {
+  id: string;
+  organization_id: string;
+  organization_name?: string;
+  form_configuration_id: string;
+  phone_number: string; // Always present, special handling
+  data: { [key: string]: any }; // Dynamic fields based on form configuration
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface CustomerFormData {
+  organization_id: string;
+  form_configuration_id: string;
+  phone_number: string;
+  data: { [key: string]: any };
+}
+
 export type FilterStatus = "all" | "active" | "inactive";
