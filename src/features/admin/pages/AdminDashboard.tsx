@@ -1,161 +1,105 @@
-import React, { useState } from "react";
-import {
-  Box,
-  Container,
-  Tabs,
-  Tab,
-  Paper,
-  Typography,
-  Breadcrumbs,
-  Link,
-} from "@mui/material";
-import {
-  Dashboard as DashboardIcon,
-  Extension as ModuleIcon,
-  Subscriptions as SubscriptionIcon,
-} from "@mui/icons-material";
+import * as React from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
+import type {} from "@mui/x-date-pickers/themeAugmentation";
+import type {} from "@mui/x-charts/themeAugmentation";
+import type {} from "@mui/x-data-grid-pro/themeAugmentation";
+import type {} from "@mui/x-tree-view/themeAugmentation";
+import { alpha } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import AdminAppNavbar from "../components/AdminAppNavbar";
+import AdminHeader from "../components/AdminHeader";
+import AdminSideMenu from "../components/AdminSideMenu";
 import ModuleManagement from "../components/ModuleManagement";
 import SubscriptionManagement from "../components/SubscriptionManagement";
+import AdminOverview from "../components/AdminOverview";
+import AppTheme from "../../../themes/AppTheme";
+import {
+  chartsCustomizations,
+  dataGridCustomizations,
+  datePickersCustomizations,
+  treeViewCustomizations,
+} from "../../dashboard/theme/customizations";
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`admin-tabpanel-${index}`}
-      aria-labelledby={`admin-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box sx={{ py: 3 }}>{children}</Box>}
-    </div>
-  );
-}
-
-function a11yProps(index: number) {
-  return {
-    id: `admin-tab-${index}`,
-    "aria-controls": `admin-tabpanel-${index}`,
-  };
-}
-
-const AdminDashboard: React.FC = () => {
-  const [currentTab, setCurrentTab] = useState(0);
-
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    setCurrentTab(newValue);
-  };
-
-  return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
-      {/* Breadcrumbs */}
-      <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 3 }}>
-        <Link underline="hover" color="inherit" href="/">
-          Home
-        </Link>
-        <Typography color="text.primary">Admin Panel</Typography>
-      </Breadcrumbs>
-
-      {/* Header */}
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h3" component="h1" gutterBottom fontWeight="bold">
-          Admin Panel
-        </Typography>
-        <Typography variant="body1" color="text.secondary">
-          Manage modules, subscriptions, and system configurations
-        </Typography>
-      </Box>
-
-      {/* Navigation Tabs */}
-      <Paper sx={{ mb: 3 }}>
-        <Tabs
-          value={currentTab}
-          onChange={handleTabChange}
-          variant="scrollable"
-          scrollButtons="auto"
-          sx={{ px: 2 }}
-        >
-          <Tab
-            label="Overview"
-            icon={<DashboardIcon />}
-            iconPosition="start"
-            {...a11yProps(0)}
-          />
-          <Tab
-            label="Module Management"
-            icon={<ModuleIcon />}
-            iconPosition="start"
-            {...a11yProps(1)}
-          />
-          <Tab
-            label="Subscription Management"
-            icon={<SubscriptionIcon />}
-            iconPosition="start"
-            {...a11yProps(2)}
-          />
-        </Tabs>
-      </Paper>
-
-      {/* Tab Panels */}
-      <TabPanel value={currentTab} index={0}>
-        <Box>
-          <Typography variant="h4" gutterBottom>
-            Admin Overview
-          </Typography>
-          <Typography variant="body1" color="text.secondary" paragraph>
-            Welcome to the admin panel. Use the tabs above to navigate between
-            different management sections.
-          </Typography>
-
-          <Box
-            sx={{
-              mt: 4,
-              display: "grid",
-              gap: 3,
-              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            }}
-          >
-            <Paper sx={{ p: 3, textAlign: "center" }}>
-              <ModuleIcon sx={{ fontSize: 48, color: "primary.main", mb: 2 }} />
-              <Typography variant="h6" gutterBottom>
-                Module Management
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Create, edit, and manage system modules with activation controls
-              </Typography>
-            </Paper>
-
-            <Paper sx={{ p: 3, textAlign: "center" }}>
-              <SubscriptionIcon
-                sx={{ fontSize: 48, color: "primary.main", mb: 2 }}
-              />
-              <Typography variant="h6" gutterBottom>
-                Subscription Management
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Configure subscription plans with module permissions and pricing
-              </Typography>
-            </Paper>
-          </Box>
-        </Box>
-      </TabPanel>
-
-      <TabPanel value={currentTab} index={1}>
-        <ModuleManagement />
-      </TabPanel>
-
-      <TabPanel value={currentTab} index={2}>
-        <SubscriptionManagement />
-      </TabPanel>
-    </Container>
-  );
+const xThemeComponents = {
+  ...chartsCustomizations,
+  ...dataGridCustomizations,
+  ...datePickersCustomizations,
+  ...treeViewCustomizations,
 };
 
-export default AdminDashboard;
+// Page titles based on route
+const getPageTitle = (pathname: string) => {
+  if (pathname.includes("/modules")) return "Module Management";
+  if (pathname.includes("/subscriptions")) return "Subscription Management";
+  if (pathname.includes("/analytics")) return "Analytics Dashboard";
+  if (pathname.includes("/users")) return "User Management";
+  if (pathname.includes("/settings")) return "Admin Settings";
+  return "Admin Overview";
+};
+
+const getPageSubtitle = (pathname: string) => {
+  if (pathname.includes("/modules"))
+    return "Create, edit, and manage system modules";
+  if (pathname.includes("/subscriptions"))
+    return "Configure subscription plans and pricing";
+  if (pathname.includes("/analytics"))
+    return "View analytics and performance metrics";
+  if (pathname.includes("/users"))
+    return "Manage user accounts and permissions";
+  if (pathname.includes("/settings")) return "Configure admin panel settings";
+  return "Manage your application settings and configurations";
+};
+
+export default function AdminDashboard() {
+  const location = useLocation();
+  const pageTitle = getPageTitle(location.pathname);
+  const pageSubtitle = getPageSubtitle(location.pathname);
+
+  return (
+    <AppTheme themeComponents={xThemeComponents}>
+      <CssBaseline enableColorScheme />
+      <Box sx={{ display: "flex", height: "100vh" }}>
+        <AdminSideMenu />
+        <AdminAppNavbar />
+        {/* Main content */}
+        <Box
+          component="main"
+          sx={(theme) => ({
+            flexGrow: 1,
+            backgroundColor: theme.vars
+              ? `rgba(${theme.vars.palette.background.defaultChannel} / 1)`
+              : alpha(theme.palette.background.default, 1),
+            overflow: "auto",
+          })}
+        >
+          <Stack
+            spacing={2}
+            sx={{
+              alignItems: "center",
+              mx: 3,
+              pb: 5,
+              mt: { xs: 8, md: 0 },
+            }}
+          >
+            <AdminHeader title={pageTitle} subtitle={pageSubtitle} />
+            <Routes>
+              <Route index element={<AdminOverview />} />
+              <Route path="modules" element={<ModuleManagement />} />
+              <Route
+                path="subscriptions"
+                element={<SubscriptionManagement />}
+              />
+              <Route path="analytics" element={<AdminOverview />} />
+              <Route path="users" element={<AdminOverview />} />
+              <Route path="settings" element={<AdminOverview />} />
+              <Route path="help" element={<AdminOverview />} />
+              <Route path="profile" element={<AdminOverview />} />
+            </Routes>
+          </Stack>
+        </Box>
+      </Box>
+    </AppTheme>
+  );
+}
