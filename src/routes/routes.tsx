@@ -65,6 +65,7 @@ export default function AppRoutes() {
       <Route path="/marketing" element={<MarketingPage />} />
       <Route path="/blog" element={<Blog />} />
       <Route path="/checkout" element={<Checkout />} />
+      <Route path="/demo" element={<DemoAccess />} />
 
       {/* Protected routes */}
       <Route
