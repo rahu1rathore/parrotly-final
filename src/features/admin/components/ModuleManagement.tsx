@@ -323,7 +323,12 @@ const ModuleManagement: React.FC<ModuleManagementProps> = ({
             {filteredModules.length === 0 && (
               <TableRow>
                 <TableCell colSpan={5} align="center">
-                  <Typography variant="body2" color="text.secondary" py={4}>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    py={4}
+                    component="div"
+                  >
                     {searchTerm || filterStatus !== "all"
                       ? "No modules found matching your criteria"
                       : "No modules available. Create your first module to get started."}
