@@ -109,6 +109,7 @@ export default function LeadManagementSystem() {
       setLeads(leadsData);
       setTasks(tasksData);
       setAgents(agentsData);
+      setActivityLogs(activityLogsData);
       setCampaignStats(campaignStatsData);
       setLeadStats(leadStatsData);
     } catch (error) {
