@@ -165,8 +165,24 @@ export default function AppAppBar() {
                   </Button>
                 </MenuItem>
                 <MenuItem>
-                  <Button color="primary" variant="outlined" fullWidth>
+                  <Button
+                    color="primary"
+                    variant="outlined"
+                    fullWidth
+                    onClick={handleSignIn}
+                  >
                     Sign in
+                  </Button>
+                </MenuItem>
+                <MenuItem>
+                  <Button
+                    color="secondary"
+                    variant="outlined"
+                    fullWidth
+                    startIcon={<AdminPanelSettingsIcon />}
+                    onClick={handleAdminAccess}
+                  >
+                    Admin Panel
                   </Button>
                 </MenuItem>
               </Box>
