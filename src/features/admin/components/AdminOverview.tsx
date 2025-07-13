@@ -228,7 +228,12 @@ const AdminOverview: React.FC = () => {
         <Typography variant="h5" gutterBottom>
           Recent Activity
         </Typography>
-        <Typography variant="body2" color="text.secondary" paragraph>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          paragraph
+          component="div"
+        >
           Latest system events and changes
         </Typography>
 
