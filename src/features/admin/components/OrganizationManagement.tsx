@@ -487,7 +487,7 @@ const OrganizationManagement: React.FC<OrganizationManagementProps> = ({
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Box sx={{ width: "100%", p: 0, m: 0 }}>
         {/* Create Button */}
         <Box sx={{ mb: 3, display: "flex", justifyContent: "flex-end" }}>
