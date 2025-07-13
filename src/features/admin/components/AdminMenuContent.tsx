@@ -62,6 +62,12 @@ const mainListItems = [
     description: "Create & manage WhatsApp templates",
   },
   {
+    text: "Lead Management",
+    icon: <CampaignRoundedIcon />,
+    path: "/admin/lead-management",
+    description: "Campaigns, forms & lead tracking",
+  },
+  {
     text: "Customer Management",
     icon: <PersonRoundedIcon />,
     path: "/admin/customers",
