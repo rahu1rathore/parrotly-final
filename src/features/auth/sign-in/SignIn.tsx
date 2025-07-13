@@ -165,6 +165,10 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
           >
             Sign in
           </Typography>
+          <Alert severity="info" sx={{ mb: 1 }}>
+            <strong>Demo Access:</strong> Use any email/password (6+ chars) or
+            click "Admin Demo Access"
+          </Alert>
           <Box
             component="form"
             onSubmit={handleSubmit}
