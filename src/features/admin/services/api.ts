@@ -90,6 +90,65 @@ export const organizationAPI = {
     api.delete(`/admin/organizations/${id}`),
 };
 
+// Form Configuration API endpoints
+export const formConfigurationAPI = {
+  // Get all form configurations
+  getAll: (): Promise<{ data: FormConfiguration[] }> =>
+    api.get("/admin/form-configurations"),
+
+  // Get form configurations by organization
+  getByOrganization: (
+    organizationId: string,
+  ): Promise<{ data: FormConfiguration[] }> =>
+    api.get(`/admin/form-configurations?organization_id=${organizationId}`),
+
+  // Get form configuration by ID
+  getById: (id: string): Promise<{ data: FormConfiguration }> =>
+    api.get(`/admin/form-configurations/${id}`),
+
+  // Create form configuration
+  create: (
+    data: Omit<FormConfiguration, "id" | "created_at" | "updated_at">,
+  ): Promise<{ data: FormConfiguration }> =>
+    api.post("/admin/form-configurations", data),
+
+  // Update form configuration
+  update: (
+    id: string,
+    data: Partial<FormConfiguration>,
+  ): Promise<{ data: FormConfiguration }> =>
+    api.put(`/admin/form-configurations/${id}`, data),
+
+  // Delete form configuration
+  delete: (id: string): Promise<void> =>
+    api.delete(`/admin/form-configurations/${id}`),
+};
+
+// Customer API endpoints
+export const customerAPI = {
+  // Get all customers
+  getAll: (): Promise<{ data: Customer[] }> => api.get("/admin/customers"),
+
+  // Get customers by organization
+  getByOrganization: (organizationId: string): Promise<{ data: Customer[] }> =>
+    api.get(`/admin/customers?organization_id=${organizationId}`),
+
+  // Get customer by ID
+  getById: (id: string): Promise<{ data: Customer }> =>
+    api.get(`/admin/customers/${id}`),
+
+  // Create customer
+  create: (data: CustomerFormData): Promise<{ data: Customer }> =>
+    api.post("/admin/customers", data),
+
+  // Update customer
+  update: (id: string, data: CustomerFormData): Promise<{ data: Customer }> =>
+    api.put(`/admin/customers/${id}`, data),
+
+  // Delete customer
+  delete: (id: string): Promise<void> => api.delete(`/admin/customers/${id}`),
+};
+
 // Mock data for development (remove when backend is ready)
 export const mockModules: Module[] = [
   {
