@@ -178,3 +178,101 @@ export interface ChatUserFormData {
 }
 
 export type FilterStatus = "all" | "active" | "inactive";
+
+// WhatsApp Template Types
+export interface WhatsAppTemplateButton {
+  id: string;
+  type: "call_to_action" | "quick_reply";
+  text: string;
+  url?: string;
+  phoneNumber?: string;
+  payload?: string;
+}
+
+export interface WhatsAppTemplateHeader {
+  type: "text" | "image" | "video" | "document";
+  content: string;
+  mediaUrl?: string;
+}
+
+export interface WhatsAppTemplate {
+  id: string;
+  name: string;
+  category: "marketing" | "utility" | "authentication";
+  language: string;
+  status: "approved" | "rejected" | "pending" | "disabled";
+  header?: WhatsAppTemplateHeader;
+  body: string;
+  footer?: string;
+  buttons: WhatsAppTemplateButton[];
+  createdDate: string;
+  updatedDate: string;
+  createdBy: string;
+  variables?: string[];
+}
+
+export interface WhatsAppTemplateFormData {
+  name: string;
+  category: "marketing" | "utility" | "authentication";
+  language: string;
+  header?: WhatsAppTemplateHeader;
+  body: string;
+  footer?: string;
+  buttons: WhatsAppTemplateButton[];
+}
+
+export interface TemplateInsights {
+  templateId: string;
+  totalSent: number;
+  delivered: number;
+  read: number;
+  clicked: number;
+  deliveryRate: number;
+  readRate: number;
+  clickRate: number;
+  lastSent: string;
+}
+
+export interface TemplateInteraction {
+  id: string;
+  templateId: string;
+  userId: string;
+  userName: string;
+  userPhone: string;
+  sentAt: string;
+  deliveredAt?: string;
+  readAt?: string;
+  clickedAt?: string;
+  status: "sent" | "delivered" | "read" | "clicked" | "failed";
+}
+
+export interface BulkSendRequest {
+  templateId: string;
+  recipients: {
+    phone: string;
+    name?: string;
+    variables?: Record<string, string>;
+  }[];
+  scheduledAt?: string;
+}
+
+export interface BulkSendResult {
+  id: string;
+  templateId: string;
+  totalRecipients: number;
+  successCount: number;
+  failureCount: number;
+  status: "pending" | "processing" | "completed" | "failed";
+  createdAt: string;
+  completedAt?: string;
+  errors?: string[];
+}
+
+export interface UserSegment {
+  id: string;
+  name: string;
+  description: string;
+  userCount: number;
+  criteria: Record<string, any>;
+  createdDate: string;
+}
