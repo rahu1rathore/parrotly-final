@@ -329,7 +329,11 @@ const SubscriptionManagement: React.FC = () => {
 
                 <Box display="flex" alignItems="center" gap={1} mt={1}>
                   <ScheduleIcon fontSize="small" color="action" />
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    component="span"
+                  >
                     {subscription.validity} days validity
                   </Typography>
                 </Box>
