@@ -511,19 +511,16 @@ export default function LeadManagementSystem() {
       label: "Tasks",
       icon: <TaskIcon />,
       component: (
-        <Box sx={{ p: 3, textAlign: "center" }}>
-          <Typography variant="h6" color="text.secondary">
-            Task Management
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            This will show task creation, assignment, and tracking for lead
-            follow-ups. Currently showing {tasks.length} tasks in the system.
-          </Typography>
-          <Alert severity="info" sx={{ mt: 2 }}>
-            Task Management includes follow-up scheduling, reminders, task
-            completion tracking, and outcome recording.
-          </Alert>
-        </Box>
+        <TaskManagement
+          tasks={tasks}
+          leads={leads}
+          agents={agents}
+          loading={loading}
+          onCreateTask={handleCreateTask}
+          onUpdateTask={handleUpdateTask}
+          onDeleteTask={handleDeleteTask}
+          onRefresh={loadAllData}
+        />
       ),
     },
   ];
