@@ -61,6 +61,32 @@ export const subscriptionAPI = {
     api.delete(`/admin/subscriptions/${id}`),
 };
 
+// Organization API endpoints
+export const organizationAPI = {
+  // Get all organizations
+  getAll: (): Promise<{ data: Organization[] }> =>
+    api.get("/admin/organizations"),
+
+  // Get organization by ID
+  getById: (id: string): Promise<{ data: Organization }> =>
+    api.get(`/admin/organizations/${id}`),
+
+  // Create organization
+  create: (data: OrganizationFormData): Promise<{ data: Organization }> =>
+    api.post("/admin/organizations", data),
+
+  // Update organization
+  update: (
+    id: string,
+    data: OrganizationFormData,
+  ): Promise<{ data: Organization }> =>
+    api.put(`/admin/organizations/${id}`, data),
+
+  // Delete organization
+  delete: (id: string): Promise<void> =>
+    api.delete(`/admin/organizations/${id}`),
+};
+
 // Mock data for development (remove when backend is ready)
 export const mockModules: Module[] = [
   {
