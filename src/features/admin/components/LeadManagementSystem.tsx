@@ -64,6 +64,8 @@ export default function LeadManagementSystem() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [agents, setAgents] = useState<Agent[]>([]);
+  const [leadAssignments, setLeadAssignments] = useState<LeadAssignment[]>([]);
+  const [activityLogs, setActivityLogs] = useState<ActivityLog[]>([]);
   const [campaignStats, setCampaignStats] = useState<CampaignStats>();
   const [leadStats, setLeadStats] = useState<LeadStats>();
 
