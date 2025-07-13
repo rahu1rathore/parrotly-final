@@ -17,6 +17,7 @@ export default function AdminNavbarBreadcrumbs() {
     subscriptions: "Subscriptions",
     organizations: "Organizations",
     customers: "Customers",
+    "whatsapp-templates": "WhatsApp Templates",
     chat: "Admin Chat",
     analytics: "Analytics",
     users: "Users",
