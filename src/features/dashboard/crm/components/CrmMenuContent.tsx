@@ -29,6 +29,11 @@ const mainListItems = [
 
 const secondaryListItems = [
   { text: "Settings", icon: <SettingsRoundedIcon />, path: "/settings" },
+  {
+    text: "Admin Panel",
+    icon: <AdminPanelSettingsRoundedIcon />,
+    path: "/admin",
+  },
   { text: "Help & Support", icon: <HelpOutlineRoundedIcon />, path: "/help" },
 ];
 
