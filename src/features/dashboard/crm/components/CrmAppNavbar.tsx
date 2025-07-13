@@ -9,8 +9,8 @@ import Typography from "@mui/material/Typography";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import BusinessRoundedIcon from "@mui/icons-material/BusinessRounded";
 import CrmSideMenuMobile from "./CrmSideMenuMobile";
-import MenuButton from "../../dashboard/components/MenuButton";
-import ColorModeIconDropdown from "../../shared-theme/ColorModeIconDropdown";
+import MenuButton from "../../components/MenuButton";
+import ColorModeIconDropdown from "../../../../themes/ColorModeIconDropdown";
 
 const Toolbar = styled(MuiToolbar)({
   width: "100%",
