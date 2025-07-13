@@ -23,8 +23,8 @@
     "@tailwindcss/vite": "latest",
     "axios": "^1.10.0",
     "dayjs": "^1.11.13",
-    "react": "latest",
-    "react-dom": "latest",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-router-dom": "^7.6.0",
     "tailwindcss": "latest"
   },
