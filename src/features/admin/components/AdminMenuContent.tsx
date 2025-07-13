@@ -43,6 +43,11 @@ const mainListItems = [
     path: "/admin/customers",
   },
   {
+    text: "Admin Chat",
+    icon: <ChatRoundedIcon />,
+    path: "/admin/chat",
+  },
+  {
     text: "Analytics",
     icon: <AnalyticsRoundedIcon />,
     path: "/admin/analytics",
