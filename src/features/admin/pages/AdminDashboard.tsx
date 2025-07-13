@@ -15,6 +15,7 @@ import SubscriptionManagement from "../components/SubscriptionManagement";
 import OrganizationManagement from "../components/OrganizationManagement";
 import CustomerManagement from "../components/CustomerManagement";
 import InterveneAdminChat from "../components/InterveneAdminChat";
+import WhatsAppTemplateManagement from "../components/WhatsAppTemplateManagement";
 import AdminOverview from "../components/AdminOverview";
 import AppTheme from "../../../themes/AppTheme";
 import {
