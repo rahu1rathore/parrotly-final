@@ -141,6 +141,7 @@ const AdminOverview: React.FC = () => {
                       color="text.secondary"
                       gutterBottom
                       variant="body2"
+                      component="span"
                     >
                       {stat.title}
                     </Typography>
