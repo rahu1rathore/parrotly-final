@@ -311,7 +311,12 @@ const SubscriptionManagement: React.FC = () => {
                 <Typography variant="h6" component="h2" gutterBottom>
                   {subscription.name}
                 </Typography>
-                <Typography variant="body2" color="text.secondary" gutterBottom>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  gutterBottom
+                  component="div"
+                >
                   {subscription.description || "No description"}
                 </Typography>
 
