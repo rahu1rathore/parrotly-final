@@ -387,7 +387,11 @@ const SubscriptionManagement: React.FC = () => {
         {subscriptions.length === 0 && (
           <Grid item xs={12}>
             <Paper sx={{ p: 4, textAlign: "center" }}>
-              <Typography variant="body2" color="text.secondary">
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                component="div"
+              >
                 No subscriptions available. Create your first subscription to
                 get started.
               </Typography>
