@@ -11,6 +11,7 @@ import Divider from "@mui/material/Divider";
 import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
 import ExtensionRoundedIcon from "@mui/icons-material/ExtensionRounded";
 import SubscriptionsRoundedIcon from "@mui/icons-material/SubscriptionsRounded";
+import BusinessRoundedIcon from "@mui/icons-material/BusinessRounded";
 import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
