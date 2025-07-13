@@ -515,20 +515,17 @@ export default function LeadManagementSystem() {
       label: "Assignments",
       icon: <AssignmentIcon />,
       component: (
-        <Box sx={{ p: 3, textAlign: "center" }}>
-          <Typography variant="h6" color="text.secondary">
-            Lead Assignment Management
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            This will show lead assignment to agents, bulk assignment, and
-            assignment history. Currently showing {agents.length} agents
-            available for assignments.
-          </Typography>
-          <Alert severity="info" sx={{ mt: 2 }}>
-            Assignment component includes manual/automatic assignment, agent
-            workload management, and assignment analytics.
-          </Alert>
-        </Box>
+        <LeadAssignmentManagement
+          leads={leads}
+          agents={agents}
+          assignments={leadAssignments}
+          activityLogs={activityLogs}
+          loading={loading}
+          onAssignLead={handleAssignLead}
+          onBulkAssign={handleBulkAssign}
+          onUnassignLead={handleUnassignLead}
+          onRefresh={loadAllData}
+        />
       ),
     },
     {
