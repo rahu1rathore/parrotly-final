@@ -34,8 +34,8 @@ const items = [
     title: "Available on all platforms",
     description:
       "This item could let users know the product is available on all platforms, such as web, mobile, and desktop.",
-    imageLight: `url("${process.env.TEMPLATE_IMAGE_URL || "https://mui.com"}/static/images/templates/templates-images/devices-light.png")`,
-    imageDark: `url("${process.env.TEMPLATE_IMAGE_URL || "https://mui.com"}/static/images/templates/templates-images/devices-dark.png")`,
+    imageLight: `url("${import.meta.env.VITE_TEMPLATE_IMAGE_URL || "https://mui.com"}/static/images/templates/templates-images/devices-light.png")`,
+    imageDark: `url("${import.meta.env.VITE_TEMPLATE_IMAGE_URL || "https://mui.com"}/static/images/templates/templates-images/devices-dark.png")`,
   },
 ];
 
