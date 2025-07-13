@@ -637,6 +637,997 @@ export const userSegmentAPI = {
   },
 };
 
+// Lead Management Mock Data
+const mockAgents: Agent[] = [
+  {
+    id: "agent_1",
+    name: "John Smith",
+    email: "john.smith@example.com",
+    phone: "+1234567890",
+    role: "Senior Sales Agent",
+    isActive: true,
+    assignedLeadsCount: 45,
+    convertedLeadsCount: 12,
+    avatar: "https://via.placeholder.com/150x150/4f46e5/ffffff?text=JS",
+    createdDate: "2024-01-15T08:00:00Z",
+  },
+  {
+    id: "agent_2",
+    name: "Sarah Johnson",
+    email: "sarah.johnson@example.com",
+    phone: "+1234567891",
+    role: "Sales Agent",
+    isActive: true,
+    assignedLeadsCount: 32,
+    convertedLeadsCount: 8,
+    avatar: "https://via.placeholder.com/150x150/16a34a/ffffff?text=SJ",
+    createdDate: "2024-01-20T08:00:00Z",
+  },
+  {
+    id: "agent_3",
+    name: "Mike Davis",
+    email: "mike.davis@example.com",
+    phone: "+1234567892",
+    role: "Lead Qualifier",
+    isActive: true,
+    assignedLeadsCount: 28,
+    convertedLeadsCount: 5,
+    avatar: "https://via.placeholder.com/150x150/dc2626/ffffff?text=MD",
+    createdDate: "2024-01-25T08:00:00Z",
+  },
+];
+
+const mockDynamicForms: DynamicForm[] = [
+  {
+    id: "form_1",
+    name: "Real Estate Lead Form",
+    description: "Capture real estate inquiries with property preferences",
+    fields: [
+      {
+        id: "field_1",
+        name: "phoneNumber",
+        label: "Phone Number",
+        type: "phone",
+        required: true,
+        order: 1,
+        isSystem: true,
+      },
+      {
+        id: "field_2",
+        name: "fullName",
+        label: "Full Name",
+        type: "text",
+        required: true,
+        order: 2,
+        validation: { minLength: 2, maxLength: 100 },
+      },
+      {
+        id: "field_3",
+        name: "email",
+        label: "Email Address",
+        type: "email",
+        required: true,
+        order: 3,
+      },
+      {
+        id: "field_4",
+        name: "propertyType",
+        label: "Property Type",
+        type: "select",
+        required: true,
+        options: ["Apartment", "House", "Condo", "Townhouse", "Commercial"],
+        order: 4,
+      },
+      {
+        id: "field_5",
+        name: "budget",
+        label: "Budget Range",
+        type: "select",
+        required: false,
+        options: ["Under $500K", "$500K-$1M", "$1M-$2M", "$2M+"],
+        order: 5,
+      },
+      {
+        id: "field_6",
+        name: "location",
+        label: "Preferred Location",
+        type: "text",
+        required: false,
+        order: 6,
+      },
+      {
+        id: "field_7",
+        name: "timeline",
+        label: "Purchase Timeline",
+        type: "select",
+        required: false,
+        options: ["Immediately", "1-3 months", "3-6 months", "6+ months"],
+        order: 7,
+      },
+      {
+        id: "field_8",
+        name: "additionalNotes",
+        label: "Additional Requirements",
+        type: "textarea",
+        required: false,
+        order: 8,
+        validation: { maxLength: 500 },
+      },
+    ],
+    createdBy: "admin@example.com",
+    createdDate: "2024-01-10T10:00:00Z",
+    updatedDate: "2024-01-15T14:30:00Z",
+    isActive: true,
+  },
+  {
+    id: "form_2",
+    name: "Software Demo Request",
+    description: "Capture software demo and trial requests",
+    fields: [
+      {
+        id: "field_9",
+        name: "phoneNumber",
+        label: "Phone Number",
+        type: "phone",
+        required: true,
+        order: 1,
+        isSystem: true,
+      },
+      {
+        id: "field_10",
+        name: "companyName",
+        label: "Company Name",
+        type: "text",
+        required: true,
+        order: 2,
+      },
+      {
+        id: "field_11",
+        name: "contactName",
+        label: "Contact Person",
+        type: "text",
+        required: true,
+        order: 3,
+      },
+      {
+        id: "field_12",
+        name: "email",
+        label: "Business Email",
+        type: "email",
+        required: true,
+        order: 4,
+      },
+      {
+        id: "field_13",
+        name: "employeeCount",
+        label: "Company Size",
+        type: "select",
+        required: true,
+        options: ["1-10", "11-50", "51-200", "201-500", "500+"],
+        order: 5,
+      },
+      {
+        id: "field_14",
+        name: "industry",
+        label: "Industry",
+        type: "select",
+        required: false,
+        options: [
+          "Technology",
+          "Healthcare",
+          "Finance",
+          "Education",
+          "Retail",
+          "Manufacturing",
+          "Other",
+        ],
+        order: 6,
+      },
+      {
+        id: "field_15",
+        name: "currentSolution",
+        label: "Current Solution",
+        type: "text",
+        required: false,
+        order: 7,
+      },
+      {
+        id: "field_16",
+        name: "demoDate",
+        label: "Preferred Demo Date",
+        type: "date",
+        required: false,
+        order: 8,
+      },
+    ],
+    createdBy: "admin@example.com",
+    createdDate: "2024-01-12T09:00:00Z",
+    updatedDate: "2024-01-12T09:00:00Z",
+    isActive: true,
+  },
+];
+
+const mockCampaigns: Campaign[] = [
+  {
+    id: "campaign_1",
+    name: "Q1 Real Estate Drive",
+    description: "Targeting potential home buyers for Q1 property launches",
+    startDate: "2024-01-01T00:00:00Z",
+    endDate: "2024-03-31T23:59:59Z",
+    status: "active",
+    owner: "sarah.johnson@example.com",
+    formId: "form_1",
+    formName: "Real Estate Lead Form",
+    leadCount: 156,
+    convertedCount: 23,
+    createdBy: "admin@example.com",
+    createdDate: "2023-12-15T10:00:00Z",
+    updatedDate: "2024-01-20T15:30:00Z",
+  },
+  {
+    id: "campaign_2",
+    name: "SaaS Demo Campaign",
+    description: "Software demo requests for enterprise clients",
+    startDate: "2024-01-15T00:00:00Z",
+    endDate: "2024-06-30T23:59:59Z",
+    status: "active",
+    owner: "john.smith@example.com",
+    formId: "form_2",
+    formName: "Software Demo Request",
+    leadCount: 89,
+    convertedCount: 12,
+    createdBy: "admin@example.com",
+    createdDate: "2024-01-10T14:00:00Z",
+    updatedDate: "2024-01-25T09:15:00Z",
+  },
+  {
+    id: "campaign_3",
+    name: "Holiday Promotion",
+    description: "Holiday season marketing campaign",
+    startDate: "2023-11-01T00:00:00Z",
+    endDate: "2023-12-31T23:59:59Z",
+    status: "completed",
+    owner: "mike.davis@example.com",
+    formId: "form_1",
+    formName: "Real Estate Lead Form",
+    leadCount: 234,
+    convertedCount: 45,
+    createdBy: "admin@example.com",
+    createdDate: "2023-10-15T12:00:00Z",
+    updatedDate: "2024-01-05T10:00:00Z",
+  },
+];
+
+const mockLeads: Lead[] = [
+  {
+    id: "lead_1",
+    campaignId: "campaign_1",
+    campaignName: "Q1 Real Estate Drive",
+    phoneNumber: "+1234567890",
+    data: {
+      fullName: "Alice Wilson",
+      email: "alice.wilson@email.com",
+      propertyType: "House",
+      budget: "$500K-$1M",
+      location: "Downtown",
+      timeline: "1-3 months",
+      additionalNotes: "Looking for a 3-bedroom house with garden",
+    },
+    status: "qualified",
+    assignedTo: "agent_1",
+    assignedBy: "admin@example.com",
+    assignedDate: "2024-01-22T10:00:00Z",
+    source: "Website Form",
+    tags: ["hot-lead", "qualified"],
+    priority: "high",
+    lastContactDate: "2024-01-25T14:30:00Z",
+    nextFollowUpDate: "2024-01-30T10:00:00Z",
+    notes: "Very interested, scheduled property viewing",
+    createdDate: "2024-01-20T09:30:00Z",
+    updatedDate: "2024-01-25T14:30:00Z",
+  },
+  {
+    id: "lead_2",
+    campaignId: "campaign_2",
+    campaignName: "SaaS Demo Campaign",
+    phoneNumber: "+1234567891",
+    data: {
+      companyName: "TechCorp Inc",
+      contactName: "Bob Johnson",
+      email: "bob.johnson@techcorp.com",
+      employeeCount: "51-200",
+      industry: "Technology",
+      currentSolution: "Legacy ERP system",
+      demoDate: "2024-02-15",
+    },
+    status: "contacted",
+    assignedTo: "agent_2",
+    assignedBy: "admin@example.com",
+    assignedDate: "2024-01-23T11:00:00Z",
+    source: "LinkedIn Campaign",
+    tags: ["enterprise", "demo-scheduled"],
+    priority: "medium",
+    lastContactDate: "2024-01-26T16:00:00Z",
+    nextFollowUpDate: "2024-02-15T14:00:00Z",
+    notes: "Demo scheduled for Feb 15th",
+    createdDate: "2024-01-21T11:15:00Z",
+    updatedDate: "2024-01-26T16:00:00Z",
+  },
+  {
+    id: "lead_3",
+    campaignId: "campaign_1",
+    campaignName: "Q1 Real Estate Drive",
+    phoneNumber: "+1234567892",
+    data: {
+      fullName: "Carol Smith",
+      email: "carol.smith@email.com",
+      propertyType: "Apartment",
+      budget: "Under $500K",
+      location: "Suburbs",
+      timeline: "6+ months",
+      additionalNotes: "First-time buyer, needs guidance",
+    },
+    status: "new",
+    source: "Google Ads",
+    tags: ["first-time-buyer"],
+    priority: "low",
+    createdDate: "2024-01-27T08:45:00Z",
+    updatedDate: "2024-01-27T08:45:00Z",
+  },
+];
+
+const mockTasks: Task[] = [
+  {
+    id: "task_1",
+    leadId: "lead_1",
+    title: "Schedule Property Viewing",
+    description: "Arrange viewing for 3-bedroom houses in downtown area",
+    dueDate: "2024-01-30T10:00:00Z",
+    reminderDate: "2024-01-29T09:00:00Z",
+    status: "pending",
+    priority: "high",
+    assignedTo: "agent_1",
+    assignedToName: "John Smith",
+    createdBy: "admin@example.com",
+    createdByName: "Admin User",
+    createdDate: "2024-01-25T15:00:00Z",
+    updatedDate: "2024-01-25T15:00:00Z",
+  },
+  {
+    id: "task_2",
+    leadId: "lead_2",
+    title: "Prepare Demo Environment",
+    description: "Set up demo environment for TechCorp presentation",
+    dueDate: "2024-02-14T16:00:00Z",
+    reminderDate: "2024-02-13T10:00:00Z",
+    status: "in_progress",
+    priority: "medium",
+    assignedTo: "agent_2",
+    assignedToName: "Sarah Johnson",
+    createdBy: "admin@example.com",
+    createdByName: "Admin User",
+    createdDate: "2024-01-26T17:00:00Z",
+    updatedDate: "2024-01-27T10:30:00Z",
+  },
+];
+
+const mockLeadAssignments: LeadAssignment[] = [
+  {
+    id: "assignment_1",
+    leadId: "lead_1",
+    assignedTo: "agent_1",
+    assignedToName: "John Smith",
+    assignedBy: "admin@example.com",
+    assignedByName: "Admin User",
+    assignedDate: "2024-01-22T10:00:00Z",
+    notes: "High priority lead - qualified buyer",
+    isActive: true,
+  },
+  {
+    id: "assignment_2",
+    leadId: "lead_2",
+    assignedTo: "agent_2",
+    assignedToName: "Sarah Johnson",
+    assignedBy: "admin@example.com",
+    assignedByName: "Admin User",
+    assignedDate: "2024-01-23T11:00:00Z",
+    notes: "Enterprise prospect - demo required",
+    isActive: true,
+  },
+];
+
+const mockActivityLogs: ActivityLog[] = [
+  {
+    id: "log_1",
+    entityType: "lead",
+    entityId: "lead_1",
+    action: "assigned",
+    description: "Lead assigned to John Smith",
+    performedBy: "admin@example.com",
+    performedByName: "Admin User",
+    timestamp: "2024-01-22T10:00:00Z",
+    metadata: { assignedTo: "agent_1", previousAssignee: null },
+  },
+  {
+    id: "log_2",
+    entityType: "lead",
+    entityId: "lead_1",
+    action: "status_updated",
+    description: "Lead status changed from 'contacted' to 'qualified'",
+    performedBy: "agent_1",
+    performedByName: "John Smith",
+    timestamp: "2024-01-25T14:30:00Z",
+    metadata: { oldStatus: "contacted", newStatus: "qualified" },
+  },
+];
+
+// Lead Management API Services
+export const dynamicFormAPI = {
+  getAll: async (): Promise<DynamicForm[]> => {
+    return new Promise((resolve) => {
+      setTimeout(() => resolve([...mockDynamicForms]), 500);
+    });
+  },
+
+  getById: async (id: string): Promise<DynamicForm | null> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const form = mockDynamicForms.find((f) => f.id === id) || null;
+        resolve(form);
+      }, 300);
+    });
+  },
+
+  create: async (formData: Partial<DynamicForm>): Promise<DynamicForm> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const newForm: DynamicForm = {
+          id: `form_${Date.now()}`,
+          name: formData.name || "",
+          description: formData.description,
+          fields: formData.fields || [],
+          createdBy: "admin@example.com",
+          createdDate: new Date().toISOString(),
+          updatedDate: new Date().toISOString(),
+          isActive: true,
+        };
+        mockDynamicForms.push(newForm);
+        resolve(newForm);
+      }, 500);
+    });
+  },
+
+  update: async (
+    id: string,
+    formData: Partial<DynamicForm>,
+  ): Promise<DynamicForm> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const index = mockDynamicForms.findIndex((f) => f.id === id);
+        if (index === -1) {
+          reject(new Error("Form not found"));
+          return;
+        }
+
+        mockDynamicForms[index] = {
+          ...mockDynamicForms[index],
+          ...formData,
+          updatedDate: new Date().toISOString(),
+        };
+        resolve(mockDynamicForms[index]);
+      }, 500);
+    });
+  },
+
+  delete: async (id: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const index = mockDynamicForms.findIndex((f) => f.id === id);
+        if (index === -1) {
+          reject(new Error("Form not found"));
+          return;
+        }
+        mockDynamicForms.splice(index, 1);
+        resolve();
+      }, 500);
+    });
+  },
+};
+
+export const campaignAPI = {
+  getAll: async (): Promise<Campaign[]> => {
+    return new Promise((resolve) => {
+      setTimeout(() => resolve([...mockCampaigns]), 500);
+    });
+  },
+
+  getById: async (id: string): Promise<Campaign | null> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const campaign = mockCampaigns.find((c) => c.id === id) || null;
+        resolve(campaign);
+      }, 300);
+    });
+  },
+
+  create: async (campaignData: CampaignFormData): Promise<Campaign> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const form = mockDynamicForms.find((f) => f.id === campaignData.formId);
+        const newCampaign: Campaign = {
+          id: `campaign_${Date.now()}`,
+          ...campaignData,
+          formName: form?.name,
+          leadCount: 0,
+          convertedCount: 0,
+          owner: "admin@example.com",
+          createdBy: "admin@example.com",
+          createdDate: new Date().toISOString(),
+          updatedDate: new Date().toISOString(),
+        };
+        mockCampaigns.push(newCampaign);
+        resolve(newCampaign);
+      }, 500);
+    });
+  },
+
+  update: async (
+    id: string,
+    campaignData: Partial<CampaignFormData>,
+  ): Promise<Campaign> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const index = mockCampaigns.findIndex((c) => c.id === id);
+        if (index === -1) {
+          reject(new Error("Campaign not found"));
+          return;
+        }
+
+        const form = campaignData.formId
+          ? mockDynamicForms.find((f) => f.id === campaignData.formId)
+          : null;
+        mockCampaigns[index] = {
+          ...mockCampaigns[index],
+          ...campaignData,
+          formName: form?.name || mockCampaigns[index].formName,
+          updatedDate: new Date().toISOString(),
+        };
+        resolve(mockCampaigns[index]);
+      }, 500);
+    });
+  },
+
+  delete: async (id: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const index = mockCampaigns.findIndex((c) => c.id === id);
+        if (index === -1) {
+          reject(new Error("Campaign not found"));
+          return;
+        }
+        mockCampaigns.splice(index, 1);
+        resolve();
+      }, 500);
+    });
+  },
+
+  getStats: async (): Promise<CampaignStats> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const stats: CampaignStats = {
+          totalCampaigns: mockCampaigns.length,
+          activeCampaigns: mockCampaigns.filter((c) => c.status === "active")
+            .length,
+          totalLeads: mockCampaigns.reduce((sum, c) => sum + c.leadCount, 0),
+          conversionRate: 15.2,
+          topPerformingCampaign: mockCampaigns[0]?.name || "N/A",
+          leadsBySource: {
+            "Website Form": 45,
+            "Google Ads": 32,
+            "LinkedIn Campaign": 28,
+            "Social Media": 15,
+          },
+        };
+        resolve(stats);
+      }, 400);
+    });
+  },
+};
+
+export const leadAPI = {
+  getAll: async (filter?: LeadFilter): Promise<Lead[]> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        let filteredLeads = [...mockLeads];
+
+        if (filter) {
+          if (filter.campaignId) {
+            filteredLeads = filteredLeads.filter(
+              (l) => l.campaignId === filter.campaignId,
+            );
+          }
+          if (filter.status) {
+            filteredLeads = filteredLeads.filter(
+              (l) => l.status === filter.status,
+            );
+          }
+          if (filter.assignedTo) {
+            filteredLeads = filteredLeads.filter(
+              (l) => l.assignedTo === filter.assignedTo,
+            );
+          }
+          if (filter.priority) {
+            filteredLeads = filteredLeads.filter(
+              (l) => l.priority === filter.priority,
+            );
+          }
+        }
+
+        resolve(filteredLeads);
+      }, 500);
+    });
+  },
+
+  getById: async (id: string): Promise<Lead | null> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const lead = mockLeads.find((l) => l.id === id) || null;
+        resolve(lead);
+      }, 300);
+    });
+  },
+
+  create: async (leadData: LeadFormData): Promise<Lead> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const campaign = mockCampaigns.find(
+          (c) => c.id === leadData.campaignId,
+        );
+        const newLead: Lead = {
+          id: `lead_${Date.now()}`,
+          ...leadData,
+          campaignName: campaign?.name,
+          status: "new",
+          source: leadData.source || "Manual Entry",
+          tags: leadData.tags || [],
+          priority: leadData.priority || "medium",
+          createdDate: new Date().toISOString(),
+          updatedDate: new Date().toISOString(),
+        };
+        mockLeads.push(newLead);
+        resolve(newLead);
+      }, 500);
+    });
+  },
+
+  update: async (
+    id: string,
+    leadData: Partial<LeadFormData>,
+  ): Promise<Lead> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const index = mockLeads.findIndex((l) => l.id === id);
+        if (index === -1) {
+          reject(new Error("Lead not found"));
+          return;
+        }
+
+        mockLeads[index] = {
+          ...mockLeads[index],
+          ...leadData,
+          updatedDate: new Date().toISOString(),
+        };
+        resolve(mockLeads[index]);
+      }, 500);
+    });
+  },
+
+  delete: async (id: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const index = mockLeads.findIndex((l) => l.id === id);
+        if (index === -1) {
+          reject(new Error("Lead not found"));
+          return;
+        }
+        mockLeads.splice(index, 1);
+        resolve();
+      }, 500);
+    });
+  },
+
+  assign: async (
+    leadId: string,
+    assignedTo: string,
+    notes?: string,
+  ): Promise<LeadAssignment> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const agent = mockAgents.find((a) => a.id === assignedTo);
+        const assignment: LeadAssignment = {
+          id: `assignment_${Date.now()}`,
+          leadId,
+          assignedTo,
+          assignedToName: agent?.name,
+          assignedBy: "admin@example.com",
+          assignedByName: "Admin User",
+          assignedDate: new Date().toISOString(),
+          notes,
+          isActive: true,
+        };
+        mockLeadAssignments.push(assignment);
+
+        // Update lead
+        const leadIndex = mockLeads.findIndex((l) => l.id === leadId);
+        if (leadIndex !== -1) {
+          mockLeads[leadIndex].assignedTo = assignedTo;
+          mockLeads[leadIndex].assignedBy = "admin@example.com";
+          mockLeads[leadIndex].assignedDate = new Date().toISOString();
+          mockLeads[leadIndex].updatedDate = new Date().toISOString();
+        }
+
+        resolve(assignment);
+      }, 500);
+    });
+  },
+
+  bulkAssign: async (
+    leadIds: string[],
+    assignedTo: string,
+    notes?: string,
+  ): Promise<LeadAssignment[]> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const agent = mockAgents.find((a) => a.id === assignedTo);
+        const assignments: LeadAssignment[] = leadIds.map((leadId) => ({
+          id: `assignment_${Date.now()}_${leadId}`,
+          leadId,
+          assignedTo,
+          assignedToName: agent?.name,
+          assignedBy: "admin@example.com",
+          assignedByName: "Admin User",
+          assignedDate: new Date().toISOString(),
+          notes,
+          isActive: true,
+        }));
+
+        mockLeadAssignments.push(...assignments);
+
+        // Update leads
+        leadIds.forEach((leadId) => {
+          const leadIndex = mockLeads.findIndex((l) => l.id === leadId);
+          if (leadIndex !== -1) {
+            mockLeads[leadIndex].assignedTo = assignedTo;
+            mockLeads[leadIndex].assignedBy = "admin@example.com";
+            mockLeads[leadIndex].assignedDate = new Date().toISOString();
+            mockLeads[leadIndex].updatedDate = new Date().toISOString();
+          }
+        });
+
+        resolve(assignments);
+      }, 1000);
+    });
+  },
+
+  getStats: async (): Promise<LeadStats> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const stats: LeadStats = {
+          totalLeads: mockLeads.length,
+          newLeads: mockLeads.filter((l) => l.status === "new").length,
+          contactedLeads: mockLeads.filter((l) => l.status === "contacted")
+            .length,
+          qualifiedLeads: mockLeads.filter((l) => l.status === "qualified")
+            .length,
+          convertedLeads: mockLeads.filter((l) => l.status === "converted")
+            .length,
+          droppedLeads: mockLeads.filter((l) => l.status === "dropped").length,
+          conversionRate: 18.5,
+          averageResponseTime: 4.2,
+        };
+        resolve(stats);
+      }, 400);
+    });
+  },
+};
+
+export const taskAPI = {
+  getAll: async (leadId?: string): Promise<Task[]> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const filteredTasks = leadId
+          ? mockTasks.filter((t) => t.leadId === leadId)
+          : [...mockTasks];
+        resolve(filteredTasks);
+      }, 500);
+    });
+  },
+
+  getById: async (id: string): Promise<Task | null> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const task = mockTasks.find((t) => t.id === id) || null;
+        resolve(task);
+      }, 300);
+    });
+  },
+
+  create: async (taskData: TaskFormData): Promise<Task> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const agent = mockAgents.find((a) => a.id === taskData.assignedTo);
+        const newTask: Task = {
+          id: `task_${Date.now()}`,
+          ...taskData,
+          status: "pending",
+          assignedToName: agent?.name,
+          createdBy: "admin@example.com",
+          createdByName: "Admin User",
+          createdDate: new Date().toISOString(),
+          updatedDate: new Date().toISOString(),
+        };
+        mockTasks.push(newTask);
+        resolve(newTask);
+      }, 500);
+    });
+  },
+
+  update: async (
+    id: string,
+    taskData: Partial<
+      TaskFormData & { status: Task["status"]; outcome?: string }
+    >,
+  ): Promise<Task> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const index = mockTasks.findIndex((t) => t.id === id);
+        if (index === -1) {
+          reject(new Error("Task not found"));
+          return;
+        }
+
+        const updatedTask = {
+          ...mockTasks[index],
+          ...taskData,
+          updatedDate: new Date().toISOString(),
+        };
+
+        if (taskData.status === "completed") {
+          updatedTask.completedDate = new Date().toISOString();
+        }
+
+        mockTasks[index] = updatedTask;
+        resolve(updatedTask);
+      }, 500);
+    });
+  },
+
+  delete: async (id: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const index = mockTasks.findIndex((t) => t.id === id);
+        if (index === -1) {
+          reject(new Error("Task not found"));
+          return;
+        }
+        mockTasks.splice(index, 1);
+        resolve();
+      }, 500);
+    });
+  },
+};
+
+export const agentAPI = {
+  getAll: async (): Promise<Agent[]> => {
+    return new Promise((resolve) => {
+      setTimeout(() => resolve([...mockAgents]), 400);
+    });
+  },
+
+  getById: async (id: string): Promise<Agent | null> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const agent = mockAgents.find((a) => a.id === id) || null;
+        resolve(agent);
+      }, 300);
+    });
+  },
+};
+
+export const activityLogAPI = {
+  getAll: async (
+    entityType?: string,
+    entityId?: string,
+  ): Promise<ActivityLog[]> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        let filteredLogs = [...mockActivityLogs];
+        if (entityType) {
+          filteredLogs = filteredLogs.filter(
+            (l) => l.entityType === entityType,
+          );
+        }
+        if (entityId) {
+          filteredLogs = filteredLogs.filter((l) => l.entityId === entityId);
+        }
+        resolve(
+          filteredLogs.sort(
+            (a, b) =>
+              new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
+          ),
+        );
+      }, 400);
+    });
+  },
+};
+
+export const bulkUploadAPI = {
+  upload: async (file: File, campaignId: string): Promise<BulkUploadResult> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const result: BulkUploadResult = {
+          id: `upload_${Date.now()}`,
+          filename: file.name,
+          totalRecords: 100,
+          successCount: 95,
+          errorCount: 5,
+          status: "processing",
+          errors: [
+            { row: 15, field: "email", message: "Invalid email format" },
+            { row: 23, field: "phoneNumber", message: "Phone number required" },
+            {
+              row: 45,
+              field: "propertyType",
+              message: "Invalid property type",
+            },
+            { row: 67, field: "budget", message: "Invalid budget range" },
+            { row: 89, field: "email", message: "Duplicate email address" },
+          ],
+          createdBy: "admin@example.com",
+          createdDate: new Date().toISOString(),
+        };
+
+        // Simulate completion after 3 seconds
+        setTimeout(() => {
+          result.status = "completed";
+          result.completedDate = new Date().toISOString();
+        }, 3000);
+
+        resolve(result);
+      }, 1000);
+    });
+  },
+
+  getHistory: async (): Promise<BulkUploadResult[]> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const mockHistory: BulkUploadResult[] = [
+          {
+            id: "upload_1",
+            filename: "leads_jan_2024.csv",
+            totalRecords: 150,
+            successCount: 148,
+            errorCount: 2,
+            status: "completed",
+            errors: [
+              { row: 15, field: "email", message: "Invalid email format" },
+              {
+                row: 89,
+                field: "phoneNumber",
+                message: "Invalid phone number",
+              },
+            ],
+            createdBy: "admin@example.com",
+            createdDate: "2024-01-25T10:00:00Z",
+            completedDate: "2024-01-25T10:05:00Z",
+          },
+        ];
+        resolve(mockHistory);
+      }, 400);
+    });
+  },
+};
+
 // Chat API endpoints
 export const chatAPI = {
   // Get all chats
