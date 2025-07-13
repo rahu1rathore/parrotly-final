@@ -129,6 +129,8 @@ export default function LeadManagement({
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [formDialogOpen, setFormDialogOpen] = useState(false);
   const [assignDialogOpen, setAssignDialogOpen] = useState(false);
+  const [bulkUploadOpen, setBulkUploadOpen] = useState(false);
+  const [bulkDownloadOpen, setBulkDownloadOpen] = useState(false);
   const [editingLead, setEditingLead] = useState<Lead | null>(null);
 
   // Filters
