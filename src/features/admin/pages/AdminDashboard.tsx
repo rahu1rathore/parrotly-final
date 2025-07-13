@@ -13,6 +13,7 @@ import AdminSideMenu from "../components/AdminSideMenu";
 import ModuleManagement from "../components/ModuleManagement";
 import SubscriptionManagement from "../components/SubscriptionManagement";
 import OrganizationManagement from "../components/OrganizationManagement";
+import CustomerManagement from "../components/CustomerManagement";
 import AdminOverview from "../components/AdminOverview";
 import AppTheme from "../../../themes/AppTheme";
 import {
