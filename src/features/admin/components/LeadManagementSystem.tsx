@@ -26,11 +26,13 @@ import {
   DynamicForm,
   Lead,
   LeadFormData,
+  LeadFilter,
   Task,
   TaskFormData,
   Agent,
   CampaignStats,
   LeadStats,
+  BulkUploadResult,
 } from "../types";
 import {
   campaignAPI,
