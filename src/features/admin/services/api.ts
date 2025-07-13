@@ -160,6 +160,468 @@ export const customerAPI = {
   delete: (id: string): Promise<void> => api.delete(`/admin/customers/${id}`),
 };
 
+// WhatsApp Template Mock Data
+const mockWhatsAppTemplates: WhatsAppTemplate[] = [
+  {
+    id: "template_1",
+    name: "Welcome Message",
+    category: "utility",
+    language: "en",
+    status: "approved",
+    header: {
+      type: "text",
+      content: "Welcome to {{company_name}}!",
+    },
+    body: "Hi {{name}}, thank you for joining us! We're excited to have you on board. You can start exploring our features right away.",
+    footer: "Best regards, Team {{company_name}}",
+    buttons: [
+      {
+        id: "btn_1",
+        type: "call_to_action",
+        text: "Get Started",
+        url: "https://example.com/get-started",
+      },
+      {
+        id: "btn_2",
+        type: "quick_reply",
+        text: "Contact Support",
+        payload: "CONTACT_SUPPORT",
+      },
+    ],
+    createdDate: "2024-01-15T10:30:00Z",
+    updatedDate: "2024-01-15T10:30:00Z",
+    createdBy: "admin@example.com",
+    variables: ["company_name", "name"],
+  },
+  {
+    id: "template_2",
+    name: "Order Confirmation",
+    category: "utility",
+    language: "en",
+    status: "approved",
+    header: {
+      type: "image",
+      content: "Order Confirmed #{{order_id}}",
+      mediaUrl:
+        "https://via.placeholder.com/400x200/4CAF50/white?text=Order+Confirmed",
+    },
+    body: "Your order #{{order_id}} has been confirmed! \\n\\nOrder Details:\\n- Total: {{total_amount}}\\n- Delivery Date: {{delivery_date}}\\n\\nTracking will be available soon.",
+    footer: "Thank you for shopping with us!",
+    buttons: [
+      {
+        id: "btn_3",
+        type: "call_to_action",
+        text: "Track Order",
+        url: "https://example.com/track/{{order_id}}",
+      },
+    ],
+    createdDate: "2024-01-20T14:15:00Z",
+    updatedDate: "2024-01-22T09:20:00Z",
+    createdBy: "admin@example.com",
+    variables: ["order_id", "total_amount", "delivery_date"],
+  },
+  {
+    id: "template_3",
+    name: "Promotional Offer",
+    category: "marketing",
+    language: "en",
+    status: "pending",
+    header: {
+      type: "video",
+      content: "🎉 Special Offer Just for You!",
+      mediaUrl:
+        "https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4",
+    },
+    body: "Hi {{name}}, get {{discount}}% off on your next purchase! Use code: {{promo_code}} before {{expiry_date}}. Don't miss out!",
+    footer: "Terms and conditions apply",
+    buttons: [
+      {
+        id: "btn_4",
+        type: "call_to_action",
+        text: "Shop Now",
+        url: "https://example.com/shop",
+      },
+      {
+        id: "btn_5",
+        type: "quick_reply",
+        text: "View Catalog",
+        payload: "VIEW_CATALOG",
+      },
+    ],
+    createdDate: "2024-01-25T16:45:00Z",
+    updatedDate: "2024-01-25T16:45:00Z",
+    createdBy: "marketing@example.com",
+    variables: ["name", "discount", "promo_code", "expiry_date"],
+  },
+  {
+    id: "template_4",
+    name: "Payment Reminder",
+    category: "utility",
+    language: "en",
+    status: "approved",
+    body: "Hi {{name}}, this is a friendly reminder that your payment of {{amount}} is due on {{due_date}}. Please make your payment to avoid any service interruption.",
+    footer: "Need help? Contact our support team.",
+    buttons: [
+      {
+        id: "btn_6",
+        type: "call_to_action",
+        text: "Pay Now",
+        url: "https://example.com/pay/{{invoice_id}}",
+      },
+      {
+        id: "btn_7",
+        type: "call_to_action",
+        text: "Call Support",
+        phoneNumber: "+1234567890",
+      },
+    ],
+    createdDate: "2024-01-18T11:20:00Z",
+    updatedDate: "2024-01-20T08:15:00Z",
+    createdBy: "billing@example.com",
+    variables: ["name", "amount", "due_date", "invoice_id"],
+  },
+  {
+    id: "template_5",
+    name: "Account Verification",
+    category: "authentication",
+    language: "en",
+    status: "rejected",
+    body: "Your verification code is: {{code}}. This code will expire in 5 minutes. Do not share this code with anyone.",
+    buttons: [],
+    createdDate: "2024-01-12T09:10:00Z",
+    updatedDate: "2024-01-14T13:25:00Z",
+    createdBy: "security@example.com",
+    variables: ["code"],
+  },
+];
+
+const mockTemplateInsights: TemplateInsights[] = [
+  {
+    templateId: "template_1",
+    totalSent: 1250,
+    delivered: 1200,
+    read: 980,
+    clicked: 450,
+    deliveryRate: 96.0,
+    readRate: 81.7,
+    clickRate: 45.9,
+    lastSent: "2024-01-28T14:30:00Z",
+  },
+  {
+    templateId: "template_2",
+    totalSent: 890,
+    delivered: 885,
+    read: 820,
+    clicked: 380,
+    deliveryRate: 99.4,
+    readRate: 92.7,
+    clickRate: 46.3,
+    lastSent: "2024-01-28T16:45:00Z",
+  },
+  {
+    templateId: "template_3",
+    totalSent: 0,
+    delivered: 0,
+    read: 0,
+    clicked: 0,
+    deliveryRate: 0,
+    readRate: 0,
+    clickRate: 0,
+    lastSent: "",
+  },
+  {
+    templateId: "template_4",
+    totalSent: 560,
+    delivered: 548,
+    read: 489,
+    clicked: 123,
+    deliveryRate: 97.9,
+    readRate: 89.3,
+    clickRate: 25.1,
+    lastSent: "2024-01-27T10:20:00Z",
+  },
+  {
+    templateId: "template_5",
+    totalSent: 0,
+    delivered: 0,
+    read: 0,
+    clicked: 0,
+    deliveryRate: 0,
+    readRate: 0,
+    clickRate: 0,
+    lastSent: "",
+  },
+];
+
+const mockTemplateInteractions: TemplateInteraction[] = [
+  {
+    id: "interaction_1",
+    templateId: "template_1",
+    userId: "user_1",
+    userName: "John Doe",
+    userPhone: "+1234567890",
+    sentAt: "2024-01-28T14:30:00Z",
+    deliveredAt: "2024-01-28T14:31:00Z",
+    readAt: "2024-01-28T14:35:00Z",
+    clickedAt: "2024-01-28T14:37:00Z",
+    status: "clicked",
+  },
+  {
+    id: "interaction_2",
+    templateId: "template_1",
+    userId: "user_2",
+    userName: "Jane Smith",
+    userPhone: "+1234567891",
+    sentAt: "2024-01-28T14:30:00Z",
+    deliveredAt: "2024-01-28T14:31:00Z",
+    readAt: "2024-01-28T14:40:00Z",
+    status: "read",
+  },
+  {
+    id: "interaction_3",
+    templateId: "template_2",
+    userId: "user_3",
+    userName: "Bob Johnson",
+    userPhone: "+1234567892",
+    sentAt: "2024-01-28T16:45:00Z",
+    deliveredAt: "2024-01-28T16:46:00Z",
+    readAt: "2024-01-28T16:50:00Z",
+    clickedAt: "2024-01-28T16:52:00Z",
+    status: "clicked",
+  },
+];
+
+const mockUserSegments: UserSegment[] = [
+  {
+    id: "segment_1",
+    name: "Premium Customers",
+    description: "Customers with premium subscriptions",
+    userCount: 245,
+    criteria: { subscription_type: "premium", active: true },
+    createdDate: "2024-01-10T08:00:00Z",
+  },
+  {
+    id: "segment_2",
+    name: "New Users",
+    description: "Users who joined in the last 30 days",
+    userCount: 89,
+    criteria: { registration_date: "last_30_days" },
+    createdDate: "2024-01-15T10:30:00Z",
+  },
+  {
+    id: "segment_3",
+    name: "Inactive Users",
+    description: "Users who haven't logged in for 60+ days",
+    userCount: 156,
+    criteria: { last_login: "60_days_ago" },
+    createdDate: "2024-01-20T14:15:00Z",
+  },
+];
+
+const mockBulkSendResults: BulkSendResult[] = [
+  {
+    id: "bulk_1",
+    templateId: "template_1",
+    totalRecipients: 100,
+    successCount: 98,
+    failureCount: 2,
+    status: "completed",
+    createdAt: "2024-01-28T10:00:00Z",
+    completedAt: "2024-01-28T10:15:00Z",
+    errors: [
+      "Invalid phone number: +1234567999",
+      "User opted out: +1234567888",
+    ],
+  },
+  {
+    id: "bulk_2",
+    templateId: "template_2",
+    totalRecipients: 50,
+    successCount: 50,
+    failureCount: 0,
+    status: "completed",
+    createdAt: "2024-01-27T15:30:00Z",
+    completedAt: "2024-01-27T15:45:00Z",
+    errors: [],
+  },
+];
+
+// Helper function to extract variables from template content
+function extractVariables(...contents: (string | undefined)[]): string[] {
+  const variables = new Set<string>();
+  const regex = /\\{\\{([^}]+)\\}\\}/g;
+
+  contents.forEach((content) => {
+    if (content) {
+      let match;
+      while ((match = regex.exec(content)) !== null) {
+        variables.add(match[1].trim());
+      }
+    }
+  });
+
+  return Array.from(variables);
+}
+
+export const whatsappTemplateAPI = {
+  getAll: async (): Promise<WhatsAppTemplate[]> => {
+    return new Promise((resolve) => {
+      setTimeout(() => resolve([...mockWhatsAppTemplates]), 500);
+    });
+  },
+
+  getById: async (id: string): Promise<WhatsAppTemplate | null> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const template = mockWhatsAppTemplates.find((t) => t.id === id) || null;
+        resolve(template);
+      }, 300);
+    });
+  },
+
+  create: async (
+    templateData: WhatsAppTemplateFormData,
+  ): Promise<WhatsAppTemplate> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const newTemplate: WhatsAppTemplate = {
+          id: `template_${Date.now()}`,
+          ...templateData,
+          status: "pending",
+          createdDate: new Date().toISOString(),
+          updatedDate: new Date().toISOString(),
+          createdBy: "admin@example.com",
+          variables: extractVariables(
+            templateData.body,
+            templateData.header?.content,
+            templateData.footer,
+          ),
+        };
+        mockWhatsAppTemplates.push(newTemplate);
+        resolve(newTemplate);
+      }, 500);
+    });
+  },
+
+  update: async (
+    id: string,
+    templateData: Partial<WhatsAppTemplateFormData>,
+  ): Promise<WhatsAppTemplate> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const index = mockWhatsAppTemplates.findIndex((t) => t.id === id);
+        if (index === -1) {
+          reject(new Error("Template not found"));
+          return;
+        }
+
+        const updatedTemplate = {
+          ...mockWhatsAppTemplates[index],
+          ...templateData,
+          updatedDate: new Date().toISOString(),
+        };
+
+        if (templateData.body || templateData.header || templateData.footer) {
+          updatedTemplate.variables = extractVariables(
+            updatedTemplate.body,
+            updatedTemplate.header?.content,
+            updatedTemplate.footer,
+          );
+        }
+
+        mockWhatsAppTemplates[index] = updatedTemplate;
+        resolve(updatedTemplate);
+      }, 500);
+    });
+  },
+
+  delete: async (id: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const index = mockWhatsAppTemplates.findIndex((t) => t.id === id);
+        if (index === -1) {
+          reject(new Error("Template not found"));
+          return;
+        }
+        mockWhatsAppTemplates.splice(index, 1);
+        resolve();
+      }, 500);
+    });
+  },
+
+  getInsights: async (templateId: string): Promise<TemplateInsights | null> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const insights =
+          mockTemplateInsights.find((i) => i.templateId === templateId) || null;
+        resolve(insights);
+      }, 300);
+    });
+  },
+
+  getInteractions: async (
+    templateId: string,
+  ): Promise<TemplateInteraction[]> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const interactions = mockTemplateInteractions.filter(
+          (i) => i.templateId === templateId,
+        );
+        resolve(interactions);
+      }, 400);
+    });
+  },
+
+  sendBulk: async (request: BulkSendRequest): Promise<BulkSendResult> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const result: BulkSendResult = {
+          id: `bulk_${Date.now()}`,
+          templateId: request.templateId,
+          totalRecipients: request.recipients.length,
+          successCount: Math.floor(request.recipients.length * 0.95), // 95% success rate
+          failureCount: Math.ceil(request.recipients.length * 0.05), // 5% failure rate
+          status: "processing",
+          createdAt: new Date().toISOString(),
+          errors: [],
+        };
+        mockBulkSendResults.push(result);
+
+        // Simulate completion after 3 seconds
+        setTimeout(() => {
+          result.status = "completed";
+          result.completedAt = new Date().toISOString();
+        }, 3000);
+
+        resolve(result);
+      }, 1000);
+    });
+  },
+
+  getBulkSendHistory: async (): Promise<BulkSendResult[]> => {
+    return new Promise((resolve) => {
+      setTimeout(() => resolve([...mockBulkSendResults]), 400);
+    });
+  },
+};
+
+export const userSegmentAPI = {
+  getAll: async (): Promise<UserSegment[]> => {
+    return new Promise((resolve) => {
+      setTimeout(() => resolve([...mockUserSegments]), 400);
+    });
+  },
+
+  getById: async (id: string): Promise<UserSegment | null> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const segment = mockUserSegments.find((s) => s.id === id) || null;
+        resolve(segment);
+      }, 300);
+    });
+  },
+};
+
 // Chat API endpoints
 export const chatAPI = {
   // Get all chats
