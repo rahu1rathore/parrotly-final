@@ -90,6 +90,7 @@ export default function LeadManagementSystem() {
         leadsData,
         tasksData,
         agentsData,
+        activityLogsData,
         campaignStatsData,
         leadStatsData,
       ] = await Promise.all([
@@ -98,6 +99,7 @@ export default function LeadManagementSystem() {
         leadAPI.getAll(),
         taskAPI.getAll(),
         agentAPI.getAll(),
+        activityLogAPI.getAll(),
         campaignAPI.getStats(),
         leadAPI.getStats(),
       ]);
