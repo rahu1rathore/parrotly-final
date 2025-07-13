@@ -205,7 +205,12 @@ const AdminOverview: React.FC = () => {
                   <Typography variant="h6" gutterBottom>
                     {action.title}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary" paragraph>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    paragraph
+                    component="div"
+                  >
                     {action.description}
                   </Typography>
                   <Button
