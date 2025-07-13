@@ -931,6 +931,20 @@ export default function LeadManagement({
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Bulk Operations */}
+      <BulkLeadOperations
+        uploadOpen={bulkUploadOpen}
+        onUploadClose={() => setBulkUploadOpen(false)}
+        downloadOpen={bulkDownloadOpen}
+        onDownloadClose={() => setBulkDownloadOpen(false)}
+        campaigns={campaigns}
+        dynamicForms={dynamicForms}
+        leads={filteredLeads}
+        appliedFilters={filters}
+        onBulkUpload={onBulkUpload}
+        onBulkDownload={onBulkDownload}
+      />
     </Box>
   );
 }
