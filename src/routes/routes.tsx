@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Routes, Route } from "react-router-dom";
 import RouteGuard from "./RouteGuard";
-import CrmDashboard from "../features/dashboard/CrmDashboard";
+import CrmDashboard from "../features/dashboard/crm/CrmDashboard";
 import SignIn from "../features/auth/sign-in/SignIn";
 import SignInSide from "../features/auth/sign-in-side/SignInSide";
 import SignUp from "../features/auth/sign-up/SignUp";
