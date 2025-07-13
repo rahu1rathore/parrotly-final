@@ -42,7 +42,13 @@ export default function CrmMenuContent() {
   const location = useLocation();
 
   const handleNavigation = (path: string) => {
-    navigate(path);
+    if (path === "/admin") {
+      // Navigate to admin panel (outside of CRM context)
+      window.location.href = "/admin";
+    } else {
+      // Navigate within CRM context
+      navigate(path);
+    }
   };
 
   return (
