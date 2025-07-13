@@ -19,6 +19,7 @@ import {
 } from "@mui/icons-material";
 import CampaignManagement from "./CampaignManagement";
 import DynamicFormBuilder from "./DynamicFormBuilder";
+import LeadManagement from "./LeadManagement";
 import {
   Campaign,
   CampaignFormData,
