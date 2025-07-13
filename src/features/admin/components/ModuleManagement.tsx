@@ -200,41 +200,22 @@ const ModuleManagement: React.FC<ModuleManagementProps> = ({
   };
 
   return (
-    <Box>
-      {/* Header */}
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={3}
-      >
-        <Typography variant="h5" component="h1" fontWeight={600}>
-          Recent Modules
-        </Typography>
-        <Link
-          component="button"
-          variant="body2"
-          onClick={() => handleDialogOpen()}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 0.5,
-            textDecoration: "none",
-            color: "primary.main",
-            "&:hover": { textDecoration: "underline" },
-          }}
-        >
-          View All
-          <ArrowForwardIcon sx={{ fontSize: 16 }} />
-        </Link>
-      </Box>
-
-      {/* Modules Table */}
+    <Box sx={{ width: "100%", p: 0, m: 0 }}>
+      {/* Modules Table - Full Width */}
       <TableContainer
         component={Paper}
-        sx={{ boxShadow: "none", border: "1px solid", borderColor: "divider" }}
+        sx={{
+          boxShadow: "none",
+          border: "1px solid",
+          borderColor: "divider",
+          width: "100%",
+          m: 0,
+          "& .MuiTable-root": {
+            width: "100%",
+          },
+        }}
       >
-        <Table>
+        <Table sx={{ width: "100%" }}>
           <TableHead>
             <TableRow sx={{ backgroundColor: "grey.50" }}>
               <TableCell
@@ -242,6 +223,7 @@ const ModuleManagement: React.FC<ModuleManagementProps> = ({
                   fontWeight: 600,
                   color: "text.secondary",
                   fontSize: "0.875rem",
+                  pl: 3,
                 }}
               >
                 Module Name
@@ -296,6 +278,7 @@ const ModuleManagement: React.FC<ModuleManagementProps> = ({
                   fontWeight: 600,
                   color: "text.secondary",
                   fontSize: "0.875rem",
+                  pr: 3,
                 }}
               >
                 Actions
@@ -329,7 +312,7 @@ const ModuleManagement: React.FC<ModuleManagementProps> = ({
                   hover
                   sx={{ "&:hover": { backgroundColor: "grey.50" } }}
                 >
-                  <TableCell>
+                  <TableCell sx={{ pl: 3 }}>
                     <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                       <Avatar
                         sx={{
@@ -388,7 +371,7 @@ const ModuleManagement: React.FC<ModuleManagementProps> = ({
                       })}
                     </Typography>
                   </TableCell>
-                  <TableCell>
+                  <TableCell sx={{ pr: 3 }}>
                     <IconButton
                       size="small"
                       onClick={() => handleDialogOpen(module)}
@@ -410,9 +393,7 @@ const ModuleManagement: React.FC<ModuleManagementProps> = ({
                     py={4}
                     component="div"
                   >
-                    {searchTerm || filterStatus !== "all"
-                      ? "No modules found matching your criteria"
-                      : "No modules available. Create your first module to get started."}
+                    No modules available.
                   </Typography>
                 </TableCell>
               </TableRow>
@@ -420,56 +401,6 @@ const ModuleManagement: React.FC<ModuleManagementProps> = ({
           </TableBody>
         </Table>
       </TableContainer>
-
-      {/* Hidden Filters - Can be toggled via View All */}
-      <Box sx={{ display: "none" }}>
-        <Paper sx={{ p: 2, mb: 3 }}>
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Search modules"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} md={3}>
-              <FormControl fullWidth>
-                <InputLabel>Filter by Status</InputLabel>
-                <Select
-                  value={filterStatus}
-                  label="Filter by Status"
-                  onChange={(e) =>
-                    setFilterStatus(e.target.value as FilterStatus)
-                  }
-                >
-                  <MenuItem value="all">All Modules</MenuItem>
-                  <MenuItem value="active">Active Only</MenuItem>
-                  <MenuItem value="inactive">Inactive Only</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} md={3}>
-              <Button
-                fullWidth
-                variant="outlined"
-                startIcon={<RefreshIcon />}
-                onClick={loadModules}
-                disabled={loading}
-              >
-                Refresh
-              </Button>
-            </Grid>
-          </Grid>
-        </Paper>
-      </Box>
 
       {/* Create/Edit Dialog */}
       <Dialog
