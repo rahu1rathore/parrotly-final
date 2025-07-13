@@ -9,6 +9,7 @@ import SignUp from "../features/auth/sign-up/SignUp";
 import Blog from "../pages/blog/Blog";
 import Checkout from "../pages/checkout/Checkout";
 import MarketingPage from "../pages/marketing-page/MarketingPage";
+import DemoAccess from "../pages/DemoAccess";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
