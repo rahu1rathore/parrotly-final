@@ -44,4 +44,40 @@ export interface SubscriptionFormData {
   modules: ModulePermission[];
 }
 
+export interface Organization {
+  id: string;
+  name: string;
+  description?: string;
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+  postal_code: string;
+  email: string;
+  website?: string;
+  established_date: string;
+  logo?: string;
+  phone_number: string;
+  subscription_id?: string;
+  subscription_name?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface OrganizationFormData {
+  name: string;
+  description: string;
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+  postal_code: string;
+  email: string;
+  website: string;
+  established_date: string;
+  logo: string;
+  phone_number: string;
+  subscription_id: string;
+}
+
 export type FilterStatus = "all" | "active" | "inactive";
