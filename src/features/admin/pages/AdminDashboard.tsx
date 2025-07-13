@@ -14,6 +14,7 @@ import ModuleManagement from "../components/ModuleManagement";
 import SubscriptionManagement from "../components/SubscriptionManagement";
 import OrganizationManagement from "../components/OrganizationManagement";
 import CustomerManagement from "../components/CustomerManagement";
+import InterveneAdminChat from "../components/InterveneAdminChat";
 import AdminOverview from "../components/AdminOverview";
 import AppTheme from "../../../themes/AppTheme";
 import {
