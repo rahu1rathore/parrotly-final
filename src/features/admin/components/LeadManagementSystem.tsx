@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import {
   Campaign as CampaignIcon,
-  DynamicForm as FormBuilderIcon,
+  Description as FormBuilderIcon,
   People as PeopleIcon,
   Assignment as AssignmentIcon,
   Task as TaskIcon,
