@@ -32,6 +32,7 @@ const xThemeComponents = {
 const getPageTitle = (pathname: string) => {
   if (pathname.includes("/modules")) return "Module Management";
   if (pathname.includes("/subscriptions")) return "Subscription Management";
+  if (pathname.includes("/organizations")) return "Organization Management";
   if (pathname.includes("/analytics")) return "Analytics Dashboard";
   if (pathname.includes("/users")) return "User Management";
   if (pathname.includes("/settings")) return "Admin Settings";
@@ -43,6 +44,8 @@ const getPageSubtitle = (pathname: string) => {
     return "Create, edit, and manage system modules";
   if (pathname.includes("/subscriptions"))
     return "Configure subscription plans and pricing";
+  if (pathname.includes("/organizations"))
+    return "Manage organizations and their information";
   if (pathname.includes("/analytics"))
     return "View analytics and performance metrics";
   if (pathname.includes("/users"))
