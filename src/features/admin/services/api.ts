@@ -3,9 +3,12 @@ import {
   Module,
   Subscription,
   Organization,
+  Customer,
+  FormConfiguration,
   ModuleFormData,
   SubscriptionFormData,
   OrganizationFormData,
+  CustomerFormData,
 } from "../types";
 
 // Module API endpoints
