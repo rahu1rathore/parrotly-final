@@ -69,7 +69,7 @@ export default function AppRoutes() {
 
       {/* Protected routes */}
       <Route
-        path="/admin"
+        path="/admin/*"
         element={
           <RouteGuard requireAuth={true}>
             <AdminDashboard />
