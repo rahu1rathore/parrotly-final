@@ -20,6 +20,7 @@ import {
 import CampaignManagement from "./CampaignManagement";
 import DynamicFormBuilder from "./DynamicFormBuilder";
 import LeadManagement from "./LeadManagement";
+import TaskManagement from "./TaskManagement";
 import {
   Campaign,
   CampaignFormData,
