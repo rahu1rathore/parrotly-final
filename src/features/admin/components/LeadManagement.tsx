@@ -116,6 +116,8 @@ export default function LeadManagement({
   onAssignLead,
   onBulkAssign,
   onFilterChange,
+  onBulkUpload,
+  onBulkDownload,
   onRefresh,
 }: LeadManagementProps) {
   const [page, setPage] = useState(0);
