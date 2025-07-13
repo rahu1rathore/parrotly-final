@@ -610,7 +610,11 @@ const SubscriptionManagement: React.FC = () => {
                 variant="outlined"
                 sx={{ p: 2, textAlign: "center", mt: 2 }}
               >
-                <Typography variant="body2" color="text.secondary">
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  component="div"
+                >
                   No modules selected. Add modules to configure permissions.
                 </Typography>
               </Paper>
