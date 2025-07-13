@@ -17,6 +17,7 @@ export default function AdminNavbarBreadcrumbs() {
     subscriptions: "Subscriptions",
     organizations: "Organizations",
     customers: "Customers",
+    chat: "Admin Chat",
     analytics: "Analytics",
     users: "Users",
     settings: "Settings",
