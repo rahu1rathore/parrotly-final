@@ -344,6 +344,51 @@ export default function LeadManagementSystem() {
     }
   };
 
+  // Task handlers
+  const handleCreateTask = async (taskData: TaskFormData) => {
+    try {
+      setActionLoading(true);
+      const newTask = await taskAPI.create(taskData);
+      setTasks((prev) => [newTask, ...prev]);
+      showNotification("Task created successfully!", "success");
+    } catch (error) {
+      showNotification("Failed to create task", "error");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleUpdateTask = async (
+    id: string,
+    taskData: Partial<
+      TaskFormData & { status: Task["status"]; outcome?: string }
+    >,
+  ) => {
+    try {
+      setActionLoading(true);
+      const updatedTask = await taskAPI.update(id, taskData);
+      setTasks((prev) => prev.map((t) => (t.id === id ? updatedTask : t)));
+      showNotification("Task updated successfully!", "success");
+    } catch (error) {
+      showNotification("Failed to update task", "error");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleDeleteTask = async (id: string) => {
+    try {
+      setActionLoading(true);
+      await taskAPI.delete(id);
+      setTasks((prev) => prev.filter((t) => t.id !== id));
+      showNotification("Task deleted successfully", "success");
+    } catch (error) {
+      showNotification("Failed to delete task", "error");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   // Dynamic Form handlers
   const handleCreateForm = async (formData: Partial<DynamicForm>) => {
     try {
