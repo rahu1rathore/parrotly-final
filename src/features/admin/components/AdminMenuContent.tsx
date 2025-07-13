@@ -55,6 +55,12 @@ const mainListItems = [
     badge: "+5",
   },
   {
+    text: "WhatsApp Templates",
+    icon: <MessageRoundedIcon />,
+    path: "/admin/whatsapp-templates",
+    description: "Create & manage WhatsApp templates",
+  },
+  {
     text: "Customer Management",
     icon: <PersonRoundedIcon />,
     path: "/admin/customers",
