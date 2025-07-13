@@ -32,6 +32,8 @@ import {
   Task,
   TaskFormData,
   Agent,
+  LeadAssignment,
+  ActivityLog,
   CampaignStats,
   LeadStats,
   BulkUploadResult,
