@@ -64,15 +64,22 @@ const getPageSubtitle = (pathname: string) => {
 
 export default function AdminDashboard() {
   const location = useLocation();
+  const [sidebarOpen, setSidebarOpen] = React.useState(true);
   const pageTitle = getPageTitle(location.pathname);
   const pageSubtitle = getPageSubtitle(location.pathname);
   const isChatPage = location.pathname.includes("/chat");
+
+  const handleSidebarToggle = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
 
   return (
     <AppTheme themeComponents={xThemeComponents}>
       <CssBaseline enableColorScheme />
       <Box sx={{ display: "flex", height: "100vh" }}>
-        {!isChatPage && <AdminSideMenu />}
+        {!isChatPage && (
+          <AdminSideMenu open={sidebarOpen} onToggle={handleSidebarToggle} />
+        )}
         {!isChatPage && <AdminAppNavbar />}
         {/* Main content */}
         <Box
