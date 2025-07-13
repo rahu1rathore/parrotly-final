@@ -13,6 +13,13 @@ import {
   OrganizationFormData,
   CustomerFormData,
   ChatUserFormData,
+  WhatsAppTemplate,
+  WhatsAppTemplateFormData,
+  TemplateInsights,
+  TemplateInteraction,
+  BulkSendRequest,
+  BulkSendResult,
+  UserSegment,
 } from "../types";
 
 // Module API endpoints
