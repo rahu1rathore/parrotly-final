@@ -101,6 +101,7 @@ export default function AdminDashboard() {
                 path="organizations"
                 element={<OrganizationManagement />}
               />
+              <Route path="customers" element={<CustomerManagement />} />
               <Route path="analytics" element={<AdminOverview />} />
               <Route path="users" element={<AdminOverview />} />
               <Route path="settings" element={<AdminOverview />} />
