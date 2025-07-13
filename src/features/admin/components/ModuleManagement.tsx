@@ -373,38 +373,17 @@ const ModuleManagement: React.FC<ModuleManagementProps> = ({
 
   return (
     <Box sx={{ width: "100%", p: 0, m: 0 }}>
-      {/* Header with Create Button */}
-      <Card sx={{ mb: 3, boxShadow: 1 }}>
-        <CardContent>
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <Box>
-              <Typography
-                variant="h5"
-                component="h1"
-                fontWeight={600}
-                gutterBottom
-              >
-                Module Management
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Create, edit, and manage system modules
-              </Typography>
-            </Box>
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={() => setCreateDialogOpen(true)}
-              size="large"
-            >
-              Create Module
-            </Button>
-          </Stack>
-        </CardContent>
-      </Card>
+      {/* Create Button */}
+      <Box sx={{ mb: 3, display: "flex", justifyContent: "flex-end" }}>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={() => setCreateDialogOpen(true)}
+          size="large"
+        >
+          Create Module
+        </Button>
+      </Box>
 
       {/* Filters */}
       <Card sx={{ mb: 3, boxShadow: 1 }}>
