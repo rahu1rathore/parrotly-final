@@ -13,6 +13,7 @@ import ExtensionRoundedIcon from "@mui/icons-material/ExtensionRounded";
 import SubscriptionsRoundedIcon from "@mui/icons-material/SubscriptionsRounded";
 import BusinessRoundedIcon from "@mui/icons-material/BusinessRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
+import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
 import AnalyticsRoundedIcon from "@mui/icons-material/AnalyticsRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
