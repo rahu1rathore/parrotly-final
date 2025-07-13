@@ -66,13 +66,14 @@ export default function AdminDashboard() {
   const location = useLocation();
   const pageTitle = getPageTitle(location.pathname);
   const pageSubtitle = getPageSubtitle(location.pathname);
+  const isChatPage = location.pathname.includes("/chat");
 
   return (
     <AppTheme themeComponents={xThemeComponents}>
       <CssBaseline enableColorScheme />
       <Box sx={{ display: "flex", height: "100vh" }}>
-        <AdminSideMenu />
-        <AdminAppNavbar />
+        {!isChatPage && <AdminSideMenu />}
+        {!isChatPage && <AdminAppNavbar />}
         {/* Main content */}
         <Box
           component="main"
@@ -81,38 +82,44 @@ export default function AdminDashboard() {
             backgroundColor: theme.vars
               ? `rgba(${theme.vars.palette.background.defaultChannel} / 1)`
               : alpha(theme.palette.background.default, 1),
-            overflow: "auto",
+            overflow: isChatPage ? "hidden" : "auto",
           })}
         >
-          <Stack
-            spacing={2}
-            sx={{
-              alignItems: "center",
-              mx: 3,
-              pb: 5,
-              mt: { xs: 8, md: 0 },
-            }}
-          >
-            <AdminHeader title={pageTitle} subtitle={pageSubtitle} />
+          {isChatPage ? (
             <Routes>
-              <Route index element={<AdminOverview />} />
-              <Route path="modules" element={<ModuleManagement />} />
-              <Route
-                path="subscriptions"
-                element={<SubscriptionManagement />}
-              />
-              <Route
-                path="organizations"
-                element={<OrganizationManagement />}
-              />
-              <Route path="customers" element={<CustomerManagement />} />
-              <Route path="analytics" element={<AdminOverview />} />
-              <Route path="users" element={<AdminOverview />} />
-              <Route path="settings" element={<AdminOverview />} />
-              <Route path="help" element={<AdminOverview />} />
-              <Route path="profile" element={<AdminOverview />} />
+              <Route path="chat" element={<InterveneAdminChat />} />
             </Routes>
-          </Stack>
+          ) : (
+            <Stack
+              spacing={2}
+              sx={{
+                alignItems: "center",
+                mx: 3,
+                pb: 5,
+                mt: { xs: 8, md: 0 },
+              }}
+            >
+              <AdminHeader title={pageTitle} subtitle={pageSubtitle} />
+              <Routes>
+                <Route index element={<AdminOverview />} />
+                <Route path="modules" element={<ModuleManagement />} />
+                <Route
+                  path="subscriptions"
+                  element={<SubscriptionManagement />}
+                />
+                <Route
+                  path="organizations"
+                  element={<OrganizationManagement />}
+                />
+                <Route path="customers" element={<CustomerManagement />} />
+                <Route path="analytics" element={<AdminOverview />} />
+                <Route path="users" element={<AdminOverview />} />
+                <Route path="settings" element={<AdminOverview />} />
+                <Route path="help" element={<AdminOverview />} />
+                <Route path="profile" element={<AdminOverview />} />
+              </Routes>
+            </Stack>
+          )}
         </Box>
       </Box>
     </AppTheme>
