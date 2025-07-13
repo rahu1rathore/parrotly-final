@@ -18,13 +18,13 @@ import Contacts from "./pages/Contacts";
 import Tasks from "./pages/Tasks";
 import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
-import AppTheme from "../shared-theme/AppTheme";
+import AppTheme from "../../../themes/AppTheme";
 import {
   chartsCustomizations,
   dataGridCustomizations,
   datePickersCustomizations,
   treeViewCustomizations,
-} from "../dashboard/theme/customizations";
+} from "../theme/customizations";
 
 const xThemeComponents = {
   ...chartsCustomizations,
