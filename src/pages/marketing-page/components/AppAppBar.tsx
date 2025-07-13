@@ -33,10 +33,19 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 }));
 
 export default function AppAppBar() {
+  const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
+  };
+
+  const handleSignIn = () => {
+    navigate("/login");
+  };
+
+  const handleAdminAccess = () => {
+    navigate("/login");
   };
 
   return (
