@@ -276,3 +276,233 @@ export interface UserSegment {
   criteria: Record<string, any>;
   createdDate: string;
 }
+
+// Lead Management Types
+export interface DynamicFormField {
+  id: string;
+  name: string;
+  label: string;
+  type:
+    | "text"
+    | "email"
+    | "phone"
+    | "number"
+    | "date"
+    | "select"
+    | "textarea"
+    | "boolean"
+    | "file";
+  required: boolean;
+  options?: string[]; // For select fields
+  placeholder?: string;
+  validation?: {
+    minLength?: number;
+    maxLength?: number;
+    pattern?: string;
+    min?: number;
+    max?: number;
+  };
+  order: number;
+  isSystem?: boolean; // For non-editable fields like phone
+}
+
+export interface DynamicForm {
+  id: string;
+  name: string;
+  description?: string;
+  fields: DynamicFormField[];
+  createdBy: string;
+  createdDate: string;
+  updatedDate: string;
+  isActive: boolean;
+}
+
+export interface Campaign {
+  id: string;
+  name: string;
+  description?: string;
+  startDate: string;
+  endDate?: string;
+  status: "draft" | "active" | "paused" | "completed" | "cancelled";
+  owner: string;
+  formId?: string;
+  formName?: string;
+  leadCount: number;
+  convertedCount: number;
+  createdBy: string;
+  createdDate: string;
+  updatedDate: string;
+}
+
+export interface Lead {
+  id: string;
+  campaignId: string;
+  campaignName?: string;
+  phoneNumber: string; // Always required
+  data: Record<string, any>; // Dynamic fields based on form
+  status:
+    | "new"
+    | "contacted"
+    | "qualified"
+    | "converted"
+    | "dropped"
+    | "nurturing";
+  assignedTo?: string;
+  assignedBy?: string;
+  assignedDate?: string;
+  source: string;
+  tags: string[];
+  priority: "low" | "medium" | "high";
+  lastContactDate?: string;
+  nextFollowUpDate?: string;
+  notes?: string;
+  createdDate: string;
+  updatedDate: string;
+}
+
+export interface LeadFormData {
+  campaignId: string;
+  phoneNumber: string;
+  data: Record<string, any>;
+  source?: string;
+  tags?: string[];
+  priority?: "low" | "medium" | "high";
+  assignedTo?: string;
+  notes?: string;
+}
+
+export interface LeadAssignment {
+  id: string;
+  leadId: string;
+  leadData?: Lead;
+  assignedTo: string;
+  assignedToName?: string;
+  assignedBy: string;
+  assignedByName?: string;
+  assignedDate: string;
+  notes?: string;
+  isActive: boolean;
+}
+
+export interface Task {
+  id: string;
+  leadId: string;
+  leadData?: Lead;
+  title: string;
+  description?: string;
+  dueDate: string;
+  reminderDate?: string;
+  status: "pending" | "in_progress" | "completed" | "cancelled";
+  priority: "low" | "medium" | "high";
+  assignedTo: string;
+  assignedToName?: string;
+  createdBy: string;
+  createdByName?: string;
+  completedDate?: string;
+  outcome?: string;
+  createdDate: string;
+  updatedDate: string;
+}
+
+export interface ActivityLog {
+  id: string;
+  entityType: "lead" | "campaign" | "task" | "assignment";
+  entityId: string;
+  action: string;
+  description: string;
+  performedBy: string;
+  performedByName?: string;
+  timestamp: string;
+  metadata?: Record<string, any>;
+}
+
+export interface Agent {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  role: string;
+  isActive: boolean;
+  assignedLeadsCount: number;
+  convertedLeadsCount: number;
+  avatar?: string;
+  createdDate: string;
+}
+
+export interface LeadFilter {
+  campaignId?: string;
+  status?: string;
+  assignedTo?: string;
+  dateRange?: {
+    start: string;
+    end: string;
+  };
+  priority?: string;
+  tags?: string[];
+  source?: string;
+}
+
+export interface BulkUploadResult {
+  id: string;
+  filename: string;
+  totalRecords: number;
+  successCount: number;
+  errorCount: number;
+  status: "processing" | "completed" | "failed";
+  errors: Array<{
+    row: number;
+    field: string;
+    message: string;
+  }>;
+  createdBy: string;
+  createdDate: string;
+  completedDate?: string;
+}
+
+export interface CampaignFormData {
+  name: string;
+  description?: string;
+  startDate: string;
+  endDate?: string;
+  status: "draft" | "active" | "paused";
+  formId?: string;
+}
+
+export interface TaskFormData {
+  leadId: string;
+  title: string;
+  description?: string;
+  dueDate: string;
+  reminderDate?: string;
+  priority: "low" | "medium" | "high";
+  assignedTo: string;
+}
+
+export interface NotificationSettings {
+  assignments: boolean;
+  taskDeadlines: boolean;
+  leadUpdates: boolean;
+  campaignUpdates: boolean;
+  emailNotifications: boolean;
+  pushNotifications: boolean;
+}
+
+export interface LeadStats {
+  totalLeads: number;
+  newLeads: number;
+  contactedLeads: number;
+  qualifiedLeads: number;
+  convertedLeads: number;
+  droppedLeads: number;
+  conversionRate: number;
+  averageResponseTime: number;
+}
+
+export interface CampaignStats {
+  totalCampaigns: number;
+  activeCampaigns: number;
+  totalLeads: number;
+  conversionRate: number;
+  topPerformingCampaign: string;
+  leadsBySource: Record<string, number>;
+}
