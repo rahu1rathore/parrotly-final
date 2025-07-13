@@ -153,6 +153,48 @@ export const customerAPI = {
   delete: (id: string): Promise<void> => api.delete(`/admin/customers/${id}`),
 };
 
+// Chat API endpoints
+export const chatAPI = {
+  // Get all chats
+  getAll: (): Promise<{ data: Chat[] }> => api.get("/admin/chats"),
+
+  // Get chat by user ID
+  getByUserId: (userId: string): Promise<{ data: Chat }> =>
+    api.get(`/admin/chats/user/${userId}`),
+
+  // Send message
+  sendMessage: (
+    chatId: string,
+    message: string,
+  ): Promise<{ data: ChatMessage }> =>
+    api.post(`/admin/chats/${chatId}/messages`, { message }),
+
+  // Mark messages as read
+  markAsRead: (chatId: string): Promise<void> =>
+    api.patch(`/admin/chats/${chatId}/read`),
+};
+
+// Chat User API endpoints
+export const chatUserAPI = {
+  // Get all chat users
+  getAll: (): Promise<{ data: ChatUser[] }> => api.get("/admin/chat-users"),
+
+  // Get chat user by ID
+  getById: (id: string): Promise<{ data: ChatUser }> =>
+    api.get(`/admin/chat-users/${id}`),
+
+  // Update chat user
+  update: (id: string, data: ChatUserFormData): Promise<{ data: ChatUser }> =>
+    api.put(`/admin/chat-users/${id}`, data),
+
+  // Update user status
+  updateStatus: (
+    id: string,
+    status: "online" | "offline" | "away",
+  ): Promise<{ data: ChatUser }> =>
+    api.patch(`/admin/chat-users/${id}/status`, { status }),
+};
+
 // Mock data for development (remove when backend is ready)
 export const mockModules: Module[] = [
   {
