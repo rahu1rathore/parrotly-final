@@ -39,6 +39,7 @@ const getPageTitle = (pathname: string) => {
   if (pathname.includes("/organizations")) return "Organization Management";
   if (pathname.includes("/customers")) return "Customer Management";
   if (pathname.includes("/whatsapp-templates")) return "WhatsApp Templates";
+  if (pathname.includes("/lead-management")) return "Lead Management";
   if (pathname.includes("/chat")) return "Admin Chat";
   if (pathname.includes("/analytics")) return "Analytics Dashboard";
   if (pathname.includes("/users")) return "User Management";
@@ -57,6 +58,8 @@ const getPageSubtitle = (pathname: string) => {
     return "Manage customers with dynamic forms and configurations";
   if (pathname.includes("/whatsapp-templates"))
     return "Create and manage WhatsApp message templates with live preview";
+  if (pathname.includes("/lead-management"))
+    return "Campaigns, dynamic forms, lead tracking, assignments, and tasks";
   if (pathname.includes("/chat"))
     return "Communicate with customers through WhatsApp-style interface";
   if (pathname.includes("/analytics"))
@@ -127,6 +130,10 @@ export default function AdminDashboard() {
                 <Route
                   path="whatsapp-templates"
                   element={<WhatsAppTemplateManagement />}
+                />
+                <Route
+                  path="lead-management"
+                  element={<LeadManagementSystem />}
                 />
                 <Route path="analytics" element={<AdminOverview />} />
                 <Route path="users" element={<AdminOverview />} />
