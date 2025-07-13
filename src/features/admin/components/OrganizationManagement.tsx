@@ -997,18 +997,16 @@ const OrganizationManagement: React.FC<OrganizationManagementProps> = ({
                   label="Established Date"
                   value={
                     formData.established_date
-                      ? new Date(formData.established_date)
+                      ? dayjs(formData.established_date)
                       : null
                   }
                   onChange={(date) =>
                     setFormData({
                       ...formData,
-                      established_date: date
-                        ? date.toISOString().split("T")[0]
-                        : "",
+                      established_date: date ? date.format("YYYY-MM-DD") : "",
                     })
                   }
-                  renderInput={(params) => <TextField {...params} fullWidth />}
+                  slotProps={{ textField: { fullWidth: true } }}
                 />
               </Grid>
 
@@ -1274,18 +1272,16 @@ const OrganizationManagement: React.FC<OrganizationManagementProps> = ({
                   label="Established Date"
                   value={
                     formData.established_date
-                      ? new Date(formData.established_date)
+                      ? dayjs(formData.established_date)
                       : null
                   }
                   onChange={(date) =>
                     setFormData({
                       ...formData,
-                      established_date: date
-                        ? date.toISOString().split("T")[0]
-                        : "",
+                      established_date: date ? date.format("YYYY-MM-DD") : "",
                     })
                   }
-                  renderInput={(params) => <TextField {...params} fullWidth />}
+                  slotProps={{ textField: { fullWidth: true } }}
                 />
               </Grid>
 
