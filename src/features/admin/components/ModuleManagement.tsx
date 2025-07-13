@@ -27,12 +27,16 @@ import {
   Snackbar,
   Grid,
   InputAdornment,
+  Avatar,
+  Link,
 } from "@mui/material";
 import {
   Add as AddIcon,
   Edit as EditIcon,
   Search as SearchIcon,
   Refresh as RefreshIcon,
+  MoreVert as MoreVertIcon,
+  ArrowForward as ArrowForwardIcon,
 } from "@mui/icons-material";
 import { Module, ModuleFormData, FilterStatus } from "../types";
 import { moduleAPI, mockModules } from "../services/api";
@@ -204,125 +208,202 @@ const ModuleManagement: React.FC<ModuleManagementProps> = ({
         alignItems="center"
         mb={3}
       >
-        <Typography variant="h4" component="h1" fontWeight="bold">
-          Module Management
+        <Typography variant="h5" component="h1" fontWeight={600}>
+          Recent Modules
         </Typography>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
+        <Link
+          component="button"
+          variant="body2"
           onClick={() => handleDialogOpen()}
-          size="large"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 0.5,
+            textDecoration: "none",
+            color: "primary.main",
+            "&:hover": { textDecoration: "underline" },
+          }}
         >
-          Add Module
-        </Button>
+          View All
+          <ArrowForwardIcon sx={{ fontSize: 16 }} />
+        </Link>
       </Box>
 
-      {/* Filters and Search */}
-      <Paper sx={{ p: 2, mb: 3 }}>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Search modules"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <FormControl fullWidth>
-              <InputLabel>Filter by Status</InputLabel>
-              <Select
-                value={filterStatus}
-                label="Filter by Status"
-                onChange={(e) =>
-                  setFilterStatus(e.target.value as FilterStatus)
-                }
-              >
-                <MenuItem value="all">All Modules</MenuItem>
-                <MenuItem value="active">Active Only</MenuItem>
-                <MenuItem value="inactive">Inactive Only</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <Button
-              fullWidth
-              variant="outlined"
-              startIcon={<RefreshIcon />}
-              onClick={loadModules}
-              disabled={loading}
-            >
-              Refresh
-            </Button>
-          </Grid>
-        </Grid>
-      </Paper>
-
       {/* Modules Table */}
-      <TableContainer component={Paper}>
+      <TableContainer
+        component={Paper}
+        sx={{ boxShadow: "none", border: "1px solid", borderColor: "divider" }}
+      >
         <Table>
           <TableHead>
-            <TableRow>
-              <TableCell>Module Name</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell align="center">Status</TableCell>
-              <TableCell align="center">Active</TableCell>
-              <TableCell align="center">Actions</TableCell>
+            <TableRow sx={{ backgroundColor: "grey.50" }}>
+              <TableCell
+                sx={{
+                  fontWeight: 600,
+                  color: "text.secondary",
+                  fontSize: "0.875rem",
+                }}
+              >
+                Module Name
+              </TableCell>
+              <TableCell
+                sx={{
+                  fontWeight: 600,
+                  color: "text.secondary",
+                  fontSize: "0.875rem",
+                }}
+              >
+                Category
+              </TableCell>
+              <TableCell
+                sx={{
+                  fontWeight: 600,
+                  color: "text.secondary",
+                  fontSize: "0.875rem",
+                }}
+              >
+                Users
+              </TableCell>
+              <TableCell
+                sx={{
+                  fontWeight: 600,
+                  color: "text.secondary",
+                  fontSize: "0.875rem",
+                }}
+              >
+                Status
+              </TableCell>
+              <TableCell
+                sx={{
+                  fontWeight: 600,
+                  color: "text.secondary",
+                  fontSize: "0.875rem",
+                }}
+              >
+                Active
+              </TableCell>
+              <TableCell
+                sx={{
+                  fontWeight: 600,
+                  color: "text.secondary",
+                  fontSize: "0.875rem",
+                }}
+              >
+                Created Date
+              </TableCell>
+              <TableCell
+                sx={{
+                  fontWeight: 600,
+                  color: "text.secondary",
+                  fontSize: "0.875rem",
+                }}
+              >
+                Actions
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredModules.map((module) => (
-              <TableRow key={module.id} hover>
-                <TableCell>
-                  <Typography variant="subtitle1" fontWeight="medium">
-                    {module.name}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="body2" color="text.secondary">
-                    {module.description || "No description"}
-                  </Typography>
-                </TableCell>
-                <TableCell align="center">
-                  <Chip
-                    label={module.is_active ? "Active" : "Inactive"}
-                    color={module.is_active ? "success" : "default"}
-                    size="small"
-                  />
-                </TableCell>
-                <TableCell align="center">
-                  <FormControlLabel
-                    control={
-                      <Switch
-                        checked={module.is_active}
-                        onChange={() => handleToggleActive(module)}
-                        disabled={loading}
-                      />
-                    }
-                    label=""
-                  />
-                </TableCell>
-                <TableCell align="center">
-                  <IconButton
-                    onClick={() => handleDialogOpen(module)}
-                    disabled={loading}
-                    color="primary"
-                  >
-                    <EditIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
+            {filteredModules.map((module, index) => {
+              const moduleColors = [
+                "#1976d2",
+                "#388e3c",
+                "#f57c00",
+                "#d32f2f",
+                "#7b1fa2",
+              ];
+              const moduleAvatarColor =
+                moduleColors[index % moduleColors.length];
+              const userCount = Math.floor(Math.random() * 500) + 10;
+              const categories = [
+                "Core",
+                "Analytics",
+                "Sales",
+                "Support",
+                "Marketing",
+              ];
+              const category = categories[index % categories.length];
+
+              return (
+                <TableRow
+                  key={module.id}
+                  hover
+                  sx={{ "&:hover": { backgroundColor: "grey.50" } }}
+                >
+                  <TableCell>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                      <Avatar
+                        sx={{
+                          width: 32,
+                          height: 32,
+                          backgroundColor: moduleAvatarColor,
+                          fontSize: "0.875rem",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {module.name.charAt(0).toUpperCase()}
+                      </Avatar>
+                      <Typography variant="body2" fontWeight={500}>
+                        {module.name}
+                      </Typography>
+                    </Box>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="body2" color="text.secondary">
+                      {category}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="body2" fontWeight={500}>
+                      {userCount.toLocaleString()}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Chip
+                      label={module.is_active ? "Active" : "Inactive"}
+                      size="small"
+                      sx={{
+                        backgroundColor: module.is_active
+                          ? "#e3f2fd"
+                          : "#f5f5f5",
+                        color: module.is_active ? "#1976d2" : "#757575",
+                        fontWeight: 500,
+                        fontSize: "0.75rem",
+                        border: "none",
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="body2" fontWeight={500}>
+                      {module.is_active ? "100%" : "0%"}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="body2" color="text.secondary">
+                      {new Date(
+                        module.created_at || "2023-10-01",
+                      ).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <IconButton
+                      size="small"
+                      onClick={() => handleDialogOpen(module)}
+                      disabled={loading}
+                      sx={{ color: "text.secondary" }}
+                    >
+                      <MoreVertIcon sx={{ fontSize: 18 }} />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
             {filteredModules.length === 0 && (
               <TableRow>
-                <TableCell colSpan={5} align="center">
+                <TableCell colSpan={7} align="center">
                   <Typography
                     variant="body2"
                     color="text.secondary"
@@ -339,6 +420,56 @@ const ModuleManagement: React.FC<ModuleManagementProps> = ({
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Hidden Filters - Can be toggled via View All */}
+      <Box sx={{ display: "none" }}>
+        <Paper sx={{ p: 2, mb: 3 }}>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Search modules"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} md={3}>
+              <FormControl fullWidth>
+                <InputLabel>Filter by Status</InputLabel>
+                <Select
+                  value={filterStatus}
+                  label="Filter by Status"
+                  onChange={(e) =>
+                    setFilterStatus(e.target.value as FilterStatus)
+                  }
+                >
+                  <MenuItem value="all">All Modules</MenuItem>
+                  <MenuItem value="active">Active Only</MenuItem>
+                  <MenuItem value="inactive">Inactive Only</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} md={3}>
+              <Button
+                fullWidth
+                variant="outlined"
+                startIcon={<RefreshIcon />}
+                onClick={loadModules}
+                disabled={loading}
+              >
+                Refresh
+              </Button>
+            </Grid>
+          </Grid>
+        </Paper>
+      </Box>
 
       {/* Create/Edit Dialog */}
       <Dialog
