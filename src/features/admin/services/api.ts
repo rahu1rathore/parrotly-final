@@ -5,10 +5,14 @@ import {
   Organization,
   Customer,
   FormConfiguration,
+  Chat,
+  ChatUser,
+  ChatMessage,
   ModuleFormData,
   SubscriptionFormData,
   OrganizationFormData,
   CustomerFormData,
+  ChatUserFormData,
 } from "../types";
 
 // Module API endpoints
