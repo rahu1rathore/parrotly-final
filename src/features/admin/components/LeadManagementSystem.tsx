@@ -335,20 +335,21 @@ export default function LeadManagementSystem() {
       label: "Leads",
       icon: <PeopleIcon />,
       component: (
-        <Box sx={{ p: 3, textAlign: "center" }}>
-          <Typography variant="h6" color="text.secondary">
-            Lead Management Component
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            This will show lead CRUD operations, filtering, and status
-            management. Currently showing mock data: {leads.length} leads
-            loaded.
-          </Typography>
-          <Alert severity="info" sx={{ mt: 2 }}>
-            Lead Management component is being built with table view, filters,
-            bulk operations, and assignment features.
-          </Alert>
-        </Box>
+        <LeadManagement
+          leads={leads}
+          campaigns={campaigns}
+          dynamicForms={dynamicForms}
+          agents={agents}
+          leadStats={leadStats}
+          loading={loading}
+          onCreateLead={handleCreateLead}
+          onUpdateLead={handleUpdateLead}
+          onDeleteLead={handleDeleteLead}
+          onAssignLead={handleAssignLead}
+          onBulkAssign={handleBulkAssign}
+          onFilterChange={handleLeadFilterChange}
+          onRefresh={loadAllData}
+        />
       ),
     },
     {
