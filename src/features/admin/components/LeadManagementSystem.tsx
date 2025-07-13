@@ -435,6 +435,8 @@ export default function LeadManagementSystem() {
           onAssignLead={handleAssignLead}
           onBulkAssign={handleBulkAssign}
           onFilterChange={handleLeadFilterChange}
+          onBulkUpload={handleBulkUpload}
+          onBulkDownload={handleBulkDownload}
           onRefresh={loadAllData}
         />
       ),
