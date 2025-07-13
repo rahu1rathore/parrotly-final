@@ -20,6 +20,21 @@ import {
   BulkSendRequest,
   BulkSendResult,
   UserSegment,
+  DynamicForm,
+  DynamicFormField,
+  Campaign,
+  CampaignFormData,
+  Lead,
+  LeadFormData,
+  LeadFilter,
+  LeadAssignment,
+  Task,
+  TaskFormData,
+  ActivityLog,
+  Agent,
+  BulkUploadResult,
+  LeadStats,
+  CampaignStats,
 } from "../types";
 
 // Module API endpoints
