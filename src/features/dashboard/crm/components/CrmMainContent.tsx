@@ -5,7 +5,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
-import Copyright from "../../dashboard/internals/components/Copyright";
+import Copyright from "../../internals/components/Copyright";
 import CrmStatCard from "./CrmStatCard";
 import CrmRecentDealsTable from "./CrmRecentDealsTable";
 import CrmUpcomingTasks from "./CrmUpcomingTasks";
