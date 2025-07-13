@@ -115,35 +115,35 @@ export default function Hero() {
           </Typography>
           <Stack
             direction={{ xs: "column", sm: "row" }}
-            spacing={1}
+            spacing={2}
             useFlexGap
-            sx={{ pt: 2, width: { xs: "100%", sm: "350px" } }}
+            sx={{ pt: 2, width: { xs: "100%", sm: "auto" } }}
           >
-            <InputLabel htmlFor="email-hero" sx={visuallyHidden}>
-              Email
-            </InputLabel>
-            <TextField
-              id="email-hero"
-              hiddenLabel
-              size="small"
-              variant="outlined"
-              aria-label="Enter your email address"
-              placeholder="Your email address"
-              fullWidth
-              slotProps={{
-                htmlInput: {
-                  autoComplete: "off",
-                  "aria-label": "Enter your email address",
-                },
-              }}
-            />
             <Button
               variant="contained"
               color="primary"
-              size="small"
-              sx={{ minWidth: "fit-content" }}
+              size="large"
+              startIcon={<PlayArrowIcon />}
+              onClick={handleDemoAccess}
             >
-              Start now
+              Try Demo
+            </Button>
+            <Button
+              variant="outlined"
+              color="secondary"
+              size="large"
+              startIcon={<AdminPanelSettingsIcon />}
+              onClick={handleDemoAccess}
+            >
+              Admin Demo
+            </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              size="large"
+              onClick={handleGetStarted}
+            >
+              Get Started
             </Button>
           </Stack>
           <Typography
