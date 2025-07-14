@@ -648,7 +648,10 @@ export default function ChatbotBuilderSystem() {
                     Quick Actions
                   </Typography>
                   <List>
-                    <ListItem button onClick={() => setViewMode("create")}>
+                    <ListItem
+                      sx={{ cursor: "pointer" }}
+                      onClick={() => setViewMode("create")}
+                    >
                       <ListItemIcon>
                         <AddIcon />
                       </ListItemIcon>
