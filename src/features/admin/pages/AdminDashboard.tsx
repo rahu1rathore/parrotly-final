@@ -229,7 +229,10 @@ export default function AdminDashboard() {
               ) : (
                 <Routes>
                   <Route index element={<AdminOverview />} />
-                  <Route path="modules" element={<ModuleManagement />} />
+                  <Route
+                    path="modules"
+                    element={<ModuleManagementEnhanced />}
+                  />
                   <Route
                     path="subscriptions"
                     element={<SubscriptionManagement />}
