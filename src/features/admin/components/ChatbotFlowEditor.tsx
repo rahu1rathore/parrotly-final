@@ -681,7 +681,9 @@ function ChatbotFlowEditorContent({
   };
 
   const onDragStart = (event: React.DragEvent, nodeType: string) => {
+    console.log("Drag started with type:", nodeType);
     event.dataTransfer.setData("application/reactflow", nodeType);
+    event.dataTransfer.setData("text/plain", nodeType); // Fallback
     event.dataTransfer.effectAllowed = "move";
     setDraggedType(nodeType);
   };
