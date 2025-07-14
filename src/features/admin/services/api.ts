@@ -2499,7 +2499,8 @@ export const mockSubscriptions: Subscription[] = [
   {
     id: "1",
     name: "Basic Plan",
-    description: "Basic features for small teams",
+    description:
+      "Perfect for small teams and startups getting started with essential features",
     price: 29.99,
     validity: 30,
     modules: [
@@ -2508,13 +2509,20 @@ export const mockSubscriptions: Subscription[] = [
         module_name: "User Management",
         permissions: { view: true, edit: false, delete: false, create: false },
       },
+      {
+        module_id: "4",
+        module_name: "Chat Support",
+        permissions: { view: true, edit: false, delete: false, create: false },
+      },
     ],
     created_at: "2024-01-01T00:00:00Z",
+    updated_at: "2024-01-15T10:30:00Z",
   },
   {
     id: "2",
     name: "Pro Plan",
-    description: "Advanced features for growing businesses",
+    description:
+      "Advanced features for growing businesses with enhanced capabilities",
     price: 79.99,
     validity: 30,
     modules: [
@@ -2528,13 +2536,25 @@ export const mockSubscriptions: Subscription[] = [
         module_name: "Analytics Dashboard",
         permissions: { view: true, edit: false, delete: false, create: false },
       },
+      {
+        module_id: "4",
+        module_name: "Chat Support",
+        permissions: { view: true, edit: true, delete: false, create: true },
+      },
+      {
+        module_id: "7",
+        module_name: "CRM System",
+        permissions: { view: true, edit: true, delete: false, create: true },
+      },
     ],
-    created_at: "2024-01-01T00:00:00Z",
+    created_at: "2024-01-02T00:00:00Z",
+    updated_at: "2024-01-16T14:20:00Z",
   },
   {
     id: "3",
     name: "Enterprise Plan",
-    description: "Full feature set for large organizations",
+    description:
+      "Full feature set for large organizations with unlimited access",
     price: 199.99,
     validity: 30,
     modules: [
@@ -2553,8 +2573,266 @@ export const mockSubscriptions: Subscription[] = [
         module_name: "Billing System",
         permissions: { view: true, edit: true, delete: true, create: true },
       },
+      {
+        module_id: "4",
+        module_name: "Chat Support",
+        permissions: { view: true, edit: true, delete: true, create: true },
+      },
+      {
+        module_id: "7",
+        module_name: "CRM System",
+        permissions: { view: true, edit: true, delete: true, create: true },
+      },
+      {
+        module_id: "8",
+        module_name: "Task Management",
+        permissions: { view: true, edit: true, delete: true, create: true },
+      },
     ],
-    created_at: "2024-01-01T00:00:00Z",
+    created_at: "2024-01-03T00:00:00Z",
+    updated_at: "2024-01-17T11:45:00Z",
+  },
+  {
+    id: "4",
+    name: "Basic Annual",
+    description: "Basic plan with annual billing for better value",
+    price: 299.99,
+    validity: 365,
+    modules: [
+      {
+        module_id: "1",
+        module_name: "User Management",
+        permissions: { view: true, edit: false, delete: false, create: false },
+      },
+      {
+        module_id: "4",
+        module_name: "Chat Support",
+        permissions: { view: true, edit: false, delete: false, create: false },
+      },
+    ],
+    created_at: "2024-01-04T00:00:00Z",
+    updated_at: "2024-01-18T16:30:00Z",
+  },
+  {
+    id: "5",
+    name: "Pro Annual",
+    description: "Pro plan with annual billing and additional benefits",
+    price: 799.99,
+    validity: 365,
+    modules: [
+      {
+        module_id: "1",
+        module_name: "User Management",
+        permissions: { view: true, edit: true, delete: false, create: true },
+      },
+      {
+        module_id: "2",
+        module_name: "Analytics Dashboard",
+        permissions: { view: true, edit: true, delete: false, create: true },
+      },
+      {
+        module_id: "4",
+        module_name: "Chat Support",
+        permissions: { view: true, edit: true, delete: false, create: true },
+      },
+      {
+        module_id: "7",
+        module_name: "CRM System",
+        permissions: { view: true, edit: true, delete: true, create: true },
+      },
+      {
+        module_id: "5",
+        module_name: "Email Marketing",
+        permissions: { view: true, edit: true, delete: false, create: true },
+      },
+    ],
+    created_at: "2024-01-05T00:00:00Z",
+    updated_at: "2024-01-19T08:15:00Z",
+  },
+  {
+    id: "6",
+    name: "Enterprise Annual",
+    description: "Complete enterprise solution with annual commitment",
+    price: 1999.99,
+    validity: 365,
+    modules: [
+      {
+        module_id: "1",
+        module_name: "User Management",
+        permissions: { view: true, edit: true, delete: true, create: true },
+      },
+      {
+        module_id: "2",
+        module_name: "Analytics Dashboard",
+        permissions: { view: true, edit: true, delete: true, create: true },
+      },
+      {
+        module_id: "3",
+        module_name: "Billing System",
+        permissions: { view: true, edit: true, delete: true, create: true },
+      },
+      {
+        module_id: "4",
+        module_name: "Chat Support",
+        permissions: { view: true, edit: true, delete: true, create: true },
+      },
+      {
+        module_id: "5",
+        module_name: "Email Marketing",
+        permissions: { view: true, edit: true, delete: true, create: true },
+      },
+      {
+        module_id: "7",
+        module_name: "CRM System",
+        permissions: { view: true, edit: true, delete: true, create: true },
+      },
+      {
+        module_id: "8",
+        module_name: "Task Management",
+        permissions: { view: true, edit: true, delete: true, create: true },
+      },
+      {
+        module_id: "10",
+        module_name: "API Gateway",
+        permissions: { view: true, edit: true, delete: true, create: true },
+      },
+    ],
+    created_at: "2024-01-06T00:00:00Z",
+    updated_at: "2024-01-20T12:40:00Z",
+  },
+  {
+    id: "7",
+    name: "Starter Plan",
+    description: "Entry-level plan for individuals and freelancers",
+    price: 9.99,
+    validity: 30,
+    modules: [
+      {
+        module_id: "1",
+        module_name: "User Management",
+        permissions: { view: true, edit: false, delete: false, create: false },
+      },
+    ],
+    created_at: "2024-01-07T00:00:00Z",
+    updated_at: "2024-01-21T09:50:00Z",
+  },
+  {
+    id: "8",
+    name: "Team Plan",
+    description: "Perfect for medium-sized teams with collaboration features",
+    price: 149.99,
+    validity: 30,
+    modules: [
+      {
+        module_id: "1",
+        module_name: "User Management",
+        permissions: { view: true, edit: true, delete: false, create: true },
+      },
+      {
+        module_id: "2",
+        module_name: "Analytics Dashboard",
+        permissions: { view: true, edit: true, delete: false, create: false },
+      },
+      {
+        module_id: "4",
+        module_name: "Chat Support",
+        permissions: { view: true, edit: true, delete: false, create: true },
+      },
+      {
+        module_id: "7",
+        module_name: "CRM System",
+        permissions: { view: true, edit: true, delete: true, create: true },
+      },
+      {
+        module_id: "8",
+        module_name: "Task Management",
+        permissions: { view: true, edit: true, delete: false, create: true },
+      },
+    ],
+    created_at: "2024-01-08T00:00:00Z",
+    updated_at: "2024-01-22T14:10:00Z",
+  },
+  {
+    id: "9",
+    name: "Premium Plan",
+    description: "High-end features for demanding businesses",
+    price: 299.99,
+    validity: 30,
+    modules: [
+      {
+        module_id: "1",
+        module_name: "User Management",
+        permissions: { view: true, edit: true, delete: true, create: true },
+      },
+      {
+        module_id: "2",
+        module_name: "Analytics Dashboard",
+        permissions: { view: true, edit: true, delete: true, create: true },
+      },
+      {
+        module_id: "3",
+        module_name: "Billing System",
+        permissions: { view: true, edit: true, delete: false, create: true },
+      },
+      {
+        module_id: "4",
+        module_name: "Chat Support",
+        permissions: { view: true, edit: true, delete: true, create: true },
+      },
+      {
+        module_id: "5",
+        module_name: "Email Marketing",
+        permissions: { view: true, edit: true, delete: true, create: true },
+      },
+      {
+        module_id: "7",
+        module_name: "CRM System",
+        permissions: { view: true, edit: true, delete: true, create: true },
+      },
+      {
+        module_id: "8",
+        module_name: "Task Management",
+        permissions: { view: true, edit: true, delete: true, create: true },
+      },
+    ],
+    created_at: "2024-01-09T00:00:00Z",
+    updated_at: "2024-01-23T11:35:00Z",
+  },
+  {
+    id: "10",
+    name: "Custom Enterprise",
+    description: "Tailored enterprise solution with custom pricing",
+    price: 499.99,
+    validity: 90,
+    modules: [
+      {
+        module_id: "1",
+        module_name: "User Management",
+        permissions: { view: true, edit: true, delete: true, create: true },
+      },
+      {
+        module_id: "2",
+        module_name: "Analytics Dashboard",
+        permissions: { view: true, edit: true, delete: true, create: true },
+      },
+      {
+        module_id: "3",
+        module_name: "Billing System",
+        permissions: { view: true, edit: true, delete: true, create: true },
+      },
+      {
+        module_id: "10",
+        module_name: "API Gateway",
+        permissions: { view: true, edit: true, delete: true, create: true },
+      },
+      {
+        module_id: "13",
+        module_name: "Security Monitor",
+        permissions: { view: true, edit: true, delete: true, create: true },
+      },
+    ],
+    created_at: "2024-01-10T00:00:00Z",
+    updated_at: "2024-01-24T13:25:00Z",
   },
 ];
 
