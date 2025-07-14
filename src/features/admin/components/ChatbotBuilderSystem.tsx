@@ -672,7 +672,10 @@ export default function ChatbotBuilderSystem() {
                         secondary="Detailed performance metrics"
                       />
                     </ListItem>
-                    <ListItem button onClick={() => setActiveTab(2)}>
+                    <ListItem
+                      sx={{ cursor: "pointer" }}
+                      onClick={() => setActiveTab(2)}
+                    >
                       <ListItemIcon>
                         <TestIcon />
                       </ListItemIcon>
