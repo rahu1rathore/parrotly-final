@@ -790,13 +790,7 @@ interface OrganizationFilterParams {
   subscription_id?: string;
   established_after?: string;
   established_before?: string;
-  sort_by?:
-    | "name"
-    | "established_date"
-    | "created_at"
-    | "updated_at"
-    | "city"
-    | "country";
+  sort_by?: "name" | "established_date" | "created_at" | "updated_at" | "city" | "country";
   sort_order?: "asc" | "desc";
   industry?: string;
   size?: "startup" | "small" | "medium" | "large" | "enterprise" | "all";
@@ -836,9 +830,7 @@ interface OrganizationListResponse {
 // Organization API endpoints
 export const organizationAPI = {
   // Get organizations with pagination and filtering
-  getAll: (
-    params?: OrganizationPaginationParams & OrganizationFilterParams,
-  ): Promise<OrganizationListResponse> => {
+  getAll: (params?: OrganizationPaginationParams & OrganizationFilterParams): Promise<OrganizationListResponse> => {
     return new Promise((resolve) => {
       setTimeout(() => {
         const {
@@ -867,100 +859,62 @@ export const organizationAPI = {
               org.name.toLowerCase().includes(searchLower) ||
               org.description?.toLowerCase().includes(searchLower) ||
               org.email?.toLowerCase().includes(searchLower) ||
-              org.address?.toLowerCase().includes(searchLower),
+              org.address?.toLowerCase().includes(searchLower)
           );
         }
 
         // Apply country filter
         if (country) {
-          filteredData = filteredData.filter((org) =>
-            org.country?.toLowerCase().includes(country.toLowerCase()),
+          filteredData = filteredData.filter(org =>
+            org.country?.toLowerCase().includes(country.toLowerCase())
           );
         }
 
         // Apply state filter
         if (state) {
-          filteredData = filteredData.filter((org) =>
-            org.state?.toLowerCase().includes(state.toLowerCase()),
+          filteredData = filteredData.filter(org =>
+            org.state?.toLowerCase().includes(state.toLowerCase())
           );
         }
 
         // Apply city filter
         if (city) {
-          filteredData = filteredData.filter((org) =>
-            org.city?.toLowerCase().includes(city.toLowerCase()),
+          filteredData = filteredData.filter(org =>
+            org.city?.toLowerCase().includes(city.toLowerCase())
           );
         }
 
         // Apply subscription filter
         if (subscription_id) {
-          filteredData = filteredData.filter(
-            (org) => org.subscription_id === subscription_id,
-          );
+          filteredData = filteredData.filter(org => org.subscription_id === subscription_id);
         }
 
         // Apply industry filter (simulated based on organization name/description)
         if (industry) {
-          filteredData = filteredData.filter((org) => {
+          filteredData = filteredData.filter(org => {
             const orgData = (org.name + " " + org.description).toLowerCase();
             switch (industry) {
-              case "technology":
-                return (
-                  orgData.includes("tech") ||
-                  orgData.includes("software") ||
-                  orgData.includes("digital")
-                );
-              case "finance":
-                return (
-                  orgData.includes("fintech") ||
-                  orgData.includes("financial") ||
-                  orgData.includes("bank")
-                );
-              case "healthcare":
-                return (
-                  orgData.includes("health") ||
-                  orgData.includes("medical") ||
-                  orgData.includes("pharma")
-                );
-              case "retail":
-                return (
-                  orgData.includes("retail") ||
-                  orgData.includes("commerce") ||
-                  orgData.includes("store")
-                );
-              case "education":
-                return (
-                  orgData.includes("education") ||
-                  orgData.includes("university") ||
-                  orgData.includes("school")
-                );
-              default:
-                return true;
+              case "technology": return orgData.includes("tech") || orgData.includes("software") || orgData.includes("digital");
+              case "finance": return orgData.includes("fintech") || orgData.includes("financial") || orgData.includes("bank");
+              case "healthcare": return orgData.includes("health") || orgData.includes("medical") || orgData.includes("pharma");
+              case "retail": return orgData.includes("retail") || orgData.includes("commerce") || orgData.includes("store");
+              case "education": return orgData.includes("education") || orgData.includes("university") || orgData.includes("school");
+              default: return true;
             }
           });
         }
 
         // Apply size filter (simulated based on organization name patterns)
         if (size !== "all") {
-          filteredData = filteredData.filter((org) => {
+          filteredData = filteredData.filter(org => {
             const orgName = org.name.toLowerCase();
             switch (size) {
-              case "startup":
-                return orgName.includes("startup") || orgName.includes("xyz");
-              case "small":
-                return orgName.includes("small") || orgName.includes("local");
-              case "medium":
-                return (
-                  orgName.includes("medium") || orgName.includes("solutions")
-                );
-              case "large":
-                return orgName.includes("corp") || orgName.includes("inc");
-              case "enterprise":
-                return (
-                  orgName.includes("enterprise") || orgName.includes("global")
-                );
-              default:
-                return true;
+              case "startup": return orgName.includes("startup") || orgName.includes("xyz");
+              case "small": return orgName.includes("small") || orgName.includes("local");
+              case "medium": return orgName.includes("medium") || orgName.includes("solutions");
+              case "large": return orgName.includes("corp") || orgName.includes("inc");
+              case "enterprise": return orgName.includes("enterprise") || orgName.includes("global");
+              default: return true;
             }
           });
         }
@@ -968,16 +922,12 @@ export const organizationAPI = {
         // Apply date filters
         if (established_after) {
           filteredData = filteredData.filter(
-            (org) =>
-              org.established_date &&
-              new Date(org.established_date) >= new Date(established_after),
+            (org) => org.established_date && new Date(org.established_date) >= new Date(established_after)
           );
         }
         if (established_before) {
           filteredData = filteredData.filter(
-            (org) =>
-              org.established_date &&
-              new Date(org.established_date) <= new Date(established_before),
+            (org) => org.established_date && new Date(org.established_date) <= new Date(established_before)
           );
         }
 
@@ -986,11 +936,7 @@ export const organizationAPI = {
           let aValue: any = a[sort_by as keyof Organization];
           let bValue: any = b[sort_by as keyof Organization];
 
-          if (
-            sort_by === "created_at" ||
-            sort_by === "updated_at" ||
-            sort_by === "established_date"
-          ) {
+          if (sort_by === "created_at" || sort_by === "updated_at" || sort_by === "established_date") {
             aValue = new Date(aValue || 0).getTime();
             bValue = new Date(bValue || 0).getTime();
           } else {
@@ -1015,64 +961,45 @@ export const organizationAPI = {
         const has_prev = page > 1;
 
         // Calculate summary statistics
-        const countries = mockOrganizations.reduce(
-          (acc, org) => {
-            if (org.country) {
-              acc[org.country] = (acc[org.country] || 0) + 1;
-            }
-            return acc;
-          },
-          {} as { [key: string]: number },
-        );
+        const countries = mockOrganizations.reduce((acc, org) => {
+          if (org.country) {
+            acc[org.country] = (acc[org.country] || 0) + 1;
+          }
+          return acc;
+        }, {} as { [key: string]: number });
 
-        const subscriptionDistribution = mockOrganizations.reduce(
-          (acc, org) => {
-            if (org.subscription_name) {
-              acc[org.subscription_name] =
-                (acc[org.subscription_name] || 0) + 1;
-            }
-            return acc;
-          },
-          {} as { [key: string]: number },
-        );
+        const subscriptionDistribution = mockOrganizations.reduce((acc, org) => {
+          if (org.subscription_name) {
+            acc[org.subscription_name] = (acc[org.subscription_name] || 0) + 1;
+          }
+          return acc;
+        }, {} as { [key: string]: number });
 
         const currentYear = new Date().getFullYear();
-        const establishmentYears = mockOrganizations.reduce(
-          (acc, org) => {
-            if (org.established_date) {
-              const estYear = new Date(org.established_date).getFullYear();
-              const yearsAgo = currentYear - estYear;
+        const establishmentYears = mockOrganizations.reduce((acc, org) => {
+          if (org.established_date) {
+            const estYear = new Date(org.established_date).getFullYear();
+            const yearsAgo = currentYear - estYear;
 
-              if (yearsAgo <= 1) acc.last_year++;
-              else if (yearsAgo <= 3) acc.last_3_years++;
-              else if (yearsAgo <= 5) acc.last_5_years++;
-              else acc.older++;
-            }
-            return acc;
-          },
-          { last_year: 0, last_3_years: 0, last_5_years: 0, older: 0 },
-        );
+            if (yearsAgo <= 1) acc.last_year++;
+            else if (yearsAgo <= 3) acc.last_3_years++;
+            else if (yearsAgo <= 5) acc.last_5_years++;
+            else acc.older++;
+          }
+          return acc;
+        }, { last_year: 0, last_3_years: 0, last_5_years: 0, older: 0 });
 
         // Simulate organization sizes based on naming patterns
-        const organizationSizes = mockOrganizations.reduce(
-          (acc, org) => {
-            const orgName = org.name.toLowerCase();
-            if (orgName.includes("startup")) acc.startup++;
-            else if (orgName.includes("small") || orgName.includes("local"))
-              acc.small++;
-            else if (orgName.includes("solutions")) acc.medium++;
-            else if (orgName.includes("corp") || orgName.includes("inc"))
-              acc.large++;
-            else if (
-              orgName.includes("enterprise") ||
-              orgName.includes("global")
-            )
-              acc.enterprise++;
-            else acc.medium++; // default
-            return acc;
-          },
-          { startup: 0, small: 0, medium: 0, large: 0, enterprise: 0 },
-        );
+        const organizationSizes = mockOrganizations.reduce((acc, org) => {
+          const orgName = org.name.toLowerCase();
+          if (orgName.includes("startup")) acc.startup++;
+          else if (orgName.includes("small") || orgName.includes("local")) acc.small++;
+          else if (orgName.includes("solutions")) acc.medium++;
+          else if (orgName.includes("corp") || orgName.includes("inc")) acc.large++;
+          else if (orgName.includes("enterprise") || orgName.includes("global")) acc.enterprise++;
+          else acc.medium++; // default
+          return acc;
+        }, { startup: 0, small: 0, medium: 0, large: 0, enterprise: 0 });
 
         const summary = {
           total_organizations: mockOrganizations.length,
@@ -1129,9 +1056,7 @@ export const organizationAPI = {
           email: data.email,
           website: data.website,
           established_date: data.established_date,
-          logo:
-            data.logo ||
-            `https://via.placeholder.com/150x150/2196f3/ffffff?text=${data.name.charAt(0)}`,
+          logo: data.logo || `https://via.placeholder.com/150x150/2196f3/ffffff?text=${data.name.charAt(0)}`,
           phone_number: data.phone_number,
           subscription_id: data.subscription_id,
           subscription_name: data.subscription_name,
@@ -1151,9 +1076,7 @@ export const organizationAPI = {
   ): Promise<{ data: Organization }> => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        const organizationIndex = mockOrganizations.findIndex(
-          (o) => o.id === id,
-        );
+        const organizationIndex = mockOrganizations.findIndex((o) => o.id === id);
         if (organizationIndex !== -1) {
           mockOrganizations[organizationIndex] = {
             ...mockOrganizations[organizationIndex],
@@ -1172,9 +1095,7 @@ export const organizationAPI = {
   delete: (id: string): Promise<void> => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        const organizationIndex = mockOrganizations.findIndex(
-          (o) => o.id === id,
-        );
+        const organizationIndex = mockOrganizations.findIndex((o) => o.id === id);
         if (organizationIndex !== -1) {
           mockOrganizations.splice(organizationIndex, 1);
           resolve();
@@ -1194,9 +1115,7 @@ export const organizationAPI = {
       setTimeout(() => {
         const updatedOrganizations: Organization[] = [];
         ids.forEach((id) => {
-          const organizationIndex = mockOrganizations.findIndex(
-            (o) => o.id === id,
-          );
+          const organizationIndex = mockOrganizations.findIndex((o) => o.id === id);
           if (organizationIndex !== -1) {
             mockOrganizations[organizationIndex] = {
               ...mockOrganizations[organizationIndex],
@@ -1206,10 +1125,7 @@ export const organizationAPI = {
             updatedOrganizations.push(mockOrganizations[organizationIndex]);
           }
         });
-        resolve({
-          data: updatedOrganizations,
-          updated_count: updatedOrganizations.length,
-        });
+        resolve({ data: updatedOrganizations, updated_count: updatedOrganizations.length });
       }, 300);
     });
   },
@@ -1219,9 +1135,7 @@ export const organizationAPI = {
       setTimeout(() => {
         let deletedCount = 0;
         ids.forEach((id) => {
-          const organizationIndex = mockOrganizations.findIndex(
-            (o) => o.id === id,
-          );
+          const organizationIndex = mockOrganizations.findIndex((o) => o.id === id);
           if (organizationIndex !== -1) {
             mockOrganizations.splice(organizationIndex, 1);
             deletedCount++;
@@ -1237,7 +1151,7 @@ export const organizationAPI = {
     return new Promise((resolve) => {
       setTimeout(() => {
         const countries = Array.from(
-          new Set(mockOrganizations.map((org) => org.country).filter(Boolean)),
+          new Set(mockOrganizations.map((org) => org.country).filter(Boolean))
         );
         resolve({ data: countries });
       }, 100);
@@ -1253,8 +1167,8 @@ export const organizationAPI = {
             mockOrganizations
               .filter((org) => org.country === country)
               .map((org) => org.state)
-              .filter(Boolean),
-          ),
+              .filter(Boolean)
+          )
         );
         resolve({ data: states });
       }, 100);
@@ -1270,8 +1184,8 @@ export const organizationAPI = {
             mockOrganizations
               .filter((org) => org.state === state)
               .map((org) => org.city)
-              .filter(Boolean),
-          ),
+              .filter(Boolean)
+          )
         );
         resolve({ data: cities });
       }, 100);
@@ -1279,16 +1193,13 @@ export const organizationAPI = {
   },
 
   // Export organizations
-  export: (
-    format: "csv" | "excel" | "json",
-    filters?: OrganizationFilterParams,
-  ): Promise<{ download_url: string }> => {
+  export: (format: "csv" | "excel" | "json", filters?: OrganizationFilterParams): Promise<{ download_url: string }> => {
     return new Promise((resolve) => {
       setTimeout(() => {
         const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
         const filename = `organizations-export-${timestamp}.${format}`;
         resolve({
-          download_url: `/api/admin/organizations/export/${filename}`,
+          download_url: `/api/admin/organizations/export/${filename}`
         });
       }, 1000);
     });
@@ -1301,7 +1212,7 @@ export const organizationAPI = {
       top_countries: { country: string; count: number }[];
       subscription_breakdown: { subscription: string; organizations: number }[];
       establishment_timeline: { year: number; count: number }[];
-    };
+    }
   }> => {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -3378,7 +3289,7 @@ export const mockOrganizations: Organization[] = [
   {
     id: "1",
     name: "TechCorp Inc.",
-    description: "Leading technology solutions provider",
+    description: "Leading technology solutions provider specializing in cloud infrastructure and AI",
     address: "123 Tech Street",
     city: "San Francisco",
     state: "California",
@@ -3392,11 +3303,12 @@ export const mockOrganizations: Organization[] = [
     subscription_id: "2",
     subscription_name: "Pro Plan",
     created_at: "2024-01-01T00:00:00Z",
+    updated_at: "2024-01-15T10:30:00Z",
   },
   {
     id: "2",
     name: "Global Enterprises Ltd.",
-    description: "International business solutions",
+    description: "International business solutions with focus on digital transformation",
     address: "456 Business Avenue",
     city: "New York",
     state: "New York",
@@ -3410,11 +3322,12 @@ export const mockOrganizations: Organization[] = [
     subscription_id: "3",
     subscription_name: "Enterprise Plan",
     created_at: "2024-01-02T00:00:00Z",
+    updated_at: "2024-01-16T14:20:00Z",
   },
   {
     id: "3",
     name: "StartupXYZ",
-    description: "Innovative startup in fintech space",
+    description: "Innovative fintech startup revolutionizing digital payments and blockchain",
     address: "789 Innovation Drive",
     city: "Austin",
     state: "Texas",
@@ -3424,6 +3337,183 @@ export const mockOrganizations: Organization[] = [
     website: "https://www.startupxyz.com",
     established_date: "2022-06-10",
     logo: "https://via.placeholder.com/150x150/f57c00/ffffff?text=XYZ",
+    phone_number: "+1-555-456-7890",
+    subscription_id: "1",
+    subscription_name: "Basic Plan",
+    created_at: "2024-01-03T00:00:00Z",
+    updated_at: "2024-01-17T11:45:00Z",
+  },
+  {
+    id: "4",
+    name: "HealthCare Solutions Corp",
+    description: "Healthcare technology and medical software solutions",
+    address: "101 Medical Center Blvd",
+    city: "Boston",
+    state: "Massachusetts",
+    country: "United States",
+    postal_code: "02101",
+    email: "info@healthcaresolutions.com",
+    website: "https://www.healthcaresolutions.com",
+    established_date: "2019-05-12",
+    logo: "https://via.placeholder.com/150x150/e91e63/ffffff?text=HC",
+    phone_number: "+1-555-234-5678",
+    subscription_id: "3",
+    subscription_name: "Enterprise Plan",
+    created_at: "2024-01-04T00:00:00Z",
+    updated_at: "2024-01-18T16:30:00Z",
+  },
+  {
+    id: "5",
+    name: "EduTech Innovations",
+    description: "Educational technology platform for K-12 and higher education",
+    address: "555 Campus Drive",
+    city: "Seattle",
+    state: "Washington",
+    country: "United States",
+    postal_code: "98101",
+    email: "contact@edutech.com",
+    website: "https://www.edutech.com",
+    established_date: "2021-09-01",
+    logo: "https://via.placeholder.com/150x150/9c27b0/ffffff?text=EDU",
+    phone_number: "+1-555-345-6789",
+    subscription_id: "2",
+    subscription_name: "Pro Plan",
+    created_at: "2024-01-05T00:00:00Z",
+    updated_at: "2024-01-19T08:15:00Z",
+  },
+  {
+    id: "6",
+    name: "RetailMax Solutions",
+    description: "E-commerce and retail management platform for modern businesses",
+    address: "777 Commerce Street",
+    city: "Chicago",
+    state: "Illinois",
+    country: "United States",
+    postal_code: "60601",
+    email: "sales@retailmax.com",
+    website: "https://www.retailmax.com",
+    established_date: "2017-11-30",
+    logo: "https://via.placeholder.com/150x150/ff5722/ffffff?text=RM",
+    phone_number: "+1-555-567-8901",
+    subscription_id: "2",
+    subscription_name: "Pro Plan",
+    created_at: "2024-01-06T00:00:00Z",
+    updated_at: "2024-01-20T12:40:00Z",
+  },
+  {
+    id: "7",
+    name: "Northern Technologies",
+    description: "Canadian technology consultancy specializing in AI and machine learning",
+    address: "100 Innovation Way",
+    city: "Toronto",
+    state: "Ontario",
+    country: "Canada",
+    postal_code: "M5V 3A8",
+    email: "info@northerntech.ca",
+    website: "https://www.northerntech.ca",
+    established_date: "2020-03-15",
+    logo: "https://via.placeholder.com/150x150/607d8b/ffffff?text=NT",
+    phone_number: "+1-416-555-0123",
+    subscription_id: "3",
+    subscription_name: "Enterprise Plan",
+    created_at: "2024-01-07T00:00:00Z",
+    updated_at: "2024-01-21T09:50:00Z",
+  },
+  {
+    id: "8",
+    name: "London Fintech Ltd",
+    description: "Financial services and banking technology solutions",
+    address: "25 Financial District",
+    city: "London",
+    state: "England",
+    country: "United Kingdom",
+    postal_code: "EC2V 6DN",
+    email: "hello@londonfintech.co.uk",
+    website: "https://www.londonfintech.co.uk",
+    established_date: "2019-08-20",
+    logo: "https://via.placeholder.com/150x150/3f51b5/ffffff?text=LF",
+    phone_number: "+44-20-7946-0958",
+    subscription_id: "3",
+    subscription_name: "Enterprise Plan",
+    created_at: "2024-01-08T00:00:00Z",
+    updated_at: "2024-01-22T14:10:00Z",
+  },
+  {
+    id: "9",
+    name: "Berlin Software GmbH",
+    description: "Enterprise software development and digital transformation services",
+    address: "Unter den Linden 12",
+    city: "Berlin",
+    state: "Berlin",
+    country: "Germany",
+    postal_code: "10117",
+    email: "kontakt@berlinsoftware.de",
+    website: "https://www.berlinsoftware.de",
+    established_date: "2018-12-05",
+    logo: "https://via.placeholder.com/150x150/795548/ffffff?text=BS",
+    phone_number: "+49-30-12345678",
+    subscription_id: "2",
+    subscription_name: "Pro Plan",
+    created_at: "2024-01-09T00:00:00Z",
+    updated_at: "2024-01-23T11:35:00Z",
+  },
+  {
+    id: "10",
+    name: "Sydney Digital Agency",
+    description: "Creative digital marketing and web development agency",
+    address: "88 Harbour Bridge Road",
+    city: "Sydney",
+    state: "New South Wales",
+    country: "Australia",
+    postal_code: "2000",
+    email: "info@sydneydigital.com.au",
+    website: "https://www.sydneydigital.com.au",
+    established_date: "2021-02-14",
+    logo: "https://via.placeholder.com/150x150/00bcd4/ffffff?text=SD",
+    phone_number: "+61-2-9876-5432",
+    subscription_id: "1",
+    subscription_name: "Basic Plan",
+    created_at: "2024-01-10T00:00:00Z",
+    updated_at: "2024-01-24T13:25:00Z",
+  },
+  {
+    id: "11",
+    name: "DataScience Pro Inc",
+    description: "Big data analytics and machine learning consulting firm",
+    address: "999 Data Drive",
+    city: "San Jose",
+    state: "California",
+    country: "United States",
+    postal_code: "95110",
+    email: "team@datasciencepro.com",
+    website: "https://www.datasciencepro.com",
+    established_date: "2020-07-22",
+    logo: "https://via.placeholder.com/150x150/4caf50/ffffff?text=DS",
+    phone_number: "+1-408-555-9876",
+    subscription_id: "3",
+    subscription_name: "Enterprise Plan",
+    created_at: "2024-01-11T00:00:00Z",
+    updated_at: "2024-01-25T16:15:00Z",
+  },
+  {
+    id: "12",
+    name: "Small Business Solutions",
+    description: "Local business management software for small enterprises",
+    address: "321 Main Street",
+    city: "Portland",
+    state: "Oregon",
+    country: "United States",
+    postal_code: "97201",
+    email: "support@smallbizsolutions.com",
+    website: "https://www.smallbizsolutions.com",
+    established_date: "2023-01-10",
+    logo: "https://via.placeholder.com/150x150/ffc107/ffffff?text=SB",
+    phone_number: "+1-503-555-1234",
+    subscription_id: "1",
+    subscription_name: "Basic Plan",
+    created_at: "2024-01-12T00:00:00Z",
+    updated_at: "2024-01-26T09:30:00Z",
+  },
     phone_number: "+1-555-456-7890",
     subscription_id: "1",
     subscription_name: "Basic Plan",
