@@ -71,12 +71,26 @@ interface PaginationState {
   page: number;
   rowsPerPage: number;
   total: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
 }
 
 interface FilterState {
   search: string;
   status: FilterStatus;
   category: string;
+  createdAfter: string;
+  createdBefore: string;
+  sortBy: "name" | "created_at" | "updated_at";
+  sortOrder: "asc" | "desc";
+}
+
+interface ModuleSummary {
+  totalModules: number;
+  activeModules: number;
+  inactiveModules: number;
+  categories: { [key: string]: number };
 }
 
 const ModuleManagement: React.FC<ModuleManagementProps> = ({
