@@ -706,7 +706,7 @@ export default function ChatbotBuilderSystem() {
               <Card sx={{ height: "100%", textAlign: "center" }}>
                 <CardContent>
                   <ExportIcon color="primary" sx={{ fontSize: 40, mb: 1 }} />
-                  <Typography variant={'h6" gutterBottom'}>
+                  <Typography variant="h6" gutterBottom>
                     Export/Import
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
