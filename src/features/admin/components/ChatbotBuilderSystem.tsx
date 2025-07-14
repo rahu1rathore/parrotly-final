@@ -244,7 +244,7 @@ export default function ChatbotBuilderSystem() {
       <Card sx={{ mb: 3 }}>
         <Tabs
           value={activeTab}
-          onChange={(e, newValue) => setActiveTab(newValue)}
+          onChange={(_, newValue) => setActiveTab(newValue)}
           sx={{ borderBottom: 1, borderColor: "divider" }}
         >
           <Tab
