@@ -91,6 +91,7 @@ export default function ChatbotBuilderSystem() {
     useState<ChatbotFlow | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState<ChatbotFilter>({});
+  const [activeTab, setActiveTab] = useState(0);
 
   useEffect(() => {
     loadFlows();
