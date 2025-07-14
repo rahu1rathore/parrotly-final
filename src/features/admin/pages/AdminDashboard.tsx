@@ -125,7 +125,7 @@ export default function AdminDashboard() {
               <AdminHeader title={pageTitle} subtitle={pageSubtitle} />
               <Routes>
                 <Route index element={<AdminOverview />} />
-                <Route path="modules" element={<ChatbotBuilderTest />} />
+                <Route path="modules" element={<ModuleManagement />} />
                 <Route
                   path="subscriptions"
                   element={<SubscriptionManagement />}
@@ -145,7 +145,7 @@ export default function AdminDashboard() {
                 />
                 <Route
                   path="chatbot-builder"
-                  element={<ChatbotBuilderTest />}
+                  element={<ChatbotBuilderSystem />}
                 />
                 <Route path="analytics" element={<AdminOverview />} />
                 <Route path="users" element={<AdminOverview />} />
