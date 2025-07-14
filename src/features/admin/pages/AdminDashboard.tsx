@@ -10,7 +10,7 @@ import Stack from "@mui/material/Stack";
 import AdminAppNavbar from "../components/AdminAppNavbar";
 import AdminHeader from "../components/AdminHeader";
 import AdminSideMenu from "../components/AdminSideMenu";
-import ModuleManagement from "../components/ModuleManagement";
+import ModuleManagementEnhanced from "../components/ModuleManagementEnhanced";
 import SubscriptionManagement from "../components/SubscriptionManagement";
 import OrganizationManagement from "../components/OrganizationManagement";
 import CustomerManagement from "../components/CustomerManagement";
