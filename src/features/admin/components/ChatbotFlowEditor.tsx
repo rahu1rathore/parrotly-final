@@ -221,6 +221,57 @@ const CustomApiNode = ({ data }: { data: any }) => (
   </Card>
 );
 
+const CustomProductNode = ({ data }: { data: any }) => (
+  <Card sx={{ width: 220, border: "2px solid #0891b2" }}>
+    <CardContent sx={{ p: 2, "&:last-child": { pb: 2 } }}>
+      <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+        <ProductIcon sx={{ mr: 1, color: "#0891b2" }} />
+        <Typography variant="caption" color="info.main">
+          Product
+        </Typography>
+      </Box>
+      <Typography variant="body2" sx={{ mb: 1 }}>
+        {data.body || "Product information"}
+      </Typography>
+      <Box
+        sx={{
+          border: 1,
+          borderColor: "divider",
+          borderRadius: 1,
+          p: 1,
+          backgroundColor: "grey.50",
+        }}
+      >
+        <Typography variant="caption" fontWeight="bold">
+          {data.product?.name || "Product Name"}
+        </Typography>
+        <Typography variant="caption" display="block" color="text.secondary">
+          ${data.product?.price || "99.99"}
+        </Typography>
+      </Box>
+    </CardContent>
+  </Card>
+);
+
+const CustomConditionNode = ({ data }: { data: any }) => (
+  <Card sx={{ width: 200, border: "2px solid #ca8a04" }}>
+    <CardContent sx={{ p: 2, "&:last-child": { pb: 2 } }}>
+      <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+        <ConditionIcon sx={{ mr: 1, color: "#ca8a04" }} />
+        <Typography variant="caption" sx={{ color: "#ca8a04" }}>
+          Condition
+        </Typography>
+      </Box>
+      <Typography variant="body2" sx={{ mb: 1 }}>
+        {data.body || "If condition..."}
+      </Typography>
+      <Typography variant="caption" color="text.secondary">
+        {data.condition || "user.role === 'premium'"}
+      </Typography>
+    </CardContent>
+  </Card>
+);
+
 const CustomEndNode = ({ data }: { data: any }) => (
   <Card sx={{ width: 150, border: "2px solid #64748b" }}>
     <CardContent sx={{ p: 2, "&:last-child": { pb: 2 } }}>
