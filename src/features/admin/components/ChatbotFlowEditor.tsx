@@ -308,24 +308,183 @@ function ChatbotFlowEditorContent({
   const dragRef = useRef<HTMLDivElement>(null);
   const [draggedType, setDraggedType] = useState<string | null>(null);
 
-  // Initialize flow with existing nodes/edges
+  // Initialize flow with existing nodes/edges or create example nodes
   React.useEffect(() => {
-    if (flow.nodes && flow.edges) {
+    if (flow.nodes && flow.nodes.length > 0) {
       const flowNodes = flow.nodes.map((node) => ({
         id: node.id,
         type: node.type,
         position: node.position,
         data: node,
       }));
-      const flowEdges = flow.edges.map((edge) => ({
-        id: edge.id,
-        source: edge.source,
-        target: edge.target,
-        label: edge.label,
-        type: edge.type || "default",
-      }));
+      const flowEdges =
+        flow.edges?.map((edge) => ({
+          id: edge.id,
+          source: edge.source,
+          target: edge.target,
+          label: edge.label,
+          type: edge.type || "default",
+        })) || [];
       setNodes(flowNodes);
       setEdges(flowEdges);
+    } else {
+      // Create example nodes for all types
+      const exampleNodes: Node[] = [
+        {
+          id: "start-text",
+          type: "text",
+          position: { x: 100, y: 50 },
+          data: {
+            id: "start-text",
+            type: "text",
+            position: { x: 100, y: 50 },
+            body: "Welcome! How can I help you today?",
+            header: "Welcome Message",
+            footer: "Choose an option below",
+          },
+        },
+        {
+          id: "menu-buttons",
+          type: "button",
+          position: { x: 400, y: 50 },
+          data: {
+            id: "menu-buttons",
+            type: "button",
+            position: { x: 400, y: 50 },
+            body: "Please select what you need help with:",
+            buttons: [
+              { id: "btn-1", text: "📦 Order Status", action: "order_status" },
+              { id: "btn-2", text: "💬 Customer Support", action: "support" },
+              { id: "btn-3", text: "📋 Services", action: "services" },
+            ],
+          },
+        },
+        {
+          id: "services-list",
+          type: "list",
+          position: { x: 700, y: 50 },
+          data: {
+            id: "services-list",
+            type: "list",
+            position: { x: 700, y: 50 },
+            body: "Our available services:",
+            list_items: [
+              {
+                id: "item-1",
+                title: "Web Development",
+                description: "Custom websites and applications",
+                action: "web_dev",
+              },
+              {
+                id: "item-2",
+                title: "Mobile Apps",
+                description: "iOS and Android development",
+                action: "mobile",
+              },
+              {
+                id: "item-3",
+                title: "Consulting",
+                description: "Technical consulting services",
+                action: "consulting",
+              },
+            ],
+          },
+        },
+        {
+          id: "welcome-image",
+          type: "image",
+          position: { x: 100, y: 250 },
+          data: {
+            id: "welcome-image",
+            type: "image",
+            position: { x: 100, y: 250 },
+            body: "Check out our latest product!",
+            media_url: "https://example.com/product.jpg",
+          },
+        },
+        {
+          id: "audio-message",
+          type: "audio",
+          position: { x: 400, y: 250 },
+          data: {
+            id: "audio-message",
+            type: "audio",
+            position: { x: 400, y: 250 },
+            body: "Listen to our welcome message",
+            media_url: "https://example.com/welcome.mp3",
+          },
+        },
+        {
+          id: "video-demo",
+          type: "video",
+          position: { x: 700, y: 250 },
+          data: {
+            id: "video-demo",
+            type: "video",
+            position: { x: 700, y: 250 },
+            body: "Watch our product demo",
+            media_url: "https://example.com/demo.mp4",
+          },
+        },
+        {
+          id: "api-call",
+          type: "api_trigger",
+          position: { x: 100, y: 450 },
+          data: {
+            id: "api-call",
+            type: "api_trigger",
+            position: { x: 100, y: 450 },
+            body: "Fetching your order details...",
+            api_config: {
+              method: "GET",
+              url: "/api/orders/{user_id}",
+              headers: { Authorization: "Bearer {token}" },
+            },
+          },
+        },
+        {
+          id: "end-flow",
+          type: "end",
+          position: { x: 400, y: 450 },
+          data: {
+            id: "end-flow",
+            type: "end",
+            position: { x: 400, y: 450 },
+            body: "Thank you for using our service!",
+          },
+        },
+      ];
+
+      const exampleEdges: Edge[] = [
+        {
+          id: "e1",
+          source: "start-text",
+          target: "menu-buttons",
+          label: "next",
+        },
+        {
+          id: "e2",
+          source: "menu-buttons",
+          target: "services-list",
+          label: "services",
+        },
+        {
+          id: "e3",
+          source: "menu-buttons",
+          target: "api-call",
+          label: "order_status",
+        },
+        { id: "e4", source: "api-call", target: "end-flow", label: "complete" },
+        {
+          id: "e5",
+          source: "services-list",
+          target: "end-flow",
+          label: "complete",
+        },
+      ];
+
+      setNodes(exampleNodes);
+      setEdges(exampleEdges);
     }
   }, [flow, setNodes, setEdges]);
 
