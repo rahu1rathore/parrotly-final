@@ -124,6 +124,8 @@ export default function AdminDashboard() {
             >
               <AdminHeader title={pageTitle} subtitle={pageSubtitle} />
               {location.pathname.includes("/chatbot-builder") ? (
+                <ChatbotBuilderSystem />
+              ) : location.pathname.includes("/chatbot-builder-old") ? (
                 <div
                   style={{
                     width: "100%",
