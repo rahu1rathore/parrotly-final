@@ -653,7 +653,7 @@ const SubscriptionManagementEnhanced: React.FC<
                   </Avatar>
                   <Box>
                     <Typography variant="h6">
-                      {summary.avgValidity} days
+                      {summary?.avgValidity ?? 0} days
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                       Average Validity
