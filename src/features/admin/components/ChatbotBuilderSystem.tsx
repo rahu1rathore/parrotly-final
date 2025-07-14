@@ -511,8 +511,29 @@ export default function ChatbotBuilderSystem() {
         </Button>
       </Box>
 
-      {/* Statistics Cards */}
-      {renderStatsCards()}
+      {/* Navigation Tabs */}
+      <Paper sx={{ mb: 3 }}>
+        <Tabs
+          value={activeTab}
+          onChange={(e, newValue) => setActiveTab(newValue)}
+        >
+          <Tab label="Flow Management" icon={<ChatIcon />} />
+          <Tab label="Analytics" icon={<AnalyticsIcon />} />
+          <Tab label="Testing" icon={<TestIcon />} />
+        </Tabs>
+      </Paper>
+
+      {/* Tab Content */}
+      {activeTab === 0 && (
+        <>
+          {/* Statistics Cards */}
+          {renderStatsCards()}
+        </>
+      )}
+
+      {activeTab === 1 && <ChatbotAnalyticsDashboard flows={flows} />}
+
+      {activeTab === 2 && <ChatbotTestingInterface flows={flows} />}
 
       {/* Search and Filters */}
       <Paper sx={{ p: 2, mb: 3 }}>
