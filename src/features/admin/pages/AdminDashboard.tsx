@@ -235,7 +235,7 @@ export default function AdminDashboard() {
                   />
                   <Route
                     path="subscriptions"
-                    element={<SubscriptionManagement />}
+                    element={<SubscriptionManagementEnhanced />}
                   />
                   <Route
                     path="organizations"
