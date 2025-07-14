@@ -71,7 +71,7 @@ import {
   Cancel as InactiveIcon,
   ExpandMore as ExpandMoreIcon,
   GridView as GridViewIcon,
-  ViewList as ListViewIcon,
+  ViewList,
   Category as CategoryIcon,
   Timeline as TimelineIcon,
   TrendingUp as TrendingUpIcon,
