@@ -1980,25 +1980,139 @@ export const mockModules: Module[] = [
   {
     id: "1",
     name: "User Management",
-    description: "Manage users, roles and permissions",
+    description:
+      "Manage users, roles and permissions with advanced security features",
     is_active: true,
     created_at: "2024-01-01T00:00:00Z",
+    updated_at: "2024-01-15T10:30:00Z",
   },
   {
     id: "2",
     name: "Analytics Dashboard",
-    description: "View analytics and reports",
+    description:
+      "View comprehensive analytics, reports and business intelligence",
     is_active: true,
     created_at: "2024-01-02T00:00:00Z",
+    updated_at: "2024-01-16T14:20:00Z",
   },
   {
     id: "3",
     name: "Billing System",
-    description: "Handle billing and invoicing",
+    description: "Handle billing, invoicing and payment processing",
     is_active: false,
     created_at: "2024-01-03T00:00:00Z",
+    updated_at: "2024-01-10T09:15:00Z",
+  },
+  {
+    id: "4",
+    name: "Chat Support",
+    description: "Live chat support system with real-time messaging",
+    is_active: true,
+    created_at: "2024-01-04T00:00:00Z",
+    updated_at: "2024-01-17T11:45:00Z",
+  },
+  {
+    id: "5",
+    name: "Email Marketing",
+    description: "Email campaign management and automation tools",
+    is_active: true,
+    created_at: "2024-01-05T00:00:00Z",
+    updated_at: "2024-01-18T16:30:00Z",
+  },
+  {
+    id: "6",
+    name: "Inventory Management",
+    description: "Track and manage inventory with automated alerts",
+    is_active: false,
+    created_at: "2024-01-06T00:00:00Z",
+    updated_at: "2024-01-12T13:22:00Z",
+  },
+  {
+    id: "7",
+    name: "CRM System",
+    description: "Customer relationship management with lead tracking",
+    is_active: true,
+    created_at: "2024-01-07T00:00:00Z",
+    updated_at: "2024-01-19T08:15:00Z",
+  },
+  {
+    id: "8",
+    name: "Task Management",
+    description: "Project and task management with team collaboration",
+    is_active: true,
+    created_at: "2024-01-08T00:00:00Z",
+    updated_at: "2024-01-20T12:40:00Z",
+  },
+  {
+    id: "9",
+    name: "Report Generator",
+    description: "Generate custom reports and export data in multiple formats",
+    is_active: false,
+    created_at: "2024-01-09T00:00:00Z",
+    updated_at: "2024-01-11T15:30:00Z",
+  },
+  {
+    id: "10",
+    name: "API Gateway",
+    description: "Secure API management with rate limiting and authentication",
+    is_active: true,
+    created_at: "2024-01-10T00:00:00Z",
+    updated_at: "2024-01-21T09:50:00Z",
+  },
+  {
+    id: "11",
+    name: "Document Storage",
+    description: "Cloud document storage with version control and sharing",
+    is_active: true,
+    created_at: "2024-01-11T00:00:00Z",
+    updated_at: "2024-01-22T14:10:00Z",
+  },
+  {
+    id: "12",
+    name: "Notification Center",
+    description: "Multi-channel notification system for users and admins",
+    is_active: false,
+    created_at: "2024-01-12T00:00:00Z",
+    updated_at: "2024-01-13T10:20:00Z",
+  },
+  {
+    id: "13",
+    name: "Security Monitor",
+    description: "Real-time security monitoring and threat detection",
+    is_active: true,
+    created_at: "2024-01-13T00:00:00Z",
+    updated_at: "2024-01-23T11:35:00Z",
+  },
+  {
+    id: "14",
+    name: "Backup Manager",
+    description: "Automated backup and disaster recovery solutions",
+    is_active: true,
+    created_at: "2024-01-14T00:00:00Z",
+    updated_at: "2024-01-24T13:25:00Z",
+  },
+  {
+    id: "15",
+    name: "Social Media Integration",
+    description:
+      "Integrate with social media platforms for marketing and support",
+    is_active: false,
+    created_at: "2024-01-15T00:00:00Z",
+    updated_at: "2024-01-16T17:45:00Z",
   },
 ];
+
+// Helper function for module categories
+const getModuleCategory = (index: number): string => {
+  const categories = [
+    "Core",
+    "Communication",
+    "Analytics",
+    "E-commerce",
+    "Productivity",
+  ];
+  return categories[index % categories.length];
+};
 
 export const mockSubscriptions: Subscription[] = [
   {
