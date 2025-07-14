@@ -776,30 +776,568 @@ export const subscriptionAPI = {
   },
 };
 
+// Organization API interfaces
+interface OrganizationPaginationParams {
+  page: number;
+  limit: number;
+}
+
+interface OrganizationFilterParams {
+  search?: string;
+  country?: string;
+  state?: string;
+  city?: string;
+  subscription_id?: string;
+  established_after?: string;
+  established_before?: string;
+  sort_by?:
+    | "name"
+    | "established_date"
+    | "created_at"
+    | "updated_at"
+    | "city"
+    | "country";
+  sort_order?: "asc" | "desc";
+  industry?: string;
+  size?: "startup" | "small" | "medium" | "large" | "enterprise" | "all";
+}
+
+interface OrganizationListResponse {
+  data: Organization[];
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+    total_pages: number;
+    has_next: boolean;
+    has_prev: boolean;
+  };
+  filters_applied: OrganizationFilterParams;
+  summary: {
+    total_organizations: number;
+    countries: { [key: string]: number };
+    subscription_distribution: { [key: string]: number };
+    establishment_years: {
+      last_year: number;
+      last_3_years: number;
+      last_5_years: number;
+      older: number;
+    };
+    organization_sizes: {
+      startup: number;
+      small: number;
+      medium: number;
+      large: number;
+      enterprise: number;
+    };
+  };
+}
+
 // Organization API endpoints
 export const organizationAPI = {
-  // Get all organizations
-  getAll: (): Promise<{ data: Organization[] }> =>
-    api.get("/admin/organizations"),
+  // Get organizations with pagination and filtering
+  getAll: (
+    params?: OrganizationPaginationParams & OrganizationFilterParams,
+  ): Promise<OrganizationListResponse> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const {
+          page = 1,
+          limit = 10,
+          search = "",
+          country = "",
+          state = "",
+          city = "",
+          subscription_id = "",
+          established_after,
+          established_before,
+          sort_by = "created_at",
+          sort_order = "desc",
+          industry = "",
+          size = "all",
+        } = params || {};
+
+        let filteredData = [...mockOrganizations];
+
+        // Apply search filter
+        if (search) {
+          const searchLower = search.toLowerCase();
+          filteredData = filteredData.filter(
+            (org) =>
+              org.name.toLowerCase().includes(searchLower) ||
+              org.description?.toLowerCase().includes(searchLower) ||
+              org.email?.toLowerCase().includes(searchLower) ||
+              org.address?.toLowerCase().includes(searchLower),
+          );
+        }
+
+        // Apply country filter
+        if (country) {
+          filteredData = filteredData.filter((org) =>
+            org.country?.toLowerCase().includes(country.toLowerCase()),
+          );
+        }
+
+        // Apply state filter
+        if (state) {
+          filteredData = filteredData.filter((org) =>
+            org.state?.toLowerCase().includes(state.toLowerCase()),
+          );
+        }
+
+        // Apply city filter
+        if (city) {
+          filteredData = filteredData.filter((org) =>
+            org.city?.toLowerCase().includes(city.toLowerCase()),
+          );
+        }
+
+        // Apply subscription filter
+        if (subscription_id) {
+          filteredData = filteredData.filter(
+            (org) => org.subscription_id === subscription_id,
+          );
+        }
+
+        // Apply industry filter (simulated based on organization name/description)
+        if (industry) {
+          filteredData = filteredData.filter((org) => {
+            const orgData = (org.name + " " + org.description).toLowerCase();
+            switch (industry) {
+              case "technology":
+                return (
+                  orgData.includes("tech") ||
+                  orgData.includes("software") ||
+                  orgData.includes("digital")
+                );
+              case "finance":
+                return (
+                  orgData.includes("fintech") ||
+                  orgData.includes("financial") ||
+                  orgData.includes("bank")
+                );
+              case "healthcare":
+                return (
+                  orgData.includes("health") ||
+                  orgData.includes("medical") ||
+                  orgData.includes("pharma")
+                );
+              case "retail":
+                return (
+                  orgData.includes("retail") ||
+                  orgData.includes("commerce") ||
+                  orgData.includes("store")
+                );
+              case "education":
+                return (
+                  orgData.includes("education") ||
+                  orgData.includes("university") ||
+                  orgData.includes("school")
+                );
+              default:
+                return true;
+            }
+          });
+        }
+
+        // Apply size filter (simulated based on organization name patterns)
+        if (size !== "all") {
+          filteredData = filteredData.filter((org) => {
+            const orgName = org.name.toLowerCase();
+            switch (size) {
+              case "startup":
+                return orgName.includes("startup") || orgName.includes("xyz");
+              case "small":
+                return orgName.includes("small") || orgName.includes("local");
+              case "medium":
+                return (
+                  orgName.includes("medium") || orgName.includes("solutions")
+                );
+              case "large":
+                return orgName.includes("corp") || orgName.includes("inc");
+              case "enterprise":
+                return (
+                  orgName.includes("enterprise") || orgName.includes("global")
+                );
+              default:
+                return true;
+            }
+          });
+        }
+
+        // Apply date filters
+        if (established_after) {
+          filteredData = filteredData.filter(
+            (org) =>
+              org.established_date &&
+              new Date(org.established_date) >= new Date(established_after),
+          );
+        }
+        if (established_before) {
+          filteredData = filteredData.filter(
+            (org) =>
+              org.established_date &&
+              new Date(org.established_date) <= new Date(established_before),
+          );
+        }
+
+        // Apply sorting
+        filteredData.sort((a, b) => {
+          let aValue: any = a[sort_by as keyof Organization];
+          let bValue: any = b[sort_by as keyof Organization];
+
+          if (
+            sort_by === "created_at" ||
+            sort_by === "updated_at" ||
+            sort_by === "established_date"
+          ) {
+            aValue = new Date(aValue || 0).getTime();
+            bValue = new Date(bValue || 0).getTime();
+          } else {
+            aValue = aValue?.toString().toLowerCase() || "";
+            bValue = bValue?.toString().toLowerCase() || "";
+          }
+
+          if (sort_order === "asc") {
+            return aValue > bValue ? 1 : -1;
+          } else {
+            return aValue < bValue ? 1 : -1;
+          }
+        });
+
+        // Calculate pagination
+        const total = filteredData.length;
+        const startIndex = (page - 1) * limit;
+        const endIndex = startIndex + limit;
+        const paginatedData = filteredData.slice(startIndex, endIndex);
+        const total_pages = Math.ceil(total / limit);
+        const has_next = page < total_pages;
+        const has_prev = page > 1;
+
+        // Calculate summary statistics
+        const countries = mockOrganizations.reduce(
+          (acc, org) => {
+            if (org.country) {
+              acc[org.country] = (acc[org.country] || 0) + 1;
+            }
+            return acc;
+          },
+          {} as { [key: string]: number },
+        );
+
+        const subscriptionDistribution = mockOrganizations.reduce(
+          (acc, org) => {
+            if (org.subscription_name) {
+              acc[org.subscription_name] =
+                (acc[org.subscription_name] || 0) + 1;
+            }
+            return acc;
+          },
+          {} as { [key: string]: number },
+        );
+
+        const currentYear = new Date().getFullYear();
+        const establishmentYears = mockOrganizations.reduce(
+          (acc, org) => {
+            if (org.established_date) {
+              const estYear = new Date(org.established_date).getFullYear();
+              const yearsAgo = currentYear - estYear;
+
+              if (yearsAgo <= 1) acc.last_year++;
+              else if (yearsAgo <= 3) acc.last_3_years++;
+              else if (yearsAgo <= 5) acc.last_5_years++;
+              else acc.older++;
+            }
+            return acc;
+          },
+          { last_year: 0, last_3_years: 0, last_5_years: 0, older: 0 },
+        );
+
+        // Simulate organization sizes based on naming patterns
+        const organizationSizes = mockOrganizations.reduce(
+          (acc, org) => {
+            const orgName = org.name.toLowerCase();
+            if (orgName.includes("startup")) acc.startup++;
+            else if (orgName.includes("small") || orgName.includes("local"))
+              acc.small++;
+            else if (orgName.includes("solutions")) acc.medium++;
+            else if (orgName.includes("corp") || orgName.includes("inc"))
+              acc.large++;
+            else if (
+              orgName.includes("enterprise") ||
+              orgName.includes("global")
+            )
+              acc.enterprise++;
+            else acc.medium++; // default
+            return acc;
+          },
+          { startup: 0, small: 0, medium: 0, large: 0, enterprise: 0 },
+        );
+
+        const summary = {
+          total_organizations: mockOrganizations.length,
+          countries,
+          subscription_distribution: subscriptionDistribution,
+          establishment_years: establishmentYears,
+          organization_sizes: organizationSizes,
+        };
+
+        resolve({
+          data: paginatedData,
+          pagination: {
+            total,
+            page,
+            limit,
+            total_pages,
+            has_next,
+            has_prev,
+          },
+          filters_applied: params || {},
+          summary,
+        });
+      }, 300); // Simulate network delay
+    });
+  },
 
   // Get organization by ID
-  getById: (id: string): Promise<{ data: Organization }> =>
-    api.get(`/admin/organizations/${id}`),
+  getById: (id: string): Promise<{ data: Organization }> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const organization = mockOrganizations.find((o) => o.id === id);
+        if (organization) {
+          resolve({ data: organization });
+        } else {
+          reject(new Error("Organization not found"));
+        }
+      }, 100);
+    });
+  },
 
   // Create organization
-  create: (data: OrganizationFormData): Promise<{ data: Organization }> =>
-    api.post("/admin/organizations", data),
+  create: (data: OrganizationFormData): Promise<{ data: Organization }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const newOrganization: Organization = {
+          id: `org-${Date.now()}`,
+          name: data.name,
+          description: data.description,
+          address: data.address,
+          city: data.city,
+          state: data.state,
+          country: data.country,
+          postal_code: data.postal_code,
+          email: data.email,
+          website: data.website,
+          established_date: data.established_date,
+          logo:
+            data.logo ||
+            `https://via.placeholder.com/150x150/2196f3/ffffff?text=${data.name.charAt(0)}`,
+          phone_number: data.phone_number,
+          subscription_id: data.subscription_id,
+          subscription_name: data.subscription_name,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+        mockOrganizations.unshift(newOrganization);
+        resolve({ data: newOrganization });
+      }, 200);
+    });
+  },
 
   // Update organization
   update: (
     id: string,
-    data: OrganizationFormData,
-  ): Promise<{ data: Organization }> =>
-    api.put(`/admin/organizations/${id}`, data),
+    data: Partial<OrganizationFormData>,
+  ): Promise<{ data: Organization }> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const organizationIndex = mockOrganizations.findIndex(
+          (o) => o.id === id,
+        );
+        if (organizationIndex !== -1) {
+          mockOrganizations[organizationIndex] = {
+            ...mockOrganizations[organizationIndex],
+            ...data,
+            updated_at: new Date().toISOString(),
+          };
+          resolve({ data: mockOrganizations[organizationIndex] });
+        } else {
+          reject(new Error("Organization not found"));
+        }
+      }, 200);
+    });
+  },
 
   // Delete organization
-  delete: (id: string): Promise<void> =>
-    api.delete(`/admin/organizations/${id}`),
+  delete: (id: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const organizationIndex = mockOrganizations.findIndex(
+          (o) => o.id === id,
+        );
+        if (organizationIndex !== -1) {
+          mockOrganizations.splice(organizationIndex, 1);
+          resolve();
+        } else {
+          reject(new Error("Organization not found"));
+        }
+      }, 200);
+    });
+  },
+
+  // Bulk operations
+  bulkUpdate: (
+    ids: string[],
+    data: Partial<OrganizationFormData>,
+  ): Promise<{ data: Organization[]; updated_count: number }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const updatedOrganizations: Organization[] = [];
+        ids.forEach((id) => {
+          const organizationIndex = mockOrganizations.findIndex(
+            (o) => o.id === id,
+          );
+          if (organizationIndex !== -1) {
+            mockOrganizations[organizationIndex] = {
+              ...mockOrganizations[organizationIndex],
+              ...data,
+              updated_at: new Date().toISOString(),
+            };
+            updatedOrganizations.push(mockOrganizations[organizationIndex]);
+          }
+        });
+        resolve({
+          data: updatedOrganizations,
+          updated_count: updatedOrganizations.length,
+        });
+      }, 300);
+    });
+  },
+
+  bulkDelete: (ids: string[]): Promise<{ deleted_count: number }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        let deletedCount = 0;
+        ids.forEach((id) => {
+          const organizationIndex = mockOrganizations.findIndex(
+            (o) => o.id === id,
+          );
+          if (organizationIndex !== -1) {
+            mockOrganizations.splice(organizationIndex, 1);
+            deletedCount++;
+          }
+        });
+        resolve({ deleted_count: deletedCount });
+      }, 300);
+    });
+  },
+
+  // Get countries
+  getCountries: (): Promise<{ data: string[] }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const countries = Array.from(
+          new Set(mockOrganizations.map((org) => org.country).filter(Boolean)),
+        );
+        resolve({ data: countries });
+      }, 100);
+    });
+  },
+
+  // Get states for a country
+  getStates: (country: string): Promise<{ data: string[] }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const states = Array.from(
+          new Set(
+            mockOrganizations
+              .filter((org) => org.country === country)
+              .map((org) => org.state)
+              .filter(Boolean),
+          ),
+        );
+        resolve({ data: states });
+      }, 100);
+    });
+  },
+
+  // Get cities for a state
+  getCities: (state: string): Promise<{ data: string[] }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const cities = Array.from(
+          new Set(
+            mockOrganizations
+              .filter((org) => org.state === state)
+              .map((org) => org.city)
+              .filter(Boolean),
+          ),
+        );
+        resolve({ data: cities });
+      }, 100);
+    });
+  },
+
+  // Export organizations
+  export: (
+    format: "csv" | "excel" | "json",
+    filters?: OrganizationFilterParams,
+  ): Promise<{ download_url: string }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+        const filename = `organizations-export-${timestamp}.${format}`;
+        resolve({
+          download_url: `/api/admin/organizations/export/${filename}`,
+        });
+      }, 1000);
+    });
+  },
+
+  // Get analytics
+  getAnalytics: (): Promise<{
+    data: {
+      growth_trend: { month: string; organizations: number }[];
+      top_countries: { country: string; count: number }[];
+      subscription_breakdown: { subscription: string; organizations: number }[];
+      establishment_timeline: { year: number; count: number }[];
+    };
+  }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const analytics = {
+          growth_trend: [
+            { month: "Jan", organizations: 45 },
+            { month: "Feb", organizations: 52 },
+            { month: "Mar", organizations: 61 },
+            { month: "Apr", organizations: 68 },
+            { month: "May", organizations: 75 },
+            { month: "Jun", organizations: 82 },
+          ],
+          top_countries: [
+            { country: "United States", count: 35 },
+            { country: "Canada", count: 18 },
+            { country: "United Kingdom", count: 12 },
+            { country: "Germany", count: 8 },
+            { country: "Australia", count: 7 },
+          ],
+          subscription_breakdown: [
+            { subscription: "Enterprise Plan", organizations: 25 },
+            { subscription: "Pro Plan", organizations: 35 },
+            { subscription: "Basic Plan", organizations: 20 },
+          ],
+          establishment_timeline: [
+            { year: 2020, count: 15 },
+            { year: 2021, count: 22 },
+            { year: 2022, count: 28 },
+            { year: 2023, count: 18 },
+            { year: 2024, count: 10 },
+          ],
+        };
+        resolve({ data: analytics });
+      }, 200);
+    });
+  },
 };
 
 // Form Configuration API endpoints
