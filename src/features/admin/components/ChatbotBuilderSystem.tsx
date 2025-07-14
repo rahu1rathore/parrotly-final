@@ -533,9 +533,11 @@ export default function ChatbotBuilderSystem() {
 
       {activeTab === 1 && <ChatbotAnalyticsDashboard flows={flows} />}
 
-      {activeTab === 2 && <ChatbotTestingInterface flows={flows} />}
+            {activeTab === 2 && <ChatbotTestingInterface flows={flows} />}
 
-      {/* Search and Filters */}
+      {activeTab === 0 && (
+        <>
+          {/* Search and Filters */}
       <Paper sx={{ p: 2, mb: 3 }}>
         <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
           <TextField
