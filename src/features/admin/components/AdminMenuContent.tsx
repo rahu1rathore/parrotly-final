@@ -69,6 +69,12 @@ const mainListItems = [
     description: "Campaigns, forms & lead tracking",
   },
   {
+    text: "Chatbot Builder",
+    icon: <SmartToyRoundedIcon />,
+    path: "/admin/chatbot-builder",
+    description: "Visual conversation flow builder",
+  },
+  {
     text: "Customer Management",
     icon: <PersonRoundedIcon />,
     path: "/admin/customers",
