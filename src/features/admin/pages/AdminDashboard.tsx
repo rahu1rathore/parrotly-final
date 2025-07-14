@@ -139,6 +139,10 @@ export default function AdminDashboard() {
                   path="lead-management"
                   element={<LeadManagementSystem />}
                 />
+                <Route
+                  path="chatbot-builder"
+                  element={<ChatbotBuilderSystem />}
+                />
                 <Route path="analytics" element={<AdminOverview />} />
                 <Route path="users" element={<AdminOverview />} />
                 <Route path="settings" element={<AdminOverview />} />
