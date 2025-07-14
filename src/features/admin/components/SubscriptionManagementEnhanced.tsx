@@ -634,7 +634,7 @@ const SubscriptionManagementEnhanced: React.FC<
                   </Avatar>
                   <Box>
                     <Typography variant="h6">
-                      {formatPrice(summary.avgPrice)}
+                      {formatPrice(summary?.avgPrice ?? 0)}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                       Average Price
