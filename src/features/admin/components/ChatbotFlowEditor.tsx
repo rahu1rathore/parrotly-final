@@ -573,8 +573,10 @@ function ChatbotFlowEditorContent({
           <Controls />
           <MiniMap />
           <Panel position="top-left">
-            <Alert severity="info" sx={{ mb: 1 }}>
-              Drag nodes from the sidebar to build your conversation flow
+            <Alert severity={draggedType ? "success" : "info"} sx={{ mb: 1 }}>
+              {draggedType
+                ? `Drop ${draggedType} node anywhere on the canvas`
+                : "Drag nodes from the sidebar to build your conversation flow"}
             </Alert>
           </Panel>
         </ReactFlow>
