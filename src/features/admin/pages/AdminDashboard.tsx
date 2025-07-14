@@ -41,6 +41,7 @@ const getPageTitle = (pathname: string) => {
   if (pathname.includes("/customers")) return "Customer Management";
   if (pathname.includes("/whatsapp-templates")) return "WhatsApp Templates";
   if (pathname.includes("/lead-management")) return "Lead Management";
+  if (pathname.includes("/chatbot-builder")) return "Chatbot Builder";
   if (pathname.includes("/chat")) return "Admin Chat";
   if (pathname.includes("/analytics")) return "Analytics Dashboard";
   if (pathname.includes("/users")) return "User Management";
