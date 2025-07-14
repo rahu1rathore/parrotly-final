@@ -790,7 +790,13 @@ interface OrganizationFilterParams {
   subscription_id?: string;
   established_after?: string;
   established_before?: string;
-  sort_by?: "name" | "established_date" | "created_at" | "updated_at" | "city" | "country";
+  sort_by?:
+    | "name"
+    | "established_date"
+    | "created_at"
+    | "updated_at"
+    | "city"
+    | "country";
   sort_order?: "asc" | "desc";
   industry?: string;
   size?: "startup" | "small" | "medium" | "large" | "enterprise" | "all";
@@ -830,7 +836,9 @@ interface OrganizationListResponse {
 // Organization API endpoints
 export const organizationAPI = {
   // Get organizations with pagination and filtering
-  getAll: (params?: OrganizationPaginationParams & OrganizationFilterParams): Promise<OrganizationListResponse> => {
+  getAll: (
+    params?: OrganizationPaginationParams & OrganizationFilterParams,
+  ): Promise<OrganizationListResponse> => {
     return new Promise((resolve) => {
       setTimeout(() => {
         const {
@@ -859,62 +867,100 @@ export const organizationAPI = {
               org.name.toLowerCase().includes(searchLower) ||
               org.description?.toLowerCase().includes(searchLower) ||
               org.email?.toLowerCase().includes(searchLower) ||
-              org.address?.toLowerCase().includes(searchLower)
+              org.address?.toLowerCase().includes(searchLower),
           );
         }
 
         // Apply country filter
         if (country) {
-          filteredData = filteredData.filter(org =>
-            org.country?.toLowerCase().includes(country.toLowerCase())
+          filteredData = filteredData.filter((org) =>
+            org.country?.toLowerCase().includes(country.toLowerCase()),
           );
         }
 
         // Apply state filter
         if (state) {
-          filteredData = filteredData.filter(org =>
-            org.state?.toLowerCase().includes(state.toLowerCase())
+          filteredData = filteredData.filter((org) =>
+            org.state?.toLowerCase().includes(state.toLowerCase()),
           );
         }
 
         // Apply city filter
         if (city) {
-          filteredData = filteredData.filter(org =>
-            org.city?.toLowerCase().includes(city.toLowerCase())
+          filteredData = filteredData.filter((org) =>
+            org.city?.toLowerCase().includes(city.toLowerCase()),
           );
         }
 
         // Apply subscription filter
         if (subscription_id) {
-          filteredData = filteredData.filter(org => org.subscription_id === subscription_id);
+          filteredData = filteredData.filter(
+            (org) => org.subscription_id === subscription_id,
+          );
         }
 
         // Apply industry filter (simulated based on organization name/description)
         if (industry) {
-          filteredData = filteredData.filter(org => {
+          filteredData = filteredData.filter((org) => {
             const orgData = (org.name + " " + org.description).toLowerCase();
             switch (industry) {
-              case "technology": return orgData.includes("tech") || orgData.includes("software") || orgData.includes("digital");
-              case "finance": return orgData.includes("fintech") || orgData.includes("financial") || orgData.includes("bank");
-              case "healthcare": return orgData.includes("health") || orgData.includes("medical") || orgData.includes("pharma");
-              case "retail": return orgData.includes("retail") || orgData.includes("commerce") || orgData.includes("store");
-              case "education": return orgData.includes("education") || orgData.includes("university") || orgData.includes("school");
-              default: return true;
+              case "technology":
+                return (
+                  orgData.includes("tech") ||
+                  orgData.includes("software") ||
+                  orgData.includes("digital")
+                );
+              case "finance":
+                return (
+                  orgData.includes("fintech") ||
+                  orgData.includes("financial") ||
+                  orgData.includes("bank")
+                );
+              case "healthcare":
+                return (
+                  orgData.includes("health") ||
+                  orgData.includes("medical") ||
+                  orgData.includes("pharma")
+                );
+              case "retail":
+                return (
+                  orgData.includes("retail") ||
+                  orgData.includes("commerce") ||
+                  orgData.includes("store")
+                );
+              case "education":
+                return (
+                  orgData.includes("education") ||
+                  orgData.includes("university") ||
+                  orgData.includes("school")
+                );
+              default:
+                return true;
             }
           });
         }
 
         // Apply size filter (simulated based on organization name patterns)
         if (size !== "all") {
-          filteredData = filteredData.filter(org => {
+          filteredData = filteredData.filter((org) => {
             const orgName = org.name.toLowerCase();
             switch (size) {
-              case "startup": return orgName.includes("startup") || orgName.includes("xyz");
-              case "small": return orgName.includes("small") || orgName.includes("local");
-              case "medium": return orgName.includes("medium") || orgName.includes("solutions");
-              case "large": return orgName.includes("corp") || orgName.includes("inc");
-              case "enterprise": return orgName.includes("enterprise") || orgName.includes("global");
-              default: return true;
+              case "startup":
+                return orgName.includes("startup") || orgName.includes("xyz");
+              case "small":
+                return orgName.includes("small") || orgName.includes("local");
+              case "medium":
+                return (
+                  orgName.includes("medium") || orgName.includes("solutions")
+                );
+              case "large":
+                return orgName.includes("corp") || orgName.includes("inc");
+              case "enterprise":
+                return (
+                  orgName.includes("enterprise") || orgName.includes("global")
+                );
+              default:
+                return true;
             }
           });
         }
@@ -922,12 +968,16 @@ export const organizationAPI = {
         // Apply date filters
         if (established_after) {
           filteredData = filteredData.filter(
-            (org) => org.established_date && new Date(org.established_date) >= new Date(established_after)
+            (org) =>
+              org.established_date &&
+              new Date(org.established_date) >= new Date(established_after),
           );
         }
         if (established_before) {
           filteredData = filteredData.filter(
-            (org) => org.established_date && new Date(org.established_date) <= new Date(established_before)
+            (org) =>
+              org.established_date &&
+              new Date(org.established_date) <= new Date(established_before),
           );
         }
 
@@ -936,7 +986,11 @@ export const organizationAPI = {
           let aValue: any = a[sort_by as keyof Organization];
           let bValue: any = b[sort_by as keyof Organization];
 
-          if (sort_by === "created_at" || sort_by === "updated_at" || sort_by === "established_date") {
+          if (
+            sort_by === "created_at" ||
+            sort_by === "updated_at" ||
+            sort_by === "established_date"
+          ) {
             aValue = new Date(aValue || 0).getTime();
             bValue = new Date(bValue || 0).getTime();
           } else {
@@ -961,45 +1015,64 @@ export const organizationAPI = {
         const has_prev = page > 1;
 
         // Calculate summary statistics
-        const countries = mockOrganizations.reduce((acc, org) => {
-          if (org.country) {
-            acc[org.country] = (acc[org.country] || 0) + 1;
-          }
-          return acc;
-        }, {} as { [key: string]: number });
+        const countries = mockOrganizations.reduce(
+          (acc, org) => {
+            if (org.country) {
+              acc[org.country] = (acc[org.country] || 0) + 1;
+            }
+            return acc;
+          },
+          {} as { [key: string]: number },
+        );
 
-        const subscriptionDistribution = mockOrganizations.reduce((acc, org) => {
-          if (org.subscription_name) {
-            acc[org.subscription_name] = (acc[org.subscription_name] || 0) + 1;
-          }
-          return acc;
-        }, {} as { [key: string]: number });
+        const subscriptionDistribution = mockOrganizations.reduce(
+          (acc, org) => {
+            if (org.subscription_name) {
+              acc[org.subscription_name] =
+                (acc[org.subscription_name] || 0) + 1;
+            }
+            return acc;
+          },
+          {} as { [key: string]: number },
+        );
 
         const currentYear = new Date().getFullYear();
-        const establishmentYears = mockOrganizations.reduce((acc, org) => {
-          if (org.established_date) {
-            const estYear = new Date(org.established_date).getFullYear();
-            const yearsAgo = currentYear - estYear;
+        const establishmentYears = mockOrganizations.reduce(
+          (acc, org) => {
+            if (org.established_date) {
+              const estYear = new Date(org.established_date).getFullYear();
+              const yearsAgo = currentYear - estYear;
 
-            if (yearsAgo <= 1) acc.last_year++;
-            else if (yearsAgo <= 3) acc.last_3_years++;
-            else if (yearsAgo <= 5) acc.last_5_years++;
-            else acc.older++;
-          }
-          return acc;
-        }, { last_year: 0, last_3_years: 0, last_5_years: 0, older: 0 });
+              if (yearsAgo <= 1) acc.last_year++;
+              else if (yearsAgo <= 3) acc.last_3_years++;
+              else if (yearsAgo <= 5) acc.last_5_years++;
+              else acc.older++;
+            }
+            return acc;
+          },
+          { last_year: 0, last_3_years: 0, last_5_years: 0, older: 0 },
+        );
 
         // Simulate organization sizes based on naming patterns
-        const organizationSizes = mockOrganizations.reduce((acc, org) => {
-          const orgName = org.name.toLowerCase();
-          if (orgName.includes("startup")) acc.startup++;
-          else if (orgName.includes("small") || orgName.includes("local")) acc.small++;
-          else if (orgName.includes("solutions")) acc.medium++;
-          else if (orgName.includes("corp") || orgName.includes("inc")) acc.large++;
-          else if (orgName.includes("enterprise") || orgName.includes("global")) acc.enterprise++;
-          else acc.medium++; // default
-          return acc;
-        }, { startup: 0, small: 0, medium: 0, large: 0, enterprise: 0 });
+        const organizationSizes = mockOrganizations.reduce(
+          (acc, org) => {
+            const orgName = org.name.toLowerCase();
+            if (orgName.includes("startup")) acc.startup++;
+            else if (orgName.includes("small") || orgName.includes("local"))
+              acc.small++;
+            else if (orgName.includes("solutions")) acc.medium++;
+            else if (orgName.includes("corp") || orgName.includes("inc"))
+              acc.large++;
+            else if (
+              orgName.includes("enterprise") ||
+              orgName.includes("global")
+            )
+              acc.enterprise++;
+            else acc.medium++; // default
+            return acc;
+          },
+          { startup: 0, small: 0, medium: 0, large: 0, enterprise: 0 },
+        );
 
         const summary = {
           total_organizations: mockOrganizations.length,
@@ -1056,7 +1129,9 @@ export const organizationAPI = {
           email: data.email,
           website: data.website,
           established_date: data.established_date,
-          logo: data.logo || `https://via.placeholder.com/150x150/2196f3/ffffff?text=${data.name.charAt(0)}`,
+          logo:
+            data.logo ||
+            `https://via.placeholder.com/150x150/2196f3/ffffff?text=${data.name.charAt(0)}`,
           phone_number: data.phone_number,
           subscription_id: data.subscription_id,
           subscription_name: data.subscription_name,
@@ -1076,7 +1151,9 @@ export const organizationAPI = {
   ): Promise<{ data: Organization }> => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        const organizationIndex = mockOrganizations.findIndex((o) => o.id === id);
+        const organizationIndex = mockOrganizations.findIndex(
+          (o) => o.id === id,
+        );
         if (organizationIndex !== -1) {
           mockOrganizations[organizationIndex] = {
             ...mockOrganizations[organizationIndex],
@@ -1095,7 +1172,9 @@ export const organizationAPI = {
   delete: (id: string): Promise<void> => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        const organizationIndex = mockOrganizations.findIndex((o) => o.id === id);
+        const organizationIndex = mockOrganizations.findIndex(
+          (o) => o.id === id,
+        );
         if (organizationIndex !== -1) {
           mockOrganizations.splice(organizationIndex, 1);
           resolve();
@@ -1115,7 +1194,9 @@ export const organizationAPI = {
       setTimeout(() => {
         const updatedOrganizations: Organization[] = [];
         ids.forEach((id) => {
-          const organizationIndex = mockOrganizations.findIndex((o) => o.id === id);
+          const organizationIndex = mockOrganizations.findIndex(
+            (o) => o.id === id,
+          );
           if (organizationIndex !== -1) {
             mockOrganizations[organizationIndex] = {
               ...mockOrganizations[organizationIndex],
@@ -1125,7 +1206,10 @@ export const organizationAPI = {
             updatedOrganizations.push(mockOrganizations[organizationIndex]);
           }
         });
-        resolve({ data: updatedOrganizations, updated_count: updatedOrganizations.length });
+        resolve({
+          data: updatedOrganizations,
+          updated_count: updatedOrganizations.length,
+        });
       }, 300);
     });
   },
@@ -1135,7 +1219,9 @@ export const organizationAPI = {
       setTimeout(() => {
         let deletedCount = 0;
         ids.forEach((id) => {
-          const organizationIndex = mockOrganizations.findIndex((o) => o.id === id);
+          const organizationIndex = mockOrganizations.findIndex(
+            (o) => o.id === id,
+          );
           if (organizationIndex !== -1) {
             mockOrganizations.splice(organizationIndex, 1);
             deletedCount++;
@@ -1151,7 +1237,7 @@ export const organizationAPI = {
     return new Promise((resolve) => {
       setTimeout(() => {
         const countries = Array.from(
-          new Set(mockOrganizations.map((org) => org.country).filter(Boolean))
+          new Set(mockOrganizations.map((org) => org.country).filter(Boolean)),
         );
         resolve({ data: countries });
       }, 100);
@@ -1167,8 +1253,8 @@ export const organizationAPI = {
             mockOrganizations
               .filter((org) => org.country === country)
               .map((org) => org.state)
-              .filter(Boolean)
-          )
+              .filter(Boolean),
+          ),
         );
         resolve({ data: states });
       }, 100);
@@ -1184,8 +1270,8 @@ export const organizationAPI = {
             mockOrganizations
               .filter((org) => org.state === state)
               .map((org) => org.city)
-              .filter(Boolean)
-          )
+              .filter(Boolean),
+          ),
         );
         resolve({ data: cities });
       }, 100);
@@ -1193,13 +1279,16 @@ export const organizationAPI = {
   },
 
   // Export organizations
-  export: (format: "csv" | "excel" | "json", filters?: OrganizationFilterParams): Promise<{ download_url: string }> => {
+  export: (
+    format: "csv" | "excel" | "json",
+    filters?: OrganizationFilterParams,
+  ): Promise<{ download_url: string }> => {
     return new Promise((resolve) => {
       setTimeout(() => {
         const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
         const filename = `organizations-export-${timestamp}.${format}`;
         resolve({
-          download_url: `/api/admin/organizations/export/${filename}`
+          download_url: `/api/admin/organizations/export/${filename}`,
         });
       }, 1000);
     });
@@ -1212,7 +1301,7 @@ export const organizationAPI = {
       top_countries: { country: string; count: number }[];
       subscription_breakdown: { subscription: string; organizations: number }[];
       establishment_timeline: { year: number; count: number }[];
-    }
+    };
   }> => {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -3289,7 +3378,8 @@ export const mockOrganizations: Organization[] = [
   {
     id: "1",
     name: "TechCorp Inc.",
-    description: "Leading technology solutions provider specializing in cloud infrastructure and AI",
+    description:
+      "Leading technology solutions provider specializing in cloud infrastructure and AI",
     address: "123 Tech Street",
     city: "San Francisco",
     state: "California",
@@ -3308,7 +3398,8 @@ export const mockOrganizations: Organization[] = [
   {
     id: "2",
     name: "Global Enterprises Ltd.",
-    description: "International business solutions with focus on digital transformation",
+    description:
+      "International business solutions with focus on digital transformation",
     address: "456 Business Avenue",
     city: "New York",
     state: "New York",
@@ -3327,7 +3418,8 @@ export const mockOrganizations: Organization[] = [
   {
     id: "3",
     name: "StartupXYZ",
-    description: "Innovative fintech startup revolutionizing digital payments and blockchain",
+    description:
+      "Innovative fintech startup revolutionizing digital payments and blockchain",
     address: "789 Innovation Drive",
     city: "Austin",
     state: "Texas",
@@ -3365,7 +3457,8 @@ export const mockOrganizations: Organization[] = [
   {
     id: "5",
     name: "EduTech Innovations",
-    description: "Educational technology platform for K-12 and higher education",
+    description:
+      "Educational technology platform for K-12 and higher education",
     address: "555 Campus Drive",
     city: "Seattle",
     state: "Washington",
@@ -3384,7 +3477,8 @@ export const mockOrganizations: Organization[] = [
   {
     id: "6",
     name: "RetailMax Solutions",
-    description: "E-commerce and retail management platform for modern businesses",
+    description:
+      "E-commerce and retail management platform for modern businesses",
     address: "777 Commerce Street",
     city: "Chicago",
     state: "Illinois",
@@ -3403,7 +3497,8 @@ export const mockOrganizations: Organization[] = [
   {
     id: "7",
     name: "Northern Technologies",
-    description: "Canadian technology consultancy specializing in AI and machine learning",
+    description:
+      "Canadian technology consultancy specializing in AI and machine learning",
     address: "100 Innovation Way",
     city: "Toronto",
     state: "Ontario",
@@ -3441,7 +3536,8 @@ export const mockOrganizations: Organization[] = [
   {
     id: "9",
     name: "Berlin Software GmbH",
-    description: "Enterprise software development and digital transformation services",
+    description:
+      "Enterprise software development and digital transformation services",
     address: "Unter den Linden 12",
     city: "Berlin",
     state: "Berlin",
@@ -3513,11 +3609,6 @@ export const mockOrganizations: Organization[] = [
     subscription_name: "Basic Plan",
     created_at: "2024-01-12T00:00:00Z",
     updated_at: "2024-01-26T09:30:00Z",
-  },
-    phone_number: "+1-555-456-7890",
-    subscription_id: "1",
-    subscription_name: "Basic Plan",
-    created_at: "2024-01-03T00:00:00Z",
   },
 ];
 
