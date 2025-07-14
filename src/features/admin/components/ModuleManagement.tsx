@@ -119,7 +119,11 @@ const ModuleManagement: React.FC<ModuleManagementProps> = ({
   const [filters, setFilters] = useState<FilterState>({
     search: "",
     status: "all",
-    category: "all",
+    category: "",
+    createdAfter: "",
+    createdBefore: "",
+    sortBy: "created_at",
+    sortOrder: "desc",
   });
 
   // Modal states
