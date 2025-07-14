@@ -15,7 +15,7 @@ import SubscriptionManagementEnhanced from "../components/SubscriptionManagement
 import OrganizationManagementEnhanced from "../components/OrganizationManagementEnhanced";
 import CustomerManagement from "../components/CustomerManagement";
 import InterveneAdminChat from "../components/InterveneAdminChat";
-import WhatsAppTemplateManagementEnhanced from "../components/WhatsAppTemplateManagementEnhanced";
+import WhatsAppTemplateManagement from "../components/WhatsAppTemplateManagement";
 import LeadManagementSystem from "../components/LeadManagementSystem";
 import ChatbotBuilderSystem from "../components/ChatbotBuilderSystem";
 import AdminOverview from "../components/AdminOverview";
