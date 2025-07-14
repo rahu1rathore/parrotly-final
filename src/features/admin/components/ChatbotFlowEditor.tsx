@@ -54,8 +54,6 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   Connection,
-  EdgeChange,
-  NodeChange,
   ReactFlowProvider,
   Panel,
   useReactFlow,
