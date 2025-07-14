@@ -1,29 +1,42 @@
-import { Box, Typography, Container, Card, CardContent } from "@mui/material";
-
 export default function ChatbotBuilderSystem() {
-  console.log("ChatbotBuilderSystem component is rendering");
-
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
-      <Card>
-        <CardContent>
-          <Typography variant="h3" gutterBottom color="primary">
-            🤖 Chatbot Builder System
-          </Typography>
-          <Typography variant="h5" gutterBottom>
-            This component is working!
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            If you can see this message, the routing and component are working
-            correctly.
-          </Typography>
-          <Box sx={{ mt: 3, p: 2, bgcolor: "success.light", borderRadius: 1 }}>
-            <Typography variant="body2" color="success.dark">
-              ✅ Component successfully loaded at /admin/chatbot-builder
-            </Typography>
-          </Box>
-        </CardContent>
-      </Card>
-    </Container>
+    <div
+      style={{
+        padding: "40px",
+        backgroundColor: "#f5f5f5",
+        minHeight: "500px",
+        fontSize: "24px",
+        color: "#333",
+      }}
+    >
+      <h1 style={{ color: "#1976d2", marginBottom: "20px" }}>
+        🤖 Chatbot Builder System
+      </h1>
+      <p style={{ marginBottom: "20px" }}>
+        This component is now rendering successfully!
+      </p>
+      <div
+        style={{
+          backgroundColor: "#4caf50",
+          color: "white",
+          padding: "20px",
+          borderRadius: "8px",
+          marginTop: "20px",
+        }}
+      >
+        ✅ Component loaded at /admin/chatbot-builder
+      </div>
+      <div
+        style={{
+          backgroundColor: "#2196f3",
+          color: "white",
+          padding: "20px",
+          borderRadius: "8px",
+          marginTop: "20px",
+        }}
+      >
+        🚀 Ready to build the full chatbot interface!
+      </div>
+    </div>
   );
 }
