@@ -660,7 +660,10 @@ export default function ChatbotBuilderSystem() {
                         secondary="Start building a new conversation"
                       />
                     </ListItem>
-                    <ListItem button onClick={() => setActiveTab(1)}>
+                    <ListItem
+                      sx={{ cursor: "pointer" }}
+                      onClick={() => setActiveTab(1)}
+                    >
                       <ListItemIcon>
                         <AnalyticsIcon />
                       </ListItemIcon>
