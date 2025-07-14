@@ -369,30 +369,411 @@ export const moduleAPI = {
   },
 };
 
+// Subscription API interfaces
+interface SubscriptionPaginationParams {
+  page: number;
+  limit: number;
+}
+
+interface SubscriptionFilterParams {
+  search?: string;
+  price_min?: number;
+  price_max?: number;
+  validity_min?: number;
+  validity_max?: number;
+  created_after?: string;
+  created_before?: string;
+  sort_by?: "name" | "price" | "validity" | "created_at" | "updated_at";
+  sort_order?: "asc" | "desc";
+  plan_type?: "basic" | "pro" | "enterprise" | "all";
+}
+
+interface SubscriptionListResponse {
+  data: Subscription[];
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+    total_pages: number;
+    has_next: boolean;
+    has_prev: boolean;
+  };
+  filters_applied: SubscriptionFilterParams;
+  summary: {
+    total_subscriptions: number;
+    avg_price: number;
+    avg_validity: number;
+    plan_distribution: { [key: string]: number };
+    price_ranges: {
+      basic: { min: number; max: number; count: number };
+      mid: { min: number; max: number; count: number };
+      premium: { min: number; max: number; count: number };
+    };
+  };
+}
+
 // Subscription API endpoints
 export const subscriptionAPI = {
-  // Get all subscriptions
-  getAll: (): Promise<{ data: Subscription[] }> =>
-    api.get("/admin/subscriptions"),
+  // Get subscriptions with pagination and filtering
+  getAll: (
+    params?: SubscriptionPaginationParams & SubscriptionFilterParams,
+  ): Promise<SubscriptionListResponse> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const {
+          page = 1,
+          limit = 10,
+          search = "",
+          price_min,
+          price_max,
+          validity_min,
+          validity_max,
+          sort_by = "created_at",
+          sort_order = "desc",
+          plan_type = "all",
+          created_after,
+          created_before,
+        } = params || {};
+
+        let filteredData = [...mockSubscriptions];
+
+        // Apply search filter
+        if (search) {
+          const searchLower = search.toLowerCase();
+          filteredData = filteredData.filter(
+            (subscription) =>
+              subscription.name.toLowerCase().includes(searchLower) ||
+              subscription.description?.toLowerCase().includes(searchLower),
+          );
+        }
+
+        // Apply price range filter
+        if (price_min !== undefined) {
+          filteredData = filteredData.filter((sub) => sub.price >= price_min);
+        }
+        if (price_max !== undefined) {
+          filteredData = filteredData.filter((sub) => sub.price <= price_max);
+        }
+
+        // Apply validity range filter
+        if (validity_min !== undefined) {
+          filteredData = filteredData.filter(
+            (sub) => sub.validity >= validity_min,
+          );
+        }
+        if (validity_max !== undefined) {
+          filteredData = filteredData.filter(
+            (sub) => sub.validity <= validity_max,
+          );
+        }
+
+        // Apply plan type filter
+        if (plan_type !== "all") {
+          filteredData = filteredData.filter((sub) => {
+            const planName = sub.name.toLowerCase();
+            switch (plan_type) {
+              case "basic":
+                return planName.includes("basic");
+              case "pro":
+                return planName.includes("pro");
+              case "enterprise":
+                return planName.includes("enterprise");
+              default:
+                return true;
+            }
+          });
+        }
+
+        // Apply date filters
+        if (created_after) {
+          filteredData = filteredData.filter(
+            (sub) => new Date(sub.created_at!) >= new Date(created_after),
+          );
+        }
+        if (created_before) {
+          filteredData = filteredData.filter(
+            (sub) => new Date(sub.created_at!) <= new Date(created_before),
+          );
+        }
+
+        // Apply sorting
+        filteredData.sort((a, b) => {
+          let aValue: any = a[sort_by as keyof Subscription];
+          let bValue: any = b[sort_by as keyof Subscription];
+
+          if (sort_by === "created_at" || sort_by === "updated_at") {
+            aValue = new Date(aValue || 0).getTime();
+            bValue = new Date(bValue || 0).getTime();
+          } else if (sort_by === "price" || sort_by === "validity") {
+            aValue = Number(aValue) || 0;
+            bValue = Number(bValue) || 0;
+          } else {
+            aValue = aValue?.toString().toLowerCase() || "";
+            bValue = bValue?.toString().toLowerCase() || "";
+          }
+
+          if (sort_order === "asc") {
+            return aValue > bValue ? 1 : -1;
+          } else {
+            return aValue < bValue ? 1 : -1;
+          }
+        });
+
+        // Calculate pagination
+        const total = filteredData.length;
+        const startIndex = (page - 1) * limit;
+        const endIndex = startIndex + limit;
+        const paginatedData = filteredData.slice(startIndex, endIndex);
+        const total_pages = Math.ceil(total / limit);
+        const has_next = page < total_pages;
+        const has_prev = page > 1;
+
+        // Calculate summary statistics
+        const allPrices = mockSubscriptions.map((s) => s.price);
+        const allValidities = mockSubscriptions.map((s) => s.validity);
+        const avgPrice =
+          allPrices.reduce((a, b) => a + b, 0) / allPrices.length;
+        const avgValidity =
+          allValidities.reduce((a, b) => a + b, 0) / allValidities.length;
+
+        const planDistribution = mockSubscriptions.reduce(
+          (acc, sub) => {
+            const planName = sub.name.toLowerCase();
+            if (planName.includes("basic")) acc.basic = (acc.basic || 0) + 1;
+            else if (planName.includes("pro")) acc.pro = (acc.pro || 0) + 1;
+            else if (planName.includes("enterprise"))
+              acc.enterprise = (acc.enterprise || 0) + 1;
+            else acc.other = (acc.other || 0) + 1;
+            return acc;
+          },
+          {} as { [key: string]: number },
+        );
+
+        const priceRanges = {
+          basic: {
+            min: 0,
+            max: 50,
+            count: mockSubscriptions.filter((s) => s.price <= 50).length,
+          },
+          mid: {
+            min: 51,
+            max: 150,
+            count: mockSubscriptions.filter(
+              (s) => s.price > 50 && s.price <= 150,
+            ).length,
+          },
+          premium: {
+            min: 151,
+            max: 1000,
+            count: mockSubscriptions.filter((s) => s.price > 150).length,
+          },
+        };
+
+        const summary = {
+          total_subscriptions: mockSubscriptions.length,
+          avg_price: Math.round(avgPrice * 100) / 100,
+          avg_validity: Math.round(avgValidity),
+          plan_distribution: planDistribution,
+          price_ranges: priceRanges,
+        };
+
+        resolve({
+          data: paginatedData,
+          pagination: {
+            total,
+            page,
+            limit,
+            total_pages,
+            has_next,
+            has_prev,
+          },
+          filters_applied: params || {},
+          summary,
+        });
+      }, 300); // Simulate network delay
+    });
+  },
 
   // Get subscription by ID
-  getById: (id: string): Promise<{ data: Subscription }> =>
-    api.get(`/admin/subscriptions/${id}`),
+  getById: (id: string): Promise<{ data: Subscription }> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const subscription = mockSubscriptions.find((s) => s.id === id);
+        if (subscription) {
+          resolve({ data: subscription });
+        } else {
+          reject(new Error("Subscription not found"));
+        }
+      }, 100);
+    });
+  },
 
   // Create subscription
-  create: (data: SubscriptionFormData): Promise<{ data: Subscription }> =>
-    api.post("/admin/subscriptions", data),
+  create: (data: SubscriptionFormData): Promise<{ data: Subscription }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const newSubscription: Subscription = {
+          id: `subscription-${Date.now()}`,
+          name: data.name,
+          description: data.description,
+          price: data.price,
+          validity: data.validity,
+          modules: data.modules,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+        mockSubscriptions.unshift(newSubscription);
+        resolve({ data: newSubscription });
+      }, 200);
+    });
+  },
 
   // Update subscription
   update: (
     id: string,
-    data: SubscriptionFormData,
-  ): Promise<{ data: Subscription }> =>
-    api.put(`/admin/subscriptions/${id}`, data),
+    data: Partial<SubscriptionFormData>,
+  ): Promise<{ data: Subscription }> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const subscriptionIndex = mockSubscriptions.findIndex(
+          (s) => s.id === id,
+        );
+        if (subscriptionIndex !== -1) {
+          mockSubscriptions[subscriptionIndex] = {
+            ...mockSubscriptions[subscriptionIndex],
+            ...data,
+            updated_at: new Date().toISOString(),
+          };
+          resolve({ data: mockSubscriptions[subscriptionIndex] });
+        } else {
+          reject(new Error("Subscription not found"));
+        }
+      }, 200);
+    });
+  },
 
   // Delete subscription
-  delete: (id: string): Promise<void> =>
-    api.delete(`/admin/subscriptions/${id}`),
+  delete: (id: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const subscriptionIndex = mockSubscriptions.findIndex(
+          (s) => s.id === id,
+        );
+        if (subscriptionIndex !== -1) {
+          mockSubscriptions.splice(subscriptionIndex, 1);
+          resolve();
+        } else {
+          reject(new Error("Subscription not found"));
+        }
+      }, 200);
+    });
+  },
+
+  // Bulk operations
+  bulkUpdate: (
+    ids: string[],
+    data: Partial<SubscriptionFormData>,
+  ): Promise<{ data: Subscription[]; updated_count: number }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const updatedSubscriptions: Subscription[] = [];
+        ids.forEach((id) => {
+          const subscriptionIndex = mockSubscriptions.findIndex(
+            (s) => s.id === id,
+          );
+          if (subscriptionIndex !== -1) {
+            mockSubscriptions[subscriptionIndex] = {
+              ...mockSubscriptions[subscriptionIndex],
+              ...data,
+              updated_at: new Date().toISOString(),
+            };
+            updatedSubscriptions.push(mockSubscriptions[subscriptionIndex]);
+          }
+        });
+        resolve({
+          data: updatedSubscriptions,
+          updated_count: updatedSubscriptions.length,
+        });
+      }, 300);
+    });
+  },
+
+  bulkDelete: (ids: string[]): Promise<{ deleted_count: number }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        let deletedCount = 0;
+        ids.forEach((id) => {
+          const subscriptionIndex = mockSubscriptions.findIndex(
+            (s) => s.id === id,
+          );
+          if (subscriptionIndex !== -1) {
+            mockSubscriptions.splice(subscriptionIndex, 1);
+            deletedCount++;
+          }
+        });
+        resolve({ deleted_count: deletedCount });
+      }, 300);
+    });
+  },
+
+  // Get plan types
+  getPlanTypes: (): Promise<{ data: string[] }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const planTypes = ["basic", "pro", "enterprise"];
+        resolve({ data: planTypes });
+      }, 100);
+    });
+  },
+
+  // Export subscriptions
+  export: (
+    format: "csv" | "excel" | "json",
+    filters?: SubscriptionFilterParams,
+  ): Promise<{ download_url: string }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+        const filename = `subscriptions-export-${timestamp}.${format}`;
+        resolve({
+          download_url: `/api/admin/subscriptions/export/${filename}`,
+        });
+      }, 1000);
+    });
+  },
+
+  // Get subscription analytics
+  getAnalytics: (): Promise<{
+    data: {
+      revenue_trend: { month: string; revenue: number }[];
+      popular_plans: { plan: string; subscribers: number }[];
+      churn_rate: number;
+      growth_rate: number;
+    };
+  }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const analytics = {
+          revenue_trend: [
+            { month: "Jan", revenue: 12000 },
+            { month: "Feb", revenue: 15000 },
+            { month: "Mar", revenue: 18000 },
+            { month: "Apr", revenue: 22000 },
+            { month: "May", revenue: 25000 },
+            { month: "Jun", revenue: 28000 },
+          ],
+          popular_plans: [
+            { plan: "Pro Plan", subscribers: 450 },
+            { plan: "Basic Plan", subscribers: 320 },
+            { plan: "Enterprise Plan", subscribers: 180 },
+          ],
+          churn_rate: 5.2,
+          growth_rate: 15.8,
+        };
+        resolve({ data: analytics });
+      }, 200);
+    });
+  },
 };
 
 // Organization API endpoints
