@@ -11,7 +11,7 @@ import AdminAppNavbar from "../components/AdminAppNavbar";
 import AdminHeader from "../components/AdminHeader";
 import AdminSideMenu from "../components/AdminSideMenu";
 import ModuleManagementEnhanced from "../components/ModuleManagementEnhanced";
-import SubscriptionManagement from "../components/SubscriptionManagement";
+import SubscriptionManagementEnhanced from "../components/SubscriptionManagementEnhanced";
 import OrganizationManagement from "../components/OrganizationManagement";
 import CustomerManagement from "../components/CustomerManagement";
 import InterveneAdminChat from "../components/InterveneAdminChat";
