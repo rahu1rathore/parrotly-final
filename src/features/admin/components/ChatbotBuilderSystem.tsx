@@ -70,6 +70,8 @@ import {
 import { chatbotFlowAPI } from "../services/api";
 import ChatbotFlowCreator from "./ChatbotFlowCreator";
 import ChatbotFlowEditor from "./ChatbotFlowEditor";
+import ChatbotAnalyticsDashboard from "./ChatbotAnalyticsDashboard";
+import ChatbotTestingInterface from "./ChatbotTestingInterface";
 
 type ViewMode = "list" | "create" | "edit";
 
