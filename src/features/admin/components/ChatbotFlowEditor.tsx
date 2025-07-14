@@ -532,27 +532,34 @@ function ChatbotFlowEditorContent({
       event.preventDefault();
 
       const type = event.dataTransfer.getData("application/reactflow");
-      if (typeof type === "undefined" || !type) return;
+      if (!type) {
+        console.log("No type found in drag data");
+        return;
+      }
 
       const position = reactFlowInstance.screenToFlowPosition({
         x: event.clientX,
         y: event.clientY,
       });
 
+      const nodeId = `${type}-${Date.now()}`;
       const newNode: Node = {
-        id: `${type}-${Date.now()}`,
+        id: nodeId,
         type,
         position,
         data: {
-          id: `${type}-${Date.now()}`,
+          id: nodeId,
           type,
           position,
-          body: `New ${type} node`,
-          header: type === "text" ? "Header" : undefined,
-          footer: type === "text" ? "Footer" : undefined,
+          body: getDefaultNodeBody(type),
+          header: type === "text" ? "New Header" : undefined,
+          footer: type === "text" ? "New Footer" : undefined,
           buttons:
             type === "button"
-              ? [{ id: "btn-1", text: "Option 1", action: "" }]
+              ? [
+                  { id: "btn-1", text: "Option 1", action: "" },
+                  { id: "btn-2", text: "Option 2", action: "" },
+                ]
               : undefined,
           list_items:
             type === "list"
@@ -560,19 +567,65 @@ function ChatbotFlowEditorContent({
                   {
                     id: "item-1",
                     title: "Item 1",
-                    description: "Description",
+                    description: "Description 1",
+                    action: "",
+                  },
+                  {
+                    id: "item-2",
+                    title: "Item 2",
+                    description: "Description 2",
                     action: "",
                   },
                 ]
+              : undefined,
+          media_url:
+            type === "image" || type === "audio" || type === "video"
+              ? "https://example.com/media"
+              : undefined,
+          api_config:
+            type === "api_trigger"
+              ? {
+                  method: "GET",
+                  url: "/api/endpoint",
+                  headers: {},
+                }
               : undefined,
         },
       };
 
       setNodes((nds) => nds.concat(newNode));
       setSaveStatus("unsaved");
+      setDraggedType(null);
     },
     [reactFlowInstance, setNodes],
   );
+
+  const getDefaultNodeBody = (type: string): string => {
+    switch (type) {
+      case "text":
+        return "Enter your text message here...";
+      case "button":
+        return "Choose an option:";
+      case "list":
+        return "Select from the list:";
+      case "image":
+        return "Image caption";
+      case "audio":
+        return "Audio description";
+      case "video":
+        return "Video description";
+      case "product":
+        return "Product information";
+      case "api_trigger":
+        return "Processing request...";
+      case "condition":
+        return "Condition check";
+      case "end":
+        return "Conversation ends here";
+      default:
+        return `New ${type} node`;
+    }
+  };
 
   const onDragStart = (event: React.DragEvent, nodeType: string) => {
     event.dataTransfer.setData("application/reactflow", nodeType);
