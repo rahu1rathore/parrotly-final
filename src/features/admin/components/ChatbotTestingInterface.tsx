@@ -720,7 +720,85 @@ export default function ChatbotTestingInterface({
           <Typography variant="body2" sx={{ mb: 2 }}>
             Configure how the testing interface behaves
           </Typography>
-          {/* Add test settings form here */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+              minWidth: 300,
+            }}
+          >
+            <FormControl>
+              <InputLabel>Max Messages</InputLabel>
+              <Select
+                value={testSettings.maxMessages}
+                label="Max Messages"
+                onChange={(e) =>
+                  setTestSettings((prev) => ({
+                    ...prev,
+                    maxMessages: e.target.value as number,
+                  }))
+                }
+              >
+                <MenuItem value={25}>25 messages</MenuItem>
+                <MenuItem value={50}>50 messages</MenuItem>
+                <MenuItem value={100}>100 messages</MenuItem>
+              </Select>
+            </FormControl>
+            <Box>
+              <Typography variant="subtitle2" gutterBottom>
+                Response Simulation
+              </Typography>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <input
+                  type="checkbox"
+                  checked={testSettings.simulateDelay}
+                  onChange={(e) =>
+                    setTestSettings((prev) => ({
+                      ...prev,
+                      simulateDelay: e.target.checked,
+                    }))
+                  }
+                />
+                <Typography variant="body2">
+                  Simulate response delays
+                </Typography>
+              </Box>
+            </Box>
+            <Box>
+              <Typography variant="subtitle2" gutterBottom>
+                Debug Options
+              </Typography>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <input
+                    type="checkbox"
+                    checked={testSettings.logDebugInfo}
+                    onChange={(e) =>
+                      setTestSettings((prev) => ({
+                        ...prev,
+                        logDebugInfo: e.target.checked,
+                      }))
+                    }
+                  />
+                  <Typography variant="body2">Log debug information</Typography>
+                </Box>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <input
+                    type="checkbox"
+                    checked={testSettings.trackVariables}
+                    onChange={(e) =>
+                      setTestSettings((prev) => ({
+                        ...prev,
+                        trackVariables: e.target.checked,
+                      }))
+                    }
+                  />
+                  <Typography variant="body2">Track flow variables</Typography>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setSettingsOpen(false)}>Close</Button>
