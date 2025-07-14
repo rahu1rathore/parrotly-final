@@ -239,7 +239,7 @@ export default function AdminDashboard() {
                   />
                   <Route
                     path="organizations"
-                    element={<OrganizationManagement />}
+                    element={<OrganizationManagementEnhanced />}
                   />
                   <Route path="customers" element={<CustomerManagement />} />
                   <Route
