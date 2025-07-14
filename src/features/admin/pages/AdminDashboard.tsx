@@ -61,6 +61,8 @@ const getPageSubtitle = (pathname: string) => {
     return "Create and manage WhatsApp message templates with live preview";
   if (pathname.includes("/lead-management"))
     return "Campaigns, dynamic forms, lead tracking, assignments, and tasks";
+  if (pathname.includes("/chatbot-builder"))
+    return "Create and manage visual conversation flows for your chatbot";
   if (pathname.includes("/chat"))
     return "Communicate with customers through WhatsApp-style interface";
   if (pathname.includes("/analytics"))
