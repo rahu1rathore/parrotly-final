@@ -164,6 +164,21 @@ const ModuleManagement: React.FC<ModuleManagementProps> = ({
     loadModules();
   }, [pagination.page, pagination.rowsPerPage, filters]);
 
+  // Load categories on mount
+  useEffect(() => {
+    loadCategories();
+  }, []);
+
+  // Load categories function
+  const loadCategories = async () => {
+    try {
+      const response = await moduleAPI.getCategories();
+      setCategories(response.data);
+    } catch (error) {
+      console.error("Error loading categories:", error);
+    }
+  };
+
   const loadModules = async () => {
     setLoading(true);
     setError(null);
