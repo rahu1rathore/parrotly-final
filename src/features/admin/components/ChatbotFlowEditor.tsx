@@ -560,6 +560,10 @@ function ChatbotFlowEditorContent({
           onDragOver={onDragOver}
           onNodeClick={onNodeClick}
           nodeTypes={nodeTypes}
+          nodesDraggable={true}
+          nodesConnectable={true}
+          elementsSelectable={true}
+          selectNodesOnDrag={false}
           fitView
           attributionPosition="bottom-left"
         >
