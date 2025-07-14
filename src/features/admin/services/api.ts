@@ -1702,10 +1702,254 @@ function extractVariables(...contents: (string | undefined)[]): string[] {
   return Array.from(variables);
 }
 
+// WhatsApp Template API interfaces
+interface TemplatePaginationParams {
+  page: number;
+  limit: number;
+}
+
+interface TemplateFilterParams {
+  search?: string;
+  status?: "all" | "approved" | "rejected" | "pending" | "disabled";
+  category?: string;
+  language?: string;
+  created_after?: string;
+  created_before?: string;
+  sort_by?: "name" | "status" | "created_date" | "updated_date" | "category";
+  sort_order?: "asc" | "desc";
+}
+
+interface TemplateListResponse {
+  data: WhatsAppTemplate[];
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+    total_pages: number;
+    has_next: boolean;
+    has_prev: boolean;
+  };
+  filters_applied: TemplateFilterParams;
+  summary: {
+    total_templates: number;
+    approved_templates: number;
+    pending_templates: number;
+    rejected_templates: number;
+    status_distribution: { [key: string]: number };
+    category_distribution: { [key: string]: number };
+    language_distribution: { [key: string]: number };
+  };
+}
+
+interface TemplateSendRequest {
+  template_id: string;
+  recipients: {
+    phone_number: string;
+    variables?: { [key: string]: string };
+  }[];
+  variables?: { [key: string]: string }; // Global variables for all recipients
+}
+
+interface TemplateSendResponse {
+  message_id: string;
+  status: "sent" | "failed" | "pending";
+  sent_count: number;
+  failed_count: number;
+  failed_recipients: {
+    phone_number: string;
+    error: string;
+  }[];
+  sent_at: string;
+}
+
+interface BulkTemplateSendRequest {
+  template_id: string;
+  segment_ids?: string[];
+  phone_numbers?: string[];
+  variables?: { [key: string]: string };
+  schedule_at?: string; // ISO datetime for scheduled sending
+}
+
+interface TemplatePreviewRequest {
+  template_id: string;
+  variables: { [key: string]: string };
+}
+
+interface TemplatePreviewResponse {
+  header?: {
+    type: string;
+    content: string;
+    mediaUrl?: string;
+  };
+  body: string;
+  footer?: string;
+  buttons?: WhatsAppTemplateButton[];
+}
+
 export const whatsappTemplateAPI = {
-  getAll: async (): Promise<WhatsAppTemplate[]> => {
+  // Get templates with pagination and filtering
+  getAll: async (
+    params?: TemplatePaginationParams & TemplateFilterParams,
+  ): Promise<TemplateListResponse> => {
     return new Promise((resolve) => {
-      setTimeout(() => resolve([...mockWhatsAppTemplates]), 500);
+      setTimeout(() => {
+        const {
+          page = 1,
+          limit = 10,
+          search = "",
+          status = "all",
+          category = "",
+          language = "",
+          created_after,
+          created_before,
+          sort_by = "created_date",
+          sort_order = "desc",
+        } = params || {};
+
+        let filteredData = [...mockWhatsAppTemplates];
+
+        // Apply search filter
+        if (search) {
+          const searchLower = search.toLowerCase();
+          filteredData = filteredData.filter(
+            (template) =>
+              template.name.toLowerCase().includes(searchLower) ||
+              template.body.toLowerCase().includes(searchLower) ||
+              template.category.toLowerCase().includes(searchLower),
+          );
+        }
+
+        // Apply status filter
+        if (status !== "all") {
+          filteredData = filteredData.filter(
+            (template) => template.status === status,
+          );
+        }
+
+        // Apply category filter
+        if (category) {
+          filteredData = filteredData.filter(
+            (template) => template.category === category,
+          );
+        }
+
+        // Apply language filter
+        if (language) {
+          filteredData = filteredData.filter(
+            (template) => template.language === language,
+          );
+        }
+
+        // Apply date filters
+        if (created_after) {
+          filteredData = filteredData.filter(
+            (template) =>
+              new Date(template.createdDate) >= new Date(created_after),
+          );
+        }
+        if (created_before) {
+          filteredData = filteredData.filter(
+            (template) =>
+              new Date(template.createdDate) <= new Date(created_before),
+          );
+        }
+
+        // Apply sorting
+        filteredData.sort((a, b) => {
+          let aValue: any;
+          let bValue: any;
+
+          switch (sort_by) {
+            case "name":
+              aValue = a.name.toLowerCase();
+              bValue = b.name.toLowerCase();
+              break;
+            case "status":
+              aValue = a.status;
+              bValue = b.status;
+              break;
+            case "category":
+              aValue = a.category;
+              bValue = b.category;
+              break;
+            case "created_date":
+              aValue = new Date(a.createdDate).getTime();
+              bValue = new Date(b.createdDate).getTime();
+              break;
+            case "updated_date":
+              aValue = new Date(a.updatedDate).getTime();
+              bValue = new Date(b.updatedDate).getTime();
+              break;
+            default:
+              aValue = new Date(a.createdDate).getTime();
+              bValue = new Date(b.createdDate).getTime();
+          }
+
+          if (sort_order === "asc") {
+            return aValue > bValue ? 1 : -1;
+          } else {
+            return aValue < bValue ? 1 : -1;
+          }
+        });
+
+        // Calculate pagination
+        const total = filteredData.length;
+        const startIndex = (page - 1) * limit;
+        const endIndex = startIndex + limit;
+        const paginatedData = filteredData.slice(startIndex, endIndex);
+        const total_pages = Math.ceil(total / limit);
+        const has_next = page < total_pages;
+        const has_prev = page > 1;
+
+        // Calculate summary statistics
+        const summary = {
+          total_templates: mockWhatsAppTemplates.length,
+          approved_templates: mockWhatsAppTemplates.filter(
+            (t) => t.status === "approved",
+          ).length,
+          pending_templates: mockWhatsAppTemplates.filter(
+            (t) => t.status === "pending",
+          ).length,
+          rejected_templates: mockWhatsAppTemplates.filter(
+            (t) => t.status === "rejected",
+          ).length,
+          status_distribution: mockWhatsAppTemplates.reduce(
+            (acc, template) => {
+              acc[template.status] = (acc[template.status] || 0) + 1;
+              return acc;
+            },
+            {} as { [key: string]: number },
+          ),
+          category_distribution: mockWhatsAppTemplates.reduce(
+            (acc, template) => {
+              acc[template.category] = (acc[template.category] || 0) + 1;
+              return acc;
+            },
+            {} as { [key: string]: number },
+          ),
+          language_distribution: mockWhatsAppTemplates.reduce(
+            (acc, template) => {
+              acc[template.language] = (acc[template.language] || 0) + 1;
+              return acc;
+            },
+            {} as { [key: string]: number },
+          ),
+        };
+
+        resolve({
+          data: paginatedData,
+          pagination: {
+            total,
+            page,
+            limit,
+            total_pages,
+            has_next,
+            has_prev,
+          },
+          filters_applied: params || {},
+          summary,
+        });
+      }, 300);
     });
   },
 
@@ -1714,7 +1958,7 @@ export const whatsappTemplateAPI = {
       setTimeout(() => {
         const template = mockWhatsAppTemplates.find((t) => t.id === id) || null;
         resolve(template);
-      }, 300);
+      }, 200);
     });
   },
 
@@ -1736,9 +1980,9 @@ export const whatsappTemplateAPI = {
             templateData.footer,
           ),
         };
-        mockWhatsAppTemplates.push(newTemplate);
+        mockWhatsAppTemplates.unshift(newTemplate);
         resolve(newTemplate);
-      }, 500);
+      }, 400);
     });
   },
 
@@ -1770,7 +2014,7 @@ export const whatsappTemplateAPI = {
 
         mockWhatsAppTemplates[index] = updatedTemplate;
         resolve(updatedTemplate);
-      }, 500);
+      }, 400);
     });
   },
 
@@ -1784,6 +2028,256 @@ export const whatsappTemplateAPI = {
         }
         mockWhatsAppTemplates.splice(index, 1);
         resolve();
+      }, 300);
+    });
+  },
+
+  // Bulk operations
+  bulkDelete: async (ids: string[]): Promise<{ deleted_count: number }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        let deletedCount = 0;
+        ids.forEach((id) => {
+          const templateIndex = mockWhatsAppTemplates.findIndex(
+            (t) => t.id === id,
+          );
+          if (templateIndex !== -1) {
+            mockWhatsAppTemplates.splice(templateIndex, 1);
+            deletedCount++;
+          }
+        });
+        resolve({ deleted_count: deletedCount });
+      }, 500);
+    });
+  },
+
+  bulkUpdateStatus: async (
+    ids: string[],
+    status: WhatsAppTemplate["status"],
+  ): Promise<{ updated_count: number }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        let updatedCount = 0;
+        ids.forEach((id) => {
+          const templateIndex = mockWhatsAppTemplates.findIndex(
+            (t) => t.id === id,
+          );
+          if (templateIndex !== -1) {
+            mockWhatsAppTemplates[templateIndex].status = status;
+            mockWhatsAppTemplates[templateIndex].updatedDate =
+              new Date().toISOString();
+            updatedCount++;
+          }
+        });
+        resolve({ updated_count: updatedCount });
+      }, 500);
+    });
+  },
+
+  // Template sending functionality
+  sendTemplate: async (
+    request: TemplateSendRequest,
+  ): Promise<TemplateSendResponse> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        // Simulate some failures for demo
+        const failedRecipients = request.recipients.filter(
+          (_, index) => Math.random() < 0.1,
+        );
+        const sentCount = request.recipients.length - failedRecipients.length;
+
+        const response: TemplateSendResponse = {
+          message_id: `msg_${Date.now()}`,
+          status: sentCount > 0 ? "sent" : "failed",
+          sent_count: sentCount,
+          failed_count: failedRecipients.length,
+          failed_recipients: failedRecipients.map((recipient) => ({
+            phone_number: recipient.phone_number,
+            error: "Invalid phone number format",
+          })),
+          sent_at: new Date().toISOString(),
+        };
+        resolve(response);
+      }, 1000);
+    });
+  },
+
+  sendBulkTemplate: async (
+    request: BulkTemplateSendRequest,
+  ): Promise<TemplateSendResponse> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        // Simulate recipient count based on segments/phone numbers
+        const totalRecipients =
+          request.phone_numbers?.length ||
+          (request.segment_ids?.length || 1) * 50; // Assume 50 users per segment
+
+        const failedCount = Math.floor(totalRecipients * 0.05); // 5% failure rate
+        const sentCount = totalRecipients - failedCount;
+
+        const response: TemplateSendResponse = {
+          message_id: `bulk_msg_${Date.now()}`,
+          status: sentCount > 0 ? "sent" : "failed",
+          sent_count: sentCount,
+          failed_count: failedCount,
+          failed_recipients: Array.from({ length: failedCount }, (_, i) => ({
+            phone_number: `+1234567${String(i).padStart(4, "0")}`,
+            error: "Delivery failed",
+          })),
+          sent_at: new Date().toISOString(),
+        };
+        resolve(response);
+      }, 2000);
+    });
+  },
+
+  // Template preview with variables
+  previewTemplate: async (
+    request: TemplatePreviewRequest,
+  ): Promise<TemplatePreviewResponse> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const template = mockWhatsAppTemplates.find(
+          (t) => t.id === request.template_id,
+        );
+        if (!template) {
+          reject(new Error("Template not found"));
+          return;
+        }
+
+        // Replace variables in template content
+        const replaceVariables = (
+          content: string,
+          variables: { [key: string]: string },
+        ) => {
+          let result = content;
+          Object.entries(variables).forEach(([key, value]) => {
+            result = result.replace(new RegExp(`{{${key}}}`, "g"), value);
+          });
+          return result;
+        };
+
+        const preview: TemplatePreviewResponse = {
+          body: replaceVariables(template.body, request.variables),
+          buttons: template.buttons,
+        };
+
+        if (template.header) {
+          preview.header = {
+            ...template.header,
+            content: replaceVariables(
+              template.header.content || "",
+              request.variables,
+            ),
+          };
+        }
+
+        if (template.footer) {
+          preview.footer = replaceVariables(template.footer, request.variables);
+        }
+
+        resolve(preview);
+      }, 200);
+    });
+  },
+
+  // Get template categories
+  getCategories: async (): Promise<{ data: string[] }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const categories = Array.from(
+          new Set(mockWhatsAppTemplates.map((template) => template.category)),
+        );
+        resolve({ data: categories });
+      }, 100);
+    });
+  },
+
+  // Get supported languages
+  getLanguages: async (): Promise<{ data: string[] }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const languages = Array.from(
+          new Set(mockWhatsAppTemplates.map((template) => template.language)),
+        );
+        resolve({ data: languages });
+      }, 100);
+    });
+  },
+
+  // Export templates
+  export: async (
+    format: "csv" | "excel" | "json",
+    filters?: TemplateFilterParams,
+  ): Promise<{ download_url: string }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+        const filename = `whatsapp-templates-export-${timestamp}.${format}`;
+        resolve({
+          download_url: `/api/admin/whatsapp-templates/export/${filename}`,
+        });
+      }, 1000);
+    });
+  },
+
+  // Template analytics
+  getTemplateAnalytics: async (
+    templateId?: string,
+  ): Promise<{
+    data: {
+      total_sent: number;
+      total_delivered: number;
+      total_read: number;
+      delivery_rate: number;
+      read_rate: number;
+      popular_templates: {
+        template_id: string;
+        template_name: string;
+        sent_count: number;
+      }[];
+      recent_activity: {
+        date: string;
+        sent: number;
+        delivered: number;
+        read: number;
+      }[];
+    };
+  }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const analytics = {
+          total_sent: 15420,
+          total_delivered: 14876,
+          total_read: 12340,
+          delivery_rate: 96.5,
+          read_rate: 83.0,
+          popular_templates: [
+            {
+              template_id: "template_1",
+              template_name: "Welcome Message",
+              sent_count: 3240,
+            },
+            {
+              template_id: "template_2",
+              template_name: "Order Confirmation",
+              sent_count: 2890,
+            },
+            {
+              template_id: "template_3",
+              template_name: "Payment Reminder",
+              sent_count: 2156,
+            },
+          ],
+          recent_activity: [
+            { date: "2024-01-25", sent: 450, delivered: 435, read: 380 },
+            { date: "2024-01-24", sent: 523, delivered: 501, read: 445 },
+            { date: "2024-01-23", sent: 398, delivered: 389, read: 321 },
+            { date: "2024-01-22", sent: 612, delivered: 587, read: 498 },
+            { date: "2024-01-21", sent: 345, delivered: 332, read: 278 },
+          ],
+        };
+        resolve({ data: analytics });
       }, 500);
     });
   },
