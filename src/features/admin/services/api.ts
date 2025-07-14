@@ -49,31 +49,324 @@ import {
   ChatbotFlowStats,
 } from "../types";
 
+// Module API interfaces
+interface ModulePaginationParams {
+  page: number;
+  limit: number;
+}
+
+interface ModuleFilterParams {
+  search?: string;
+  status?: "all" | "active" | "inactive";
+  category?: string;
+  created_after?: string;
+  created_before?: string;
+  sort_by?: "name" | "created_at" | "updated_at";
+  sort_order?: "asc" | "desc";
+}
+
+interface ModuleListResponse {
+  data: Module[];
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+    total_pages: number;
+    has_next: boolean;
+    has_prev: boolean;
+  };
+  filters_applied: ModuleFilterParams;
+  summary: {
+    total_modules: number;
+    active_modules: number;
+    inactive_modules: number;
+    categories: { [key: string]: number };
+  };
+}
+
 // Module API endpoints
 export const moduleAPI = {
-  // Get all modules
-  getAll: (): Promise<{ data: Module[] }> => api.get("/admin/modules"),
+  // Get modules with pagination and filtering
+  getAll: (
+    params?: ModulePaginationParams & ModuleFilterParams,
+  ): Promise<ModuleListResponse> => {
+    // Simulate server-side processing
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const {
+          page = 1,
+          limit = 10,
+          search = "",
+          status = "all",
+          category = "",
+          sort_by = "created_at",
+          sort_order = "desc",
+          created_after,
+          created_before,
+        } = params || {};
+
+        let filteredData = [...mockModules];
+
+        // Apply search filter
+        if (search) {
+          const searchLower = search.toLowerCase();
+          filteredData = filteredData.filter(
+            (module) =>
+              module.name.toLowerCase().includes(searchLower) ||
+              module.description.toLowerCase().includes(searchLower),
+          );
+        }
+
+        // Apply status filter
+        if (status !== "all") {
+          filteredData = filteredData.filter((module) =>
+            status === "active" ? module.is_active : !module.is_active,
+          );
+        }
+
+        // Apply category filter
+        if (category) {
+          filteredData = filteredData.filter((module) => {
+            const moduleCategory = getModuleCategory(
+              mockModules.indexOf(module),
+            );
+            return moduleCategory === category;
+          });
+        }
+
+        // Apply date filters
+        if (created_after) {
+          filteredData = filteredData.filter(
+            (module) => new Date(module.created_at) >= new Date(created_after),
+          );
+        }
+        if (created_before) {
+          filteredData = filteredData.filter(
+            (module) => new Date(module.created_at) <= new Date(created_before),
+          );
+        }
+
+        // Apply sorting
+        filteredData.sort((a, b) => {
+          let aValue: any = a[sort_by as keyof Module];
+          let bValue: any = b[sort_by as keyof Module];
+
+          if (sort_by === "created_at" || sort_by === "updated_at") {
+            aValue = new Date(aValue).getTime();
+            bValue = new Date(bValue).getTime();
+          } else {
+            aValue = aValue?.toString().toLowerCase() || "";
+            bValue = bValue?.toString().toLowerCase() || "";
+          }
+
+          if (sort_order === "asc") {
+            return aValue > bValue ? 1 : -1;
+          } else {
+            return aValue < bValue ? 1 : -1;
+          }
+        });
+
+        // Calculate pagination
+        const total = filteredData.length;
+        const startIndex = (page - 1) * limit;
+        const endIndex = startIndex + limit;
+        const paginatedData = filteredData.slice(startIndex, endIndex);
+        const total_pages = Math.ceil(total / limit);
+        const has_next = page < total_pages;
+        const has_prev = page > 1;
+
+        // Calculate summary
+        const summary = {
+          total_modules: mockModules.length,
+          active_modules: mockModules.filter((m) => m.is_active).length,
+          inactive_modules: mockModules.filter((m) => !m.is_active).length,
+          categories: mockModules.reduce(
+            (acc, module, index) => {
+              const cat = getModuleCategory(index);
+              acc[cat] = (acc[cat] || 0) + 1;
+              return acc;
+            },
+            {} as { [key: string]: number },
+          ),
+        };
+
+        resolve({
+          data: paginatedData,
+          pagination: {
+            total,
+            page,
+            limit,
+            total_pages,
+            has_next,
+            has_prev,
+          },
+          filters_applied: params || {},
+          summary,
+        });
+      }, 300); // Simulate network delay
+    });
+  },
 
   // Get active modules only
-  getActive: (): Promise<{ data: Module[] }> =>
-    api.get("/admin/modules?is_active=true"),
+  getActive: (params?: ModulePaginationParams): Promise<ModuleListResponse> =>
+    moduleAPI.getAll({ ...params, status: "active" }),
+
+  // Get module by ID
+  getById: (id: string): Promise<{ data: Module }> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const module = mockModules.find((m) => m.id === id);
+        if (module) {
+          resolve({ data: module });
+        } else {
+          reject(new Error("Module not found"));
+        }
+      }, 100);
+    });
+  },
 
   // Create module
-  create: (data: ModuleFormData): Promise<{ data: Module }> =>
-    api.post("/admin/modules", data),
+  create: (data: ModuleFormData): Promise<{ data: Module }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const newModule: Module = {
+          id: `module-${Date.now()}`,
+          name: data.name,
+          description: data.description,
+          is_active: true,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+        mockModules.unshift(newModule);
+        resolve({ data: newModule });
+      }, 200);
+    });
+  },
 
   // Update module
   update: (
     id: string,
     data: Partial<ModuleFormData>,
-  ): Promise<{ data: Module }> => api.put(`/admin/modules/${id}`, data),
+  ): Promise<{ data: Module }> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const moduleIndex = mockModules.findIndex((m) => m.id === id);
+        if (moduleIndex !== -1) {
+          mockModules[moduleIndex] = {
+            ...mockModules[moduleIndex],
+            ...data,
+            updated_at: new Date().toISOString(),
+          };
+          resolve({ data: mockModules[moduleIndex] });
+        } else {
+          reject(new Error("Module not found"));
+        }
+      }, 200);
+    });
+  },
 
   // Toggle module active status
-  toggleActive: (id: string, is_active: boolean): Promise<{ data: Module }> =>
-    api.patch(`/admin/modules/${id}/toggle`, { is_active }),
+  toggleActive: (id: string, is_active: boolean): Promise<{ data: Module }> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const moduleIndex = mockModules.findIndex((m) => m.id === id);
+        if (moduleIndex !== -1) {
+          mockModules[moduleIndex] = {
+            ...mockModules[moduleIndex],
+            is_active,
+            updated_at: new Date().toISOString(),
+          };
+          resolve({ data: mockModules[moduleIndex] });
+        } else {
+          reject(new Error("Module not found"));
+        }
+      }, 200);
+    });
+  },
 
-  // Delete module (if needed in future)
-  delete: (id: string): Promise<void> => api.delete(`/admin/modules/${id}`),
+  // Delete module
+  delete: (id: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const moduleIndex = mockModules.findIndex((m) => m.id === id);
+        if (moduleIndex !== -1) {
+          mockModules.splice(moduleIndex, 1);
+          resolve();
+        } else {
+          reject(new Error("Module not found"));
+        }
+      }, 200);
+    });
+  },
+
+  // Bulk operations
+  bulkUpdate: (
+    ids: string[],
+    data: Partial<ModuleFormData>,
+  ): Promise<{ data: Module[]; updated_count: number }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const updatedModules: Module[] = [];
+        ids.forEach((id) => {
+          const moduleIndex = mockModules.findIndex((m) => m.id === id);
+          if (moduleIndex !== -1) {
+            mockModules[moduleIndex] = {
+              ...mockModules[moduleIndex],
+              ...data,
+              updated_at: new Date().toISOString(),
+            };
+            updatedModules.push(mockModules[moduleIndex]);
+          }
+        });
+        resolve({ data: updatedModules, updated_count: updatedModules.length });
+      }, 300);
+    });
+  },
+
+  bulkDelete: (ids: string[]): Promise<{ deleted_count: number }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        let deletedCount = 0;
+        ids.forEach((id) => {
+          const moduleIndex = mockModules.findIndex((m) => m.id === id);
+          if (moduleIndex !== -1) {
+            mockModules.splice(moduleIndex, 1);
+            deletedCount++;
+          }
+        });
+        resolve({ deleted_count: deletedCount });
+      }, 300);
+    });
+  },
+
+  // Get categories
+  getCategories: (): Promise<{ data: string[] }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const categories = Array.from(
+          new Set(mockModules.map((_, index) => getModuleCategory(index))),
+        );
+        resolve({ data: categories });
+      }, 100);
+    });
+  },
+
+  // Export modules
+  export: (
+    format: "csv" | "excel" | "json",
+    filters?: ModuleFilterParams,
+  ): Promise<{ download_url: string }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        // Simulate file generation
+        const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+        const filename = `modules-export-${timestamp}.${format}`;
+        resolve({
+          download_url: `/api/admin/modules/export/${filename}`,
+        });
+      }, 1000);
+    });
+  },
 };
 
 // Subscription API endpoints
