@@ -166,47 +166,34 @@ const ModuleManagement: React.FC<ModuleManagementProps> = ({
 
   const loadModules = async () => {
     setLoading(true);
+    setError(null);
     try {
-      // Simulate API call with filters and pagination
-      // In real implementation, pass filters and pagination to API
-      let filteredData = [...mockModules];
+      const params = {
+        page: pagination.page + 1, // Convert 0-based to 1-based
+        limit: pagination.rowsPerPage,
+        search: filters.search,
+        status: filters.status,
+        category: filters.category,
+        created_after: filters.createdAfter,
+        created_before: filters.createdBefore,
+        sort_by: filters.sortBy,
+        sort_order: filters.sortOrder,
+      };
 
-      // Apply filters
-      if (filters.search) {
-        filteredData = filteredData.filter(
-          (module) =>
-            module.name.toLowerCase().includes(filters.search.toLowerCase()) ||
-            (module.description &&
-              module.description
-                .toLowerCase()
-                .includes(filters.search.toLowerCase())),
-        );
-      }
+      const response = await moduleAPI.getAll(params);
 
-      if (filters.status !== "all") {
-        filteredData = filteredData.filter((module) =>
-          filters.status === "active" ? module.is_active : !module.is_active,
-        );
-      }
-
-      // For demo, we'll simulate categories
-      if (filters.category !== "all") {
-        filteredData = filteredData.filter(
-          (_, index) =>
-            categories[index % categories.length] === filters.category,
-        );
-      }
-
-      const total = filteredData.length;
-      const startIndex = pagination.page * pagination.rowsPerPage;
-      const paginatedData = filteredData.slice(
-        startIndex,
-        startIndex + pagination.rowsPerPage,
-      );
-
-      setModules(paginatedData);
-      setPagination((prev) => ({ ...prev, total }));
+      setModules(response.data);
+      setPagination((prev) => ({
+        ...prev,
+        total: response.pagination.total,
+        totalPages: response.pagination.total_pages,
+        hasNext: response.pagination.has_next,
+        hasPrev: response.pagination.has_prev,
+      }));
+      setSummary(response.summary);
     } catch (error) {
+      console.error("Error loading modules:", error);
+      setError("Failed to load modules. Please try again.");
       showSnackbar("Failed to load modules", "error");
     } finally {
       setLoading(false);
