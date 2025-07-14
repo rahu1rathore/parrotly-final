@@ -141,7 +141,7 @@ export default function AdminDashboard() {
                 />
                 <Route
                   path="chatbot-builder"
-                  element={<ChatbotBuilderSystem />}
+                  element={<ChatbotBuilderTest />}
                 />
                 <Route path="analytics" element={<AdminOverview />} />
                 <Route path="users" element={<AdminOverview />} />
