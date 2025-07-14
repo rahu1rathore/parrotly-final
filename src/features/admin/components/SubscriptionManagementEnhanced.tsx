@@ -615,7 +615,7 @@ const SubscriptionManagementEnhanced: React.FC<
                   </Avatar>
                   <Box>
                     <Typography variant="h6">
-                      {summary.totalSubscriptions}
+                      {summary?.totalSubscriptions ?? 0}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                       Total Plans
