@@ -79,7 +79,7 @@ export default function AdminDashboard() {
   const [sidebarOpen, setSidebarOpen] = React.useState(true);
   const pageTitle = getPageTitle(location.pathname);
   const pageSubtitle = getPageSubtitle(location.pathname);
-  const isChatPage = location.pathname.includes("/chat");
+  const isChatPage = location.pathname === "/admin/chat";
 
   console.log("AdminDashboard - Current pathname:", location.pathname);
   console.log("AdminDashboard - Page title:", pageTitle);
