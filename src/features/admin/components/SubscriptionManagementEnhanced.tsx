@@ -698,7 +698,7 @@ const SubscriptionManagementEnhanced: React.FC<
             Subscription Management
             {summary && (
               <Chip
-                label={`${summary.totalSubscriptions} plans`}
+                label={`${summary?.totalSubscriptions ?? 0} plans`}
                 size="small"
                 sx={{ ml: 1 }}
               />
