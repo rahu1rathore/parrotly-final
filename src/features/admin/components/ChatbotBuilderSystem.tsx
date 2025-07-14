@@ -401,10 +401,18 @@ export default function ChatbotBuilderSystem() {
         >
           Edit
         </Button>
-        <Button size="small" startIcon={<TestIcon />}>
+        <Button
+          size="small"
+          startIcon={<TestIcon />}
+          onClick={() => setActiveTab(2)}
+        >
           Test
         </Button>
-        <Button size="small" startIcon={<AnalyticsIcon />}>
+        <Button
+          size="small"
+          startIcon={<AnalyticsIcon />}
+          onClick={() => setActiveTab(1)}
+        >
           Analytics
         </Button>
       </CardActions>
@@ -523,149 +531,170 @@ export default function ChatbotBuilderSystem() {
         </Tabs>
       </Paper>
 
-            {/* Tab Content */}
+      {/* Tab Content */}
       {activeTab === 0 && (
         <>
           {/* Statistics Cards */}
           {renderStatsCards()}
 
           {/* Search and Filters */}
-      <Paper sx={{ p: 2, mb: 3 }}>
-        <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-          <TextField
-            placeholder="Search flows..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-            sx={{ flexGrow: 1 }}
-          />
-          <FormControl sx={{ minWidth: 120 }}>
-            <InputLabel>Status</InputLabel>
-            <Select
-              value={filter.status || ""}
-              label="Status"
-              onChange={(e) =>
-                setFilter((prev) => ({
-                  ...prev,
-                  status: e.target.value as any,
-                }))
-              }
-            >
-              <MenuItem value="">All</MenuItem>
-              <MenuItem value="active">Active</MenuItem>
-              <MenuItem value="inactive">Inactive</MenuItem>
-              <MenuItem value="draft">Draft</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl sx={{ minWidth: 120 }}>
-            <InputLabel>Category</InputLabel>
-            <Select
-              value={filter.category || ""}
-              label="Category"
-              onChange={(e) =>
-                setFilter((prev) => ({ ...prev, category: e.target.value }))
-              }
-            >
-              <MenuItem value="">All</MenuItem>
-              <MenuItem value="general">General</MenuItem>
-              <MenuItem value="sales">Sales</MenuItem>
-              <MenuItem value="support">Support</MenuItem>
-              <MenuItem value="marketing">Marketing</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-      </Paper>
-
-      <Grid container spacing={3}>
-        {/* Main Content */}
-        <Grid item xs={12} lg={8}>
-          {loading ? (
-            <Box sx={{ p: 4, textAlign: "center" }}>
-              <LinearProgress sx={{ mb: 2 }} />
-              <Typography>Loading flows...</Typography>
-            </Box>
-          ) : filteredFlows.length === 0 ? (
-            <Paper sx={{ p: 6, textAlign: "center" }}>
-              <ChatIcon sx={{ fontSize: 60, color: "text.secondary", mb: 2 }} />
-              <Typography variant="h6" gutterBottom>
-                {flows.length === 0
-                  ? "No flows created yet"
-                  : "No flows match your search"}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                {flows.length === 0
-                  ? "Create your first chatbot flow to get started"
-                  : "Try adjusting your search terms or filters"}
-              </Typography>
-              {flows.length === 0 && (
-                <Button
-                  variant="contained"
-                  startIcon={<AddIcon />}
-                  onClick={() => setViewMode("create")}
+          <Paper sx={{ p: 2, mb: 3 }}>
+            <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+              <TextField
+                placeholder="Search flows..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{ flexGrow: 1 }}
+              />
+              <FormControl sx={{ minWidth: 120 }}>
+                <InputLabel>Status</InputLabel>
+                <Select
+                  value={filter.status || ""}
+                  label="Status"
+                  onChange={(e) =>
+                    setFilter((prev) => ({
+                      ...prev,
+                      status: e.target.value as any,
+                    }))
+                  }
                 >
-                  Create Your First Flow
-                </Button>
-              )}
-            </Paper>
-          ) : (
-            <Grid container spacing={3}>
-              {filteredFlows.map((flow) => (
-                <Grid item xs={12} md={6} key={flow.id}>
-                  {renderFlowCard(flow)}
+                  <MenuItem value="">All</MenuItem>
+                  <MenuItem value="active">Active</MenuItem>
+                  <MenuItem value="inactive">Inactive</MenuItem>
+                  <MenuItem value="draft">Draft</MenuItem>
+                </Select>
+              </FormControl>
+              <FormControl sx={{ minWidth: 120 }}>
+                <InputLabel>Category</InputLabel>
+                <Select
+                  value={filter.category || ""}
+                  label="Category"
+                  onChange={(e) =>
+                    setFilter((prev) => ({ ...prev, category: e.target.value }))
+                  }
+                >
+                  <MenuItem value="">All</MenuItem>
+                  <MenuItem value="general">General</MenuItem>
+                  <MenuItem value="sales">Sales</MenuItem>
+                  <MenuItem value="support">Support</MenuItem>
+                  <MenuItem value="marketing">Marketing</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+          </Paper>
+
+          <Grid container spacing={3}>
+            {/* Main Content */}
+            <Grid item xs={12} lg={8}>
+              {loading ? (
+                <Box sx={{ p: 4, textAlign: "center" }}>
+                  <LinearProgress sx={{ mb: 2 }} />
+                  <Typography>Loading flows...</Typography>
+                </Box>
+              ) : filteredFlows.length === 0 ? (
+                <Paper sx={{ p: 6, textAlign: "center" }}>
+                  <ChatIcon
+                    sx={{ fontSize: 60, color: "text.secondary", mb: 2 }}
+                  />
+                  <Typography variant="h6" gutterBottom>
+                    {flows.length === 0
+                      ? "No flows created yet"
+                      : "No flows match your search"}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ mb: 3 }}
+                  >
+                    {flows.length === 0
+                      ? "Create your first chatbot flow to get started"
+                      : "Try adjusting your search terms or filters"}
+                  </Typography>
+                  {flows.length === 0 && (
+                    <Button
+                      variant="contained"
+                      startIcon={<AddIcon />}
+                      onClick={() => setViewMode("create")}
+                    >
+                      Create Your First Flow
+                    </Button>
+                  )}
+                </Paper>
+              ) : (
+                <Grid container spacing={3}>
+                  {filteredFlows.map((flow) => (
+                    <Grid item xs={12} md={6} key={flow.id}>
+                      {renderFlowCard(flow)}
+                    </Grid>
+                  ))}
                 </Grid>
-              ))}
+              )}
             </Grid>
-          )}
-        </Grid>
 
-        {/* Sidebar */}
-        <Grid item xs={12} lg={4}>
-          {renderTopPerformers()}
+            {/* Sidebar */}
+            <Grid item xs={12} lg={4}>
+              {renderTopPerformers()}
 
-          <Card>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Quick Actions
-              </Typography>
-              <List>
-                <ListItem button onClick={() => setViewMode("create")}>
-                  <ListItemIcon>
-                    <AddIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="Create New Flow"
-                    secondary="Start building a new conversation"
-                  />
-                </ListItem>
-                <ListItem button>
-                  <ListItemIcon>
-                    <ExportIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="Export Flows"
-                    secondary="Download all flows as JSON"
-                  />
-                </ListItem>
-                <ListItem button>
-                  <ListItemIcon>
-                    <AnalyticsIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="View Analytics"
-                    secondary="Detailed performance metrics"
-                  />
-                </ListItem>
-              </List>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    Quick Actions
+                  </Typography>
+                  <List>
+                    <ListItem button onClick={() => setViewMode("create")}>
+                      <ListItemIcon>
+                        <AddIcon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="Create New Flow"
+                        secondary="Start building a new conversation"
+                      />
+                    </ListItem>
+                    <ListItem button onClick={() => setActiveTab(1)}>
+                      <ListItemIcon>
+                        <AnalyticsIcon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="View Analytics"
+                        secondary="Detailed performance metrics"
+                      />
+                    </ListItem>
+                    <ListItem button onClick={() => setActiveTab(2)}>
+                      <ListItemIcon>
+                        <TestIcon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="Test Flows"
+                        secondary="Interactive and automated testing"
+                      />
+                    </ListItem>
+                    <ListItem button>
+                      <ListItemIcon>
+                        <ExportIcon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="Export Flows"
+                        secondary="Download all flows as JSON"
+                      />
+                    </ListItem>
+                  </List>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+        </>
+      )}
+
+      {activeTab === 1 && <ChatbotAnalyticsDashboard flows={flows} />}
+
+      {activeTab === 2 && <ChatbotTestingInterface flows={flows} />}
 
       {/* Flow Actions Menu */}
       <Menu
