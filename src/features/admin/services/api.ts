@@ -1790,9 +1790,15 @@ export const whatsappTemplateAPI = {
   // Get templates with pagination and filtering
   getAll: async (
     params?: TemplatePaginationParams & TemplateFilterParams,
-  ): Promise<TemplateListResponse> => {
+  ): Promise<WhatsAppTemplate[] | TemplateListResponse> => {
     return new Promise((resolve) => {
       setTimeout(() => {
+        // If no params provided, return simple array for backward compatibility
+        if (!params) {
+          resolve([...mockWhatsAppTemplates]);
+          return;
+        }
+
         const {
           page = 1,
           limit = 10,
@@ -1804,7 +1810,7 @@ export const whatsappTemplateAPI = {
           created_before,
           sort_by = "created_date",
           sort_order = "desc",
-        } = params || {};
+        } = params;
 
         let filteredData = [...mockWhatsAppTemplates];
 
