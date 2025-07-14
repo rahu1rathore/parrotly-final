@@ -244,7 +244,7 @@ export default function AdminDashboard() {
                   <Route path="customers" element={<CustomerManagement />} />
                   <Route
                     path="whatsapp-templates"
-                    element={<WhatsAppTemplateManagement />}
+                    element={<WhatsAppTemplateManagementEnhanced />}
                   />
                   <Route
                     path="lead-management"
