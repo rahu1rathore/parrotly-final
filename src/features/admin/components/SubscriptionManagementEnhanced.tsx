@@ -672,10 +672,12 @@ const SubscriptionManagementEnhanced: React.FC<
                   </Avatar>
                   <Box>
                     <Typography variant="h6">
-                      {Object.values(summary.planDistribution).reduce(
-                        (a, b) => a + b,
-                        0,
-                      )}
+                      {summary.planDistribution
+                        ? Object.values(summary.planDistribution).reduce(
+                            (a, b) => a + b,
+                            0,
+                          )
+                        : 0}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                       Active Plans
