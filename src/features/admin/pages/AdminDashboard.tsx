@@ -12,7 +12,7 @@ import AdminHeader from "../components/AdminHeader";
 import AdminSideMenu from "../components/AdminSideMenu";
 import ModuleManagementEnhanced from "../components/ModuleManagementEnhanced";
 import SubscriptionManagementEnhanced from "../components/SubscriptionManagementEnhanced";
-import OrganizationManagement from "../components/OrganizationManagement";
+import OrganizationManagementEnhanced from "../components/OrganizationManagementEnhanced";
 import CustomerManagement from "../components/CustomerManagement";
 import InterveneAdminChat from "../components/InterveneAdminChat";
 import WhatsAppTemplateManagement from "../components/WhatsAppTemplateManagement";
