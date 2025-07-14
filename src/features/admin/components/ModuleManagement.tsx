@@ -37,6 +37,10 @@ import {
   Toolbar,
   Fade,
   Backdrop,
+  Checkbox,
+  Tooltip,
+  LinearProgress,
+  TableSortLabel,
 } from "@mui/material";
 import {
   Add as AddIcon,
@@ -48,7 +52,14 @@ import {
   FilterList as FilterListIcon,
   Clear as ClearIcon,
   Visibility as ViewIcon,
+  GetApp as ExportIcon,
+  Sort as SortIcon,
+  SelectAll as SelectAllIcon,
+  DeleteSweep as BulkDeleteIcon,
+  Edit as BulkEditIcon,
+  DateRange as DateRangeIcon,
 } from "@mui/icons-material";
+import { format } from "date-fns";
 import { Module, ModuleFormData, FilterStatus } from "../types";
 import { moduleAPI, mockModules } from "../services/api";
 
