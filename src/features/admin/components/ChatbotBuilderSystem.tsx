@@ -684,7 +684,7 @@ export default function ChatbotBuilderSystem() {
                         secondary="Interactive and automated testing"
                       />
                     </ListItem>
-                    <ListItem button>
+                    <ListItem sx={{ cursor: "pointer" }}>
                       <ListItemIcon>
                         <ExportIcon />
                       </ListItemIcon>
