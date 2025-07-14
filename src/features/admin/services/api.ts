@@ -35,6 +35,18 @@ import {
   BulkUploadResult,
   LeadStats,
   CampaignStats,
+  ChatbotFlow,
+  ChatbotFlowFormData,
+  ChatbotFlowNode,
+  ChatbotFlowEdge,
+  ChatbotFlowVersion,
+  ChatbotNodeTemplate,
+  ChatbotConversation,
+  ChatbotAnalytics,
+  ChatbotTestResult,
+  ChatbotIntegration,
+  ChatbotFilter,
+  ChatbotFlowStats,
 } from "../types";
 
 // Module API endpoints
