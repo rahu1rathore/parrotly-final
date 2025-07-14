@@ -110,6 +110,9 @@ const ModuleManagement: React.FC<ModuleManagementProps> = ({
     page: 0,
     rowsPerPage: 10,
     total: 0,
+    totalPages: 0,
+    hasNext: false,
+    hasPrev: false,
   });
 
   // Filter state
