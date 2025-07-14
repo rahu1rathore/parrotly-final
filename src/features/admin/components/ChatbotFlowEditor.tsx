@@ -619,13 +619,16 @@ function ChatbotFlowEditorContent({
               sx={{
                 cursor: "grab",
                 "&:hover": { backgroundColor: "action.hover" },
+                "&:active": { cursor: "grabbing" },
                 border: 1,
                 borderColor: "transparent",
                 m: 1,
                 borderRadius: 1,
+                userSelect: "none",
               }}
-              draggable
+              draggable={true}
               onDragStart={(e) => onDragStart(e, template.type)}
+              onDragEnd={() => setDraggedType(null)}
             >
               <ListItemIcon sx={{ color: template.color }}>
                 {template.icon}
