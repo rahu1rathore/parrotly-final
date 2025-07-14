@@ -81,6 +81,10 @@ export default function AdminDashboard() {
   const pageSubtitle = getPageSubtitle(location.pathname);
   const isChatPage = location.pathname.includes("/chat");
 
+  console.log("AdminDashboard - Current pathname:", location.pathname);
+  console.log("AdminDashboard - Page title:", pageTitle);
+  console.log("AdminDashboard - Is chat page:", isChatPage);
+
   const handleSidebarToggle = () => {
     setSidebarOpen(!sidebarOpen);
   };
