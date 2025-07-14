@@ -2391,3 +2391,784 @@ export const mockChats: Chat[] = [
     created_at: "2024-02-01T10:40:00Z",
   },
 ];
+
+// Chatbot Flow Mock Data
+export const mockChatbotFlows: ChatbotFlow[] = [
+  {
+    id: "1",
+    name: "Welcome Flow",
+    description: "Initial greeting and menu options for new users",
+    trigger_keywords: ["hello", "hi", "start", "menu"],
+    tags: ["welcome", "onboarding"],
+    category: "general",
+    access_permissions: "public",
+    nodes: [
+      {
+        id: "welcome-1",
+        type: "text",
+        position: { x: 100, y: 100 },
+        body: "Welcome! How can I help you today?",
+        footer: "Choose an option below",
+      },
+      {
+        id: "menu-1",
+        type: "button",
+        position: { x: 100, y: 200 },
+        body: "What would you like to do?",
+        buttons: [
+          { id: "btn-1", text: "View Products", action: "products-1" },
+          { id: "btn-2", text: "Contact Support", action: "support-1" },
+          { id: "btn-3", text: "Account Info", action: "account-1" },
+        ],
+      },
+      {
+        id: "products-1",
+        type: "list",
+        position: { x: 300, y: 300 },
+        body: "Our Product Categories",
+        list_items: [
+          {
+            id: "list-1",
+            title: "Electronics",
+            description: "Phones, laptops, gadgets",
+            action: "electronics-1",
+          },
+          {
+            id: "list-2",
+            title: "Clothing",
+            description: "Fashion and accessories",
+            action: "clothing-1",
+          },
+          {
+            id: "list-3",
+            title: "Home & Garden",
+            description: "Furniture and decor",
+            action: "home-1",
+          },
+        ],
+      },
+      {
+        id: "support-1",
+        type: "text",
+        position: { x: 500, y: 200 },
+        body: "Our support team is available 24/7. How can we assist you?",
+        footer: "You can also call us at +1-555-SUPPORT",
+      },
+    ],
+    edges: [
+      { id: "e1", source: "welcome-1", target: "menu-1" },
+      { id: "e2", source: "menu-1", target: "products-1", label: "Products" },
+      { id: "e3", source: "menu-1", target: "support-1", label: "Support" },
+    ],
+    is_active: true,
+    version: 1,
+    created_by: "admin",
+    created_by_name: "Admin User",
+    created_date: "2024-01-15T00:00:00Z",
+    updated_date: "2024-01-20T00:00:00Z",
+    published_date: "2024-01-20T00:00:00Z",
+    total_conversations: 1250,
+    completion_rate: 85.5,
+    average_completion_time: 45,
+    languages: ["en"],
+    default_language: "en",
+  },
+  {
+    id: "2",
+    name: "Product Inquiry Flow",
+    description: "Helps users find and learn about products",
+    trigger_keywords: ["product", "buy", "purchase", "price"],
+    tags: ["sales", "products"],
+    category: "sales",
+    access_permissions: "public",
+    nodes: [
+      {
+        id: "product-start",
+        type: "text",
+        position: { x: 100, y: 100 },
+        body: "I'll help you find the perfect product!",
+        footer: "What type of product are you looking for?",
+      },
+      {
+        id: "product-categories",
+        type: "button",
+        position: { x: 100, y: 200 },
+        body: "Select a category:",
+        buttons: [
+          {
+            id: "electronics",
+            text: "Electronics",
+            action: "electronics-details",
+          },
+          { id: "clothing", text: "Fashion", action: "fashion-details" },
+          { id: "books", text: "Books", action: "books-details" },
+        ],
+      },
+      {
+        id: "electronics-details",
+        type: "catalog",
+        position: { x: 300, y: 300 },
+        body: "Featured Electronics",
+        products: [
+          {
+            id: "phone-1",
+            name: "Smartphone Pro",
+            description: "Latest model with advanced features",
+            price: 899,
+            image_url:
+              "https://via.placeholder.com/200x200/4f46e5/ffffff?text=Phone",
+          },
+          {
+            id: "laptop-1",
+            name: "Gaming Laptop",
+            description: "High-performance laptop for gaming",
+            price: 1299,
+            image_url:
+              "https://via.placeholder.com/200x200/16a34a/ffffff?text=Laptop",
+          },
+        ],
+      },
+    ],
+    edges: [
+      { id: "e1", source: "product-start", target: "product-categories" },
+      {
+        id: "e2",
+        source: "product-categories",
+        target: "electronics-details",
+        label: "Electronics",
+      },
+    ],
+    is_active: true,
+    version: 2,
+    created_by: "admin",
+    created_by_name: "Admin User",
+    created_date: "2024-01-18T00:00:00Z",
+    updated_date: "2024-01-25T00:00:00Z",
+    published_date: "2024-01-25T00:00:00Z",
+    total_conversations: 890,
+    completion_rate: 78.2,
+    average_completion_time: 120,
+    languages: ["en"],
+    default_language: "en",
+  },
+  {
+    id: "3",
+    name: "Customer Support Flow",
+    description: "Handles common support queries and escalation",
+    trigger_keywords: ["help", "support", "issue", "problem"],
+    tags: ["support", "help"],
+    category: "support",
+    access_permissions: "public",
+    nodes: [
+      {
+        id: "support-start",
+        type: "text",
+        position: { x: 100, y: 100 },
+        body: "I'm here to help! What issue are you experiencing?",
+        footer: "Select the type of issue below",
+      },
+      {
+        id: "issue-type",
+        type: "list",
+        position: { x: 100, y: 200 },
+        body: "Common Issues",
+        list_items: [
+          {
+            id: "login",
+            title: "Login Problems",
+            description: "Can't access your account",
+            action: "login-help",
+          },
+          {
+            id: "billing",
+            title: "Billing Questions",
+            description: "Issues with payments or charges",
+            action: "billing-help",
+          },
+          {
+            id: "technical",
+            title: "Technical Issues",
+            description: "App crashes or bugs",
+            action: "tech-help",
+          },
+          {
+            id: "other",
+            title: "Other",
+            description: "Something else",
+            action: "human-agent",
+          },
+        ],
+      },
+      {
+        id: "login-help",
+        type: "text",
+        position: { x: 300, y: 300 },
+        body: "For login issues, try:\n1. Reset your password\n2. Clear browser cache\n3. Check your email for verification",
+        footer: "Still having trouble? I can connect you with an agent.",
+      },
+      {
+        id: "human-agent",
+        type: "api_trigger",
+        position: { x: 500, y: 400 },
+        body: "I'm connecting you with a human agent...",
+        api_config: {
+          method: "POST",
+          url: "/api/support/escalate",
+          headers: { "Content-Type": "application/json" },
+          body: {
+            type: "escalation",
+            user_id: "{{user_id}}",
+            flow_id: "{{flow_id}}",
+          },
+        },
+      },
+    ],
+    edges: [
+      { id: "e1", source: "support-start", target: "issue-type" },
+      { id: "e2", source: "issue-type", target: "login-help", label: "Login" },
+      { id: "e3", source: "issue-type", target: "human-agent", label: "Other" },
+    ],
+    is_active: true,
+    version: 1,
+    created_by: "support-admin",
+    created_by_name: "Support Admin",
+    created_date: "2024-01-20T00:00:00Z",
+    updated_date: "2024-01-22T00:00:00Z",
+    published_date: "2024-01-22T00:00:00Z",
+    total_conversations: 2100,
+    completion_rate: 92.1,
+    average_completion_time: 90,
+    languages: ["en"],
+    default_language: "en",
+  },
+];
+
+export const mockChatbotNodeTemplates: ChatbotNodeTemplate[] = [
+  {
+    id: "template-1",
+    name: "Welcome Message",
+    description: "Standard welcome message for new users",
+    type: "text",
+    template_data: {
+      body: "Welcome! How can I help you today?",
+      footer: "Select an option to continue",
+    },
+    category: "greetings",
+    is_public: true,
+    created_by: "admin",
+    created_date: "2024-01-10T00:00:00Z",
+    usage_count: 45,
+  },
+  {
+    id: "template-2",
+    name: "Product Categories Menu",
+    description: "Button menu for product categories",
+    type: "button",
+    template_data: {
+      body: "Browse our product categories:",
+      buttons: [
+        { id: "electronics", text: "Electronics", action: "electronics-node" },
+        { id: "fashion", text: "Fashion", action: "fashion-node" },
+        { id: "home", text: "Home & Garden", action: "home-node" },
+      ],
+    },
+    category: "menus",
+    is_public: true,
+    created_by: "admin",
+    created_date: "2024-01-12T00:00:00Z",
+    usage_count: 32,
+  },
+  {
+    id: "template-3",
+    name: "Support Escalation",
+    description: "API call to escalate to human support",
+    type: "api_trigger",
+    template_data: {
+      body: "Let me connect you with a support agent...",
+      api_config: {
+        method: "POST",
+        url: "/api/support/escalate",
+        headers: { "Content-Type": "application/json" },
+        body: { type: "escalation", user_id: "{{user_id}}" },
+      },
+    },
+    category: "support",
+    is_public: true,
+    created_by: "support-admin",
+    created_date: "2024-01-14T00:00:00Z",
+    usage_count: 28,
+  },
+];
+
+export const mockChatbotConversations: ChatbotConversation[] = [
+  {
+    id: "conv-1",
+    flow_id: "1",
+    flow_name: "Welcome Flow",
+    user_id: "user-1",
+    user_name: "John Doe",
+    user_phone: "+1-555-123-4567",
+    current_node_id: "support-1",
+    variables: { user_name: "John", selected_category: "support" },
+    status: "active",
+    messages: [
+      {
+        id: "msg-1",
+        node_id: "welcome-1",
+        message_type: "bot",
+        content: "Welcome! How can I help you today?",
+        timestamp: "2024-02-01T10:00:00Z",
+      },
+      {
+        id: "msg-2",
+        node_id: "menu-1",
+        message_type: "bot",
+        content: "What would you like to do?",
+        timestamp: "2024-02-01T10:00:30Z",
+      },
+      {
+        id: "msg-3",
+        node_id: "menu-1",
+        message_type: "user",
+        content: "Contact Support",
+        timestamp: "2024-02-01T10:01:00Z",
+      },
+    ],
+    started_date: "2024-02-01T10:00:00Z",
+    total_steps: 3,
+    completion_rate: 60,
+  },
+  {
+    id: "conv-2",
+    flow_id: "2",
+    flow_name: "Product Inquiry Flow",
+    user_id: "user-2",
+    user_name: "Jane Smith",
+    user_phone: "+1-555-987-6543",
+    current_node_id: undefined,
+    variables: { selected_product: "smartphone-pro" },
+    status: "completed",
+    messages: [
+      {
+        id: "msg-4",
+        node_id: "product-start",
+        message_type: "bot",
+        content: "I'll help you find the perfect product!",
+        timestamp: "2024-02-01T11:00:00Z",
+      },
+      {
+        id: "msg-5",
+        node_id: "product-categories",
+        message_type: "bot",
+        content: "Select a category:",
+        timestamp: "2024-02-01T11:00:15Z",
+      },
+      {
+        id: "msg-6",
+        node_id: "product-categories",
+        message_type: "user",
+        content: "Electronics",
+        timestamp: "2024-02-01T11:00:45Z",
+      },
+    ],
+    started_date: "2024-02-01T11:00:00Z",
+    completed_date: "2024-02-01T11:05:30Z",
+    total_steps: 5,
+    completion_rate: 100,
+  },
+];
+
+// Chatbot Flow API
+export const chatbotFlowAPI = {
+  // Get all flows
+  getAll: (filter?: ChatbotFilter): Promise<{ data: ChatbotFlow[] }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        let filteredFlows = [...mockChatbotFlows];
+
+        if (filter?.status) {
+          if (filter.status === "active") {
+            filteredFlows = filteredFlows.filter((f) => f.is_active);
+          } else if (filter.status === "inactive") {
+            filteredFlows = filteredFlows.filter((f) => !f.is_active);
+          }
+        }
+
+        if (filter?.category) {
+          filteredFlows = filteredFlows.filter(
+            (f) => f.category === filter.category,
+          );
+        }
+
+        if (filter?.tags && filter.tags.length > 0) {
+          filteredFlows = filteredFlows.filter((f) =>
+            filter.tags!.some((tag) => f.tags.includes(tag)),
+          );
+        }
+
+        if (filter?.created_by) {
+          filteredFlows = filteredFlows.filter(
+            (f) => f.created_by === filter.created_by,
+          );
+        }
+
+        resolve({ data: filteredFlows });
+      }, 300);
+    });
+  },
+
+  // Get flow by ID
+  getById: (id: string): Promise<{ data: ChatbotFlow }> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const flow = mockChatbotFlows.find((f) => f.id === id);
+        if (flow) {
+          resolve({ data: flow });
+        } else {
+          reject(new Error("Flow not found"));
+        }
+      }, 200);
+    });
+  },
+
+  // Create new flow
+  create: (data: ChatbotFlowFormData): Promise<{ data: ChatbotFlow }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const newFlow: ChatbotFlow = {
+          id: `flow-${Date.now()}`,
+          ...data,
+          nodes: [],
+          edges: [],
+          is_active: false,
+          version: 1,
+          created_by: "current-user",
+          created_by_name: "Current User",
+          created_date: new Date().toISOString(),
+          updated_date: new Date().toISOString(),
+          total_conversations: 0,
+          completion_rate: 0,
+          average_completion_time: 0,
+          languages: ["en"],
+          default_language: "en",
+        };
+        mockChatbotFlows.push(newFlow);
+        resolve({ data: newFlow });
+      }, 500);
+    });
+  },
+
+  // Update flow
+  update: (
+    id: string,
+    data: Partial<ChatbotFlowFormData>,
+  ): Promise<{ data: ChatbotFlow }> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const index = mockChatbotFlows.findIndex((f) => f.id === id);
+        if (index !== -1) {
+          mockChatbotFlows[index] = {
+            ...mockChatbotFlows[index],
+            ...data,
+            updated_date: new Date().toISOString(),
+          };
+          resolve({ data: mockChatbotFlows[index] });
+        } else {
+          reject(new Error("Flow not found"));
+        }
+      }, 400);
+    });
+  },
+
+  // Update flow structure (nodes and edges)
+  updateStructure: (
+    id: string,
+    nodes: ChatbotFlowNode[],
+    edges: ChatbotFlowEdge[],
+  ): Promise<{ data: ChatbotFlow }> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const index = mockChatbotFlows.findIndex((f) => f.id === id);
+        if (index !== -1) {
+          mockChatbotFlows[index] = {
+            ...mockChatbotFlows[index],
+            nodes,
+            edges,
+            updated_date: new Date().toISOString(),
+          };
+          resolve({ data: mockChatbotFlows[index] });
+        } else {
+          reject(new Error("Flow not found"));
+        }
+      }, 600);
+    });
+  },
+
+  // Delete flow
+  delete: (id: string): Promise<{ success: boolean }> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const index = mockChatbotFlows.findIndex((f) => f.id === id);
+        if (index !== -1) {
+          mockChatbotFlows.splice(index, 1);
+          resolve({ success: true });
+        } else {
+          reject(new Error("Flow not found"));
+        }
+      }, 300);
+    });
+  },
+
+  // Publish flow
+  publish: (id: string): Promise<{ data: ChatbotFlow }> => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const index = mockChatbotFlows.findIndex((f) => f.id === id);
+        if (index !== -1) {
+          mockChatbotFlows[index] = {
+            ...mockChatbotFlows[index],
+            is_active: true,
+            published_date: new Date().toISOString(),
+            updated_date: new Date().toISOString(),
+          };
+          resolve({ data: mockChatbotFlows[index] });
+        } else {
+          reject(new Error("Flow not found"));
+        }
+      }, 400);
+    });
+  },
+
+  // Get flow statistics
+  getStats: (): Promise<{ data: ChatbotFlowStats }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const stats: ChatbotFlowStats = {
+          total_flows: mockChatbotFlows.length,
+          active_flows: mockChatbotFlows.filter((f) => f.is_active).length,
+          draft_flows: mockChatbotFlows.filter((f) => !f.is_active).length,
+          total_conversations: mockChatbotFlows.reduce(
+            (sum, f) => sum + f.total_conversations,
+            0,
+          ),
+          average_completion_rate:
+            mockChatbotFlows.reduce((sum, f) => sum + f.completion_rate, 0) /
+            mockChatbotFlows.length,
+          top_performing_flows: mockChatbotFlows
+            .sort((a, b) => b.completion_rate - a.completion_rate)
+            .slice(0, 5)
+            .map((f) => ({
+              id: f.id,
+              name: f.name,
+              completion_rate: f.completion_rate,
+              total_conversations: f.total_conversations,
+            })),
+        };
+        resolve({ data: stats });
+      }, 200);
+    });
+  },
+};
+
+// Node Templates API
+export const chatbotNodeTemplateAPI = {
+  // Get all templates
+  getAll: (): Promise<{ data: ChatbotNodeTemplate[] }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({ data: mockChatbotNodeTemplates });
+      }, 200);
+    });
+  },
+
+  // Get templates by category
+  getByCategory: (
+    category: string,
+  ): Promise<{ data: ChatbotNodeTemplate[] }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const templates = mockChatbotNodeTemplates.filter(
+          (t) => t.category === category,
+        );
+        resolve({ data: templates });
+      }, 200);
+    });
+  },
+
+  // Create template
+  create: (
+    data: Omit<ChatbotNodeTemplate, "id" | "created_date" | "usage_count">,
+  ): Promise<{ data: ChatbotNodeTemplate }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const newTemplate: ChatbotNodeTemplate = {
+          ...data,
+          id: `template-${Date.now()}`,
+          created_date: new Date().toISOString(),
+          usage_count: 0,
+        };
+        mockChatbotNodeTemplates.push(newTemplate);
+        resolve({ data: newTemplate });
+      }, 300);
+    });
+  },
+};
+
+// Conversations API
+export const chatbotConversationAPI = {
+  // Get all conversations
+  getAll: (flowId?: string): Promise<{ data: ChatbotConversation[] }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        let conversations = [...mockChatbotConversations];
+        if (flowId) {
+          conversations = conversations.filter((c) => c.flow_id === flowId);
+        }
+        resolve({ data: conversations });
+      }, 300);
+    });
+  },
+
+  // Get conversation analytics
+  getAnalytics: (
+    flowId: string,
+    dateRange: { start: string; end: string },
+  ): Promise<{ data: ChatbotAnalytics }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const analytics: ChatbotAnalytics = {
+          flow_id: flowId,
+          date_range: dateRange,
+          total_conversations: 150,
+          completed_conversations: 120,
+          abandoned_conversations: 30,
+          completion_rate: 80,
+          average_completion_time: 85,
+          node_analytics: [
+            {
+              node_id: "welcome-1",
+              node_type: "text",
+              visits: 150,
+              exits: 5,
+              completion_rate: 96.7,
+              average_time_spent: 15,
+            },
+            {
+              node_id: "menu-1",
+              node_type: "button",
+              visits: 145,
+              exits: 25,
+              completion_rate: 82.8,
+              average_time_spent: 30,
+            },
+          ],
+          unique_users: 135,
+          returning_users: 15,
+          peak_usage_hours: [
+            { hour: 9, count: 25 },
+            { hour: 14, count: 30 },
+            { hour: 20, count: 22 },
+          ],
+          popular_paths: [
+            {
+              path: ["welcome-1", "menu-1", "products-1"],
+              count: 45,
+              completion_rate: 85,
+            },
+            {
+              path: ["welcome-1", "menu-1", "support-1"],
+              count: 35,
+              completion_rate: 92,
+            },
+          ],
+        };
+        resolve({ data: analytics });
+      }, 400);
+    });
+  },
+};
+
+// Testing API
+export const chatbotTestAPI = {
+  // Run flow test
+  runTest: (
+    flowId: string,
+    testType: "unit" | "integration" | "user_journey",
+  ): Promise<{ data: ChatbotTestResult }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const testResult: ChatbotTestResult = {
+          id: `test-${Date.now()}`,
+          flow_id: flowId,
+          test_type: testType,
+          test_name: `${testType} test for flow ${flowId}`,
+          status: Math.random() > 0.2 ? "passed" : "failed",
+          execution_time: Math.floor(Math.random() * 5000) + 1000,
+          executed_date: new Date().toISOString(),
+          steps: [
+            {
+              step_number: 1,
+              node_id: "welcome-1",
+              input: "start",
+              expected_output: "Welcome! How can I help you today?",
+              actual_output: "Welcome! How can I help you today?",
+              status: "passed",
+            },
+            {
+              step_number: 2,
+              node_id: "menu-1",
+              input: "menu",
+              expected_output: "What would you like to do?",
+              actual_output: "What would you like to do?",
+              status: "passed",
+            },
+          ],
+          total_steps: 2,
+          passed_steps: 2,
+          failed_steps: 0,
+          success_rate: 100,
+        };
+        resolve({ data: testResult });
+      }, 2000);
+    });
+  },
+
+  // Get test history
+  getTestHistory: (flowId: string): Promise<{ data: ChatbotTestResult[] }> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const mockTests: ChatbotTestResult[] = [
+          {
+            id: "test-1",
+            flow_id: flowId,
+            test_type: "unit",
+            test_name: "Unit test - Welcome Flow",
+            status: "passed",
+            execution_time: 1500,
+            executed_date: "2024-02-01T10:00:00Z",
+            steps: [],
+            total_steps: 5,
+            passed_steps: 5,
+            failed_steps: 0,
+            success_rate: 100,
+          },
+          {
+            id: "test-2",
+            flow_id: flowId,
+            test_type: "integration",
+            test_name: "Integration test - API calls",
+            status: "failed",
+            execution_time: 3200,
+            executed_date: "2024-02-01T09:30:00Z",
+            steps: [],
+            total_steps: 8,
+            passed_steps: 6,
+            failed_steps: 2,
+            success_rate: 75,
+          },
+        ];
+        resolve({ data: mockTests });
+      }, 300);
+    });
+  },
+};
