@@ -15,7 +15,7 @@ import SubscriptionManagementEnhanced from "../components/SubscriptionManagement
 import OrganizationManagementEnhanced from "../components/OrganizationManagementEnhanced";
 import CustomerManagement from "../components/CustomerManagement";
 import InterveneAdminChat from "../components/InterveneAdminChat";
-import WhatsAppTemplateManagement from "../components/WhatsAppTemplateManagement";
+import WhatsAppTemplateManagementEnhanced from "../components/WhatsAppTemplateManagementEnhanced";
 import LeadManagementSystem from "../components/LeadManagementSystem";
 import ChatbotBuilderSystem from "../components/ChatbotBuilderSystem";
 import AdminOverview from "../components/AdminOverview";
@@ -217,7 +217,7 @@ export default function AdminDashboard() {
                         }}
                       >
                         <h3 style={{ color: "#ff9800", marginBottom: "10px" }}>
-                          🧪 Testing
+                          ��� Testing
                         </h3>
                         <p style={{ color: "#666", fontSize: "0.9rem" }}>
                           Interactive testing and debugging tools
