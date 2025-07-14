@@ -295,7 +295,9 @@ const nodeTypes = {
   image: CustomMediaNode,
   audio: CustomMediaNode,
   video: CustomMediaNode,
+  product: CustomProductNode,
   api_trigger: CustomApiNode,
+  condition: CustomConditionNode,
   end: CustomEndNode,
 };
 
