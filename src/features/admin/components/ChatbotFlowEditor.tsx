@@ -564,6 +564,8 @@ function ChatbotFlowEditorContent({
           nodesConnectable={true}
           elementsSelectable={true}
           selectNodesOnDrag={false}
+          deleteKeyCode={46}
+          multiSelectionKeyCode={17}
           fitView
           attributionPosition="bottom-left"
         >
