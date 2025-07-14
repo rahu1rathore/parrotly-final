@@ -523,20 +523,12 @@ export default function ChatbotBuilderSystem() {
         </Tabs>
       </Paper>
 
-      {/* Tab Content */}
+            {/* Tab Content */}
       {activeTab === 0 && (
         <>
           {/* Statistics Cards */}
           {renderStatsCards()}
-        </>
-      )}
 
-      {activeTab === 1 && <ChatbotAnalyticsDashboard flows={flows} />}
-
-            {activeTab === 2 && <ChatbotTestingInterface flows={flows} />}
-
-      {activeTab === 0 && (
-        <>
           {/* Search and Filters */}
       <Paper sx={{ p: 2, mb: 3 }}>
         <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
