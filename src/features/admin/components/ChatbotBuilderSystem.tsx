@@ -25,7 +25,7 @@ import {
 
 export default function ChatbotBuilderSystem() {
   const [activeTab, setActiveTab] = useState(0);
-  const [flows, setFlows] = useState([]);
+  const [flows] = useState([]);
 
   const renderFlowManagement = () => (
     <Box>
