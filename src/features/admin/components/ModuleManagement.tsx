@@ -99,6 +99,11 @@ const ModuleManagement: React.FC<ModuleManagementProps> = ({
   // Data state
   const [modules, setModules] = useState<Module[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedModules, setSelectedModules] = useState<string[]>([]);
+  const [summary, setSummary] = useState<ModuleSummary | null>(null);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [exporting, setExporting] = useState(false);
 
   // Pagination state
   const [pagination, setPagination] = useState<PaginationState>({
