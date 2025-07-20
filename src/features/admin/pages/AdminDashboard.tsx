@@ -18,6 +18,7 @@ import InterveneAdminChat from "../components/InterveneAdminChat";
 import WhatsAppTemplateManagement from "../components/WhatsAppTemplateManagement";
 import LeadManagementSystem from "../components/LeadManagementSystem";
 import ChatbotBuilderSystem from "../components/ChatbotBuilderSystem";
+import DataTableDemo from "../components/DataTableDemo";
 import AdminOverview from "../components/AdminOverview";
 import AppTheme from "../../../themes/AppTheme";
 import {
@@ -42,6 +43,7 @@ const getPageTitle = (pathname: string) => {
   if (pathname.includes("/whatsapp-templates")) return "WhatsApp Templates";
   if (pathname.includes("/lead-management")) return "Lead Management";
   if (pathname.includes("/chatbot-builder")) return "Chatbot Builder";
+  if (pathname.includes("/datatable-demo")) return "DataTable Demo";
   if (pathname.includes("/chat")) return "Admin Chat";
   if (pathname.includes("/analytics")) return "Analytics Dashboard";
   if (pathname.includes("/users")) return "User Management";
@@ -64,6 +66,8 @@ const getPageSubtitle = (pathname: string) => {
     return "Campaigns, dynamic forms, lead tracking, assignments, and tasks";
   if (pathname.includes("/chatbot-builder"))
     return "Create and manage visual conversation flows for your chatbot";
+  if (pathname.includes("/datatable-demo"))
+    return "Showcase of the reusable DataTable component with Tailwind CSS";
   if (pathname.includes("/chat"))
     return "Communicate with customers through WhatsApp-style interface";
   if (pathname.includes("/analytics"))
@@ -246,9 +250,13 @@ export default function AdminDashboard() {
                     path="whatsapp-templates"
                     element={<WhatsAppTemplateManagement />}
                   />
-                  <Route
+                                    <Route
                     path="lead-management"
                     element={<LeadManagementSystem />}
+                  />
+                  <Route
+                    path="datatable-demo"
+                    element={<DataTableDemo />}
                   />
                   <Route path="analytics" element={<AdminOverview />} />
                   <Route path="users" element={<AdminOverview />} />
