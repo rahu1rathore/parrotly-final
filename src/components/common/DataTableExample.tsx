@@ -230,14 +230,9 @@ const DataTableExample: React.FC = () => {
     }
   ];
 
-  return (
+    return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Customer Management</h1>
-          <p className="text-gray-600">Manage your customer database with advanced filtering and actions.</p>
-        </div>
-
         <DataTable
           columns={columns}
           data={sampleCustomers}
@@ -256,7 +251,7 @@ const DataTableExample: React.FC = () => {
             'bg-white'
           }
           emptyStateMessage="No customers found. Add your first customer to get started."
-        />
+                />
       </div>
     </div>
   );
