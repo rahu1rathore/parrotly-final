@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import RouteGuard from "./RouteGuard";
 import LandingPage from "../components/LandingPage";
+import CrmDashboard from "../features/dashboard/crm/CrmDashboard";
 import AdminDashboard from "../features/admin/pages/AdminDashboard";
 import SignIn from "../features/auth/sign-in/SignIn";
 import SignInSide from "../features/auth/sign-in-side/SignInSide";
