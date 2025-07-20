@@ -48,6 +48,11 @@ export interface DataTableProps {
   pagination?: boolean;
   pageSize?: number;
   pageSizeOptions?: number[];
+  showTopControls?: boolean;
+  searchTerm?: string;
+  onSearchChange?: (value: string) => void;
+  sortBy?: string;
+  onSortChange?: (value: string) => void;
 }
 
 export const DataTable: React.FC<DataTableProps> = ({
@@ -67,14 +72,39 @@ export const DataTable: React.FC<DataTableProps> = ({
   emptyStateMessage = 'No data available',
   pagination = true,
   pageSize = 10,
-  pageSizeOptions = [10, 25, 50, 100]
+  pageSizeOptions = [10, 25, 50, 100],
+  showTopControls = true,
+  searchTerm: externalSearchTerm,
+  onSearchChange,
+  sortBy: externalSortBy,
+  onSortChange
 }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState('');
+    const [internalSearchTerm, setInternalSearchTerm] = useState('');
+  const [internalSortBy, setInternalSortBy] = useState('');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageSize, setCurrentPageSize] = useState(pageSize);
+
+  // Use external state if provided, otherwise use internal state
+  const searchTerm = externalSearchTerm !== undefined ? externalSearchTerm : internalSearchTerm;
+  const sortBy = externalSortBy !== undefined ? externalSortBy : internalSortBy;
+
+  const handleSearchChange = (value: string) => {
+    if (onSearchChange) {
+      onSearchChange(value);
+    } else {
+      setInternalSearchTerm(value);
+    }
+  };
+
+  const handleSortChange = (value: string) => {
+    if (onSortChange) {
+      onSortChange(value);
+    } else {
+      setInternalSortBy(value);
+    }
+  };
 
   // Default actions if none provided
   const defaultActions: TableAction[] = [
@@ -197,70 +227,72 @@ export const DataTable: React.FC<DataTableProps> = ({
 
   return (
     <div className={`bg-white rounded-lg shadow-sm border border-gray-200 ${className}`}>
-      {/* Top Bar Controls */}
-      <div className="p-4 border-b border-gray-200">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          {/* Left Side - Search */}
-          <div className="flex-1 max-w-md">
-            {searchable && (
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" style={{ fontSize: '16px' }} />
-                <input
-                  type="text"
-                  placeholder={searchPlaceholder}
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200"
-                />
-              </div>
-            )}
-          </div>
+            {/* Top Bar Controls - Only show if showTopControls is true */}
+      {showTopControls && (
+        <div className="p-4 border-b border-gray-200">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            {/* Left Side - Search */}
+            <div className="flex-1 max-w-md">
+              {searchable && (
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" style={{ fontSize: '16px' }} />
+                  <input
+                    type="text"
+                    placeholder={searchPlaceholder}
+                    value={searchTerm}
+                    onChange={(e) => handleSearchChange(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200"
+                  />
+                </div>
+              )}
+            </div>
 
-          {/* Right Side - Controls */}
-          <div className="flex items-center gap-3">
-            {/* Sort Dropdown */}
-            {sortable && sortOptions.length > 0 && (
-              <div className="relative">
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200"
+            {/* Right Side - Controls */}
+            <div className="flex items-center gap-3">
+              {/* Sort Dropdown */}
+              {sortable && sortOptions.length > 0 && (
+                <div className="relative">
+                  <select
+                    value={sortBy}
+                    onChange={(e) => handleSortChange(e.target.value)}
+                    className="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200"
+                  >
+                    <option value="">Sort by...</option>
+                    {sortOptions.map(option => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" style={{ fontSize: '16px' }} />
+                </div>
+              )}
+
+              {/* Add Button */}
+              {onAdd && (
+                <button
+                  onClick={onAdd}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-medium transition-colors duration-200"
                 >
-                  <option value="">Sort by...</option>
-                  {sortOptions.map(option => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" style={{ fontSize: '16px' }} />
-              </div>
-            )}
+                  <Plus style={{ fontSize: '16px' }} />
+                  {addButtonText}
+                </button>
+              )}
 
-            {/* Add Button */}
-            {onAdd && (
-              <button
-                onClick={onAdd}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-medium transition-colors duration-200"
-              >
-                <Plus style={{ fontSize: '16px' }} />
-                {addButtonText}
-              </button>
-            )}
-
-            {/* Download Button */}
-            {onDownload && (
-              <button
-                onClick={onDownload}
-                className="border border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900 px-3 py-2 rounded-lg flex items-center transition-colors duration-200"
-                title="Download data"
-              >
-                <Download style={{ fontSize: '16px' }} />
-              </button>
-            )}
+              {/* Download Button */}
+              {onDownload && (
+                <button
+                  onClick={onDownload}
+                  className="border border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900 px-3 py-2 rounded-lg flex items-center transition-colors duration-200"
+                  title="Download data"
+                >
+                  <Download style={{ fontSize: '16px' }} />
+                </button>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Table */}
       <div className="overflow-x-auto">
