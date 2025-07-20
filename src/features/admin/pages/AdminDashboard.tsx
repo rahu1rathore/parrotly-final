@@ -15,7 +15,7 @@ import SubscriptionManagementStandardized from "../components/SubscriptionManage
 import OrganizationManagementStandardized from "../components/OrganizationManagementStandardized";
 import CustomerManagement from "../components/CustomerManagement";
 import InterveneAdminChat from "../components/InterveneAdminChat";
-import WhatsAppTemplateManagement from "../components/WhatsAppTemplateManagement";
+import WhatsAppTemplateManagementStandardized from "../components/WhatsAppTemplateManagementStandardized";
 import LeadManagementSystem from "../components/LeadManagementSystem";
 import ChatbotBuilderSystem from "../components/ChatbotBuilderSystem";
 import DataTableDemo from "../components/DataTableDemo";
@@ -246,9 +246,9 @@ export default function AdminDashboard() {
                     element={<OrganizationManagementStandardized />}
                   />
                   <Route path="customers" element={<CustomerManagement />} />
-                  <Route
+                                    <Route
                     path="whatsapp-templates"
-                    element={<WhatsAppTemplateManagement />}
+                    element={<WhatsAppTemplateManagementStandardized />}
                   />
                                     <Route
                     path="lead-management"
