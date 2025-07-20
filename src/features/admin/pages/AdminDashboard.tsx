@@ -23,6 +23,9 @@ import LeadManagementSystem from "../components/LeadManagementSystem";
 import ChatbotBuilderSystem from "../components/ChatbotBuilderSystem";
 import DataTableDemo from "../components/DataTableDemo";
 import AdminOverview from "../components/AdminOverview";
+import UserManagement from "../components/UserManagement";
+import RoleManagement from "../components/RoleManagement";
+import OrganizationSettings from "../components/OrganizationSettings";
 import AppTheme from "../../../themes/AppTheme";
 import {
   dataGridCustomizations,
@@ -39,9 +42,12 @@ const xThemeComponents = {
 
 // Page titles based on route
 const getPageTitle = (pathname: string) => {
-  if (pathname.includes("/modules")) return "Module Management";
+    if (pathname.includes("/modules")) return "Module Management";
   if (pathname.includes("/subscriptions")) return "Subscription Management";
   if (pathname.includes("/organizations")) return "Organization Management";
+  if (pathname.includes("/users")) return "User Management";
+  if (pathname.includes("/roles")) return "Role Management";
+  if (pathname.includes("/organization-settings")) return "Organization Settings";
     if (pathname.includes("/customers")) return "Customer Management";
   if (pathname.includes("/whatsapp-templates")) return "WhatsApp Templates";
   if (pathname.includes("/leads")) return "Lead Management";
@@ -58,12 +64,18 @@ const getPageTitle = (pathname: string) => {
 };
 
 const getPageSubtitle = (pathname: string) => {
-  if (pathname.includes("/modules"))
+    if (pathname.includes("/modules"))
     return "Create, edit, and manage system modules";
   if (pathname.includes("/subscriptions"))
     return "Configure subscription plans and pricing";
   if (pathname.includes("/organizations"))
     return "Manage organizations and their information";
+  if (pathname.includes("/users"))
+    return "Manage users, roles, and permissions";
+  if (pathname.includes("/roles"))
+    return "Configure roles and module permissions";
+  if (pathname.includes("/organization-settings"))
+    return "Organization and subscription plan management";
     if (pathname.includes("/customers"))
     return "Manage customers with dynamic forms and configurations";
   if (pathname.includes("/whatsapp-templates"))
@@ -273,8 +285,10 @@ export default function AdminDashboard() {
                     path="datatable-demo"
                     element={<DataTableDemo />}
                   />
-                  <Route path="analytics" element={<AdminOverview />} />
-                  <Route path="users" element={<AdminOverview />} />
+                                    <Route path="analytics" element={<AdminOverview />} />
+                  <Route path="users" element={<UserManagement />} />
+                  <Route path="roles" element={<RoleManagement />} />
+                  <Route path="organization-settings" element={<OrganizationSettings isSuperAdmin={true} />} />
                   <Route path="settings" element={<AdminOverview />} />
                   <Route path="help" element={<AdminOverview />} />
                   <Route path="profile" element={<AdminOverview />} />
