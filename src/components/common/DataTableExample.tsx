@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { DataTable, TableColumn } from './DataTable';
 import {
   Visibility as Eye,
   Edit as Edit2,
-  Delete as Trash2
+  Delete as Trash2,
+  Search,
+  Add as Plus,
+  Download,
+  KeyboardArrowDown as ChevronDown
 } from '@mui/icons-material';
 
 // Sample customer data that matches the reference image
@@ -101,6 +105,10 @@ const sampleCustomers = [
 ];
 
 const DataTableExample: React.FC = () => {
+  // State for external controls
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState('');
+
   // Define columns matching the reference image
   const columns: TableColumn[] = [
     {
@@ -232,28 +240,92 @@ const DataTableExample: React.FC = () => {
 
   return (
     <div className="p-6 bg-gray-50">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Separated Top Controls */}
+        <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            {/* Left Side - Search */}
+            <div className="flex-1 max-w-md">
+              <div className="relative">
+                <Search 
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" 
+                  style={{ fontSize: '16px' }} 
+                />
+                <input
+                  type="text"
+                  placeholder="Search customers..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200"
+                />
+              </div>
+            </div>
+
+            {/* Right Side - Controls */}
+            <div className="flex items-center gap-3">
+              {/* Sort Dropdown */}
+              <div className="relative">
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200"
+                >
+                  <option value="">Sort by...</option>
+                  {sortOptions.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown 
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" 
+                  style={{ fontSize: '16px' }} 
+                />
+              </div>
+
+              {/* Add Button */}
+              <button
+                onClick={handleAddCustomer}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-medium transition-colors duration-200"
+              >
+                <Plus style={{ fontSize: '16px' }} />
+                + Add Customer
+              </button>
+
+              {/* Download Button */}
+              <button
+                onClick={handleDownload}
+                className="border border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900 px-3 py-2 rounded-lg flex items-center transition-colors duration-200"
+                title="Download data"
+              >
+                <Download style={{ fontSize: '16px' }} />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* DataTable without top controls */}
         <DataTable
           columns={columns}
           data={sampleCustomers}
-          searchable={true}
+          searchable={false} // We handle search externally
           sortable={true}
           pagination={true}
           pageSize={5}
           pageSizeOptions={[5, 10, 25, 50]}
           actions={customActions}
-          onAdd={handleAddCustomer}
-          onDownload={handleDownload}
-          addButtonText="+ Add Customer"
-          searchPlaceholder="Search 200 records..."
-          sortOptions={sortOptions}
+          showTopControls={false} // Hide built-in controls
+          searchTerm={searchTerm} // Pass external search state
+          onSearchChange={setSearchTerm}
+          sortBy={sortBy} // Pass external sort state  
+          onSortChange={setSortBy}
           className="shadow-lg"
           rowClassName={(row) => 
             row.status === 'Verified' ? 'bg-green-50' : 
             row.status === 'Rejected' ? 'bg-red-50' : 
             'bg-white'
           }
-          emptyStateMessage="No customers found. Add your first customer to get started."
+          emptyStateMessage="No customers found. Try adjusting your search or filters."
         />
       </div>
     </div>
