@@ -43,6 +43,9 @@ export interface DataTableProps {
   className?: string;
   rowClassName?: (row: any) => string;
   emptyStateMessage?: string;
+  pagination?: boolean;
+  pageSize?: number;
+  pageSizeOptions?: number[];
 }
 
 export const DataTable: React.FC<DataTableProps> = ({
@@ -59,12 +62,17 @@ export const DataTable: React.FC<DataTableProps> = ({
   sortOptions = [],
   className = '',
   rowClassName,
-  emptyStateMessage = 'No data available'
+  emptyStateMessage = 'No data available',
+  pagination = true,
+  pageSize = 10,
+  pageSizeOptions = [10, 25, 50, 100]
 }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPageSize, setCurrentPageSize] = useState(pageSize);
 
   // Default actions if none provided
   const defaultActions: TableAction[] = [
