@@ -11,8 +11,8 @@ import AdminAppNavbar from "../components/AdminAppNavbar";
 import AdminHeader from "../components/AdminHeader";
 import AdminSideMenu from "../components/AdminSideMenu";
 import ModuleManagementClean from "../components/ModuleManagementClean";
-import SubscriptionManagementEnhanced from "../components/SubscriptionManagementEnhanced";
-import OrganizationManagementEnhanced from "../components/OrganizationManagementEnhanced";
+import SubscriptionManagementStandardized from "../components/SubscriptionManagementStandardized";
+import OrganizationManagementStandardized from "../components/OrganizationManagementStandardized";
 import CustomerManagement from "../components/CustomerManagement";
 import InterveneAdminChat from "../components/InterveneAdminChat";
 import WhatsAppTemplateManagement from "../components/WhatsAppTemplateManagement";
@@ -237,13 +237,13 @@ export default function AdminDashboard() {
                     path="modules"
                     element={<ModuleManagementClean />}
                   />
-                  <Route
+                                    <Route
                     path="subscriptions"
-                    element={<SubscriptionManagementEnhanced />}
+                    element={<SubscriptionManagementStandardized />}
                   />
                   <Route
                     path="organizations"
-                    element={<OrganizationManagementEnhanced />}
+                    element={<OrganizationManagementStandardized />}
                   />
                   <Route path="customers" element={<CustomerManagement />} />
                   <Route
