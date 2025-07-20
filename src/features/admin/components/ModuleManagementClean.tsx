@@ -412,170 +412,141 @@ const ModuleManagementClean: React.FC<ModuleManagementCleanProps> = ({
   return (
     <Box className="p-6 bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto space-y-6">
-        {/* Separated Filter Section */}
+                {/* Unified Filter and Action Row */}
         <Card className="shadow-sm">
-          <CardContent className="p-6">
-            <Stack spacing={3}>
-              {/* Filter Header */}
-              <Stack direction="row" alignItems="center" spacing={2}>
-                <FilterListIcon className="text-gray-600" />
-                <Typography variant="h6" className="text-gray-800">
-                  Filters
-                </Typography>
-              </Stack>
+          <CardContent className="p-4">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 overflow-x-auto">
+              {/* Left Section - Filters */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 flex-1 min-w-0">
+                {/* Quick Filters */}
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <span className="text-sm text-gray-600 font-medium whitespace-nowrap">Quick:</span>
+                  <div className="flex items-center gap-1">
+                    {quickFilters.map((filter) => (
+                      <button
+                        key={filter.status}
+                        onClick={() => handleFilterChange("status", filter.status)}
+                        className={`px-2 py-1 rounded text-xs font-medium transition-colors whitespace-nowrap ${
+                          filters.status === filter.status
+                            ? "bg-blue-600 text-white"
+                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        }`}
+                      >
+                        {filter.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
-              {/* Quick Filters */}
-              <Stack direction="row" spacing={2} alignItems="center">
-                <Typography variant="body2" className="text-gray-600 font-medium">
-                  Quick Filter:
-                </Typography>
-                {quickFilters.map((filter) => (
-                  <button
-                    key={filter.status}
-                    onClick={() => handleFilterChange("status", filter.status)}
-                    className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                      filters.status === filter.status
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
-                  >
-                    {filter.label}
-                  </button>
-                ))}
-              </Stack>
-
-              {/* Advanced Filters */}
-              <Grid container spacing={3} alignItems="center">
-                <Grid item xs={12} sm={6} md={3}>
+                {/* Search */}
+                <div className="flex-shrink-0 w-full sm:w-auto min-w-[200px]">
                   <TextField
-                    fullWidth
                     placeholder="Search modules..."
                     value={filters.search}
                     onChange={(e) => handleFilterChange("search", e.target.value)}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
-                          <SearchIcon className="text-gray-400" />
+                          <SearchIcon className="text-gray-400" style={{ fontSize: '16px' }} />
                         </InputAdornment>
                       ),
                     }}
                     size="small"
                     className="bg-white"
                   />
-                </Grid>
+                </div>
 
-                <Grid item xs={12} sm={6} md={2}>
-                  <FormControl fullWidth size="small">
-                    <InputLabel>Category</InputLabel>
-                    <Select
-                      value={filters.category}
-                      onChange={(e) => handleFilterChange("category", e.target.value)}
-                      label="Category"
-                      className="bg-white"
-                    >
-                      <MenuItem value="">All Categories</MenuItem>
-                      {categories.map((category) => (
-                        <MenuItem key={category} value={category}>
-                          <Stack direction="row" alignItems="center" spacing={1}>
-                            {getCategoryIcon(category)}
-                            <span>{category}</span>
-                          </Stack>
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-
-                <Grid item xs={12} sm={6} md={2}>
-                  <FormControl fullWidth size="small">
-                    <InputLabel>Sort By</InputLabel>
-                    <Select
-                      value={filters.sortBy}
-                      onChange={(e) => handleFilterChange("sortBy", e.target.value)}
-                      label="Sort By"
-                      className="bg-white"
-                    >
-                      <MenuItem value="name">Name</MenuItem>
-                      <MenuItem value="created_at">Created Date</MenuItem>
-                      <MenuItem value="updated_at">Updated Date</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-
-                <Grid item xs={12} sm={6} md={2}>
-                  <FormControl fullWidth size="small">
-                    <InputLabel>Order</InputLabel>
-                    <Select
-                      value={filters.sortOrder}
-                      onChange={(e) => handleFilterChange("sortOrder", e.target.value)}
-                      label="Order"
-                      className="bg-white"
-                    >
-                      <MenuItem value="asc">Ascending</MenuItem>
-                      <MenuItem value="desc">Descending</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-
-                <Grid item xs={12} sm={6} md={2}>
-                  <Button
-                    fullWidth
-                    variant="outlined"
-                    startIcon={<ClearIcon />}
-                    onClick={handleClearFilters}
-                    size="small"
-                    className="h-10"
+                {/* Category Filter */}
+                <FormControl size="small" className="min-w-[120px]">
+                  <InputLabel>Category</InputLabel>
+                  <Select
+                    value={filters.category}
+                    onChange={(e) => handleFilterChange("category", e.target.value)}
+                    label="Category"
+                    className="bg-white"
                   >
-                    Clear Filters
-                  </Button>
-                </Grid>
-              </Grid>
-            </Stack>
-          </CardContent>
-        </Card>
+                    <MenuItem value="">All</MenuItem>
+                    {categories.map((category) => (
+                      <MenuItem key={category} value={category}>
+                        {category}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
 
-        {/* Main Table Section */}
-        <Paper className="shadow-lg rounded-lg overflow-hidden">
-          {/* Header */}
-          <div className="p-6 border-b border-gray-200 bg-white">
-            <div className="flex items-center justify-between">
-              <div>
-                <Typography variant="h5" className="text-gray-900 font-semibold">
-                  Module Management
-                </Typography>
-                <Typography variant="body2" className="text-gray-600 mt-1">
-                  Manage and configure system modules
-                </Typography>
+                {/* Sort By */}
+                <FormControl size="small" className="min-w-[100px]">
+                  <InputLabel>Sort</InputLabel>
+                  <Select
+                    value={filters.sortBy}
+                    onChange={(e) => handleFilterChange("sortBy", e.target.value)}
+                    label="Sort"
+                    className="bg-white"
+                  >
+                    <MenuItem value="name">Name</MenuItem>
+                    <MenuItem value="created_at">Created</MenuItem>
+                    <MenuItem value="updated_at">Updated</MenuItem>
+                  </Select>
+                </FormControl>
+
+                {/* Sort Order */}
+                <FormControl size="small" className="min-w-[80px]">
+                  <InputLabel>Order</InputLabel>
+                  <Select
+                    value={filters.sortOrder}
+                    onChange={(e) => handleFilterChange("sortOrder", e.target.value)}
+                    label="Order"
+                    className="bg-white"
+                  >
+                    <MenuItem value="asc">↑</MenuItem>
+                    <MenuItem value="desc">↓</MenuItem>
+                  </Select>
+                </FormControl>
+
+                {/* Clear Filters */}
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={handleClearFilters}
+                  className="whitespace-nowrap"
+                >
+                  Clear
+                </Button>
               </div>
 
-              {/* Action Buttons */}
-              <Stack direction="row" spacing={2}>
+              {/* Right Section - Action Buttons */}
+              <div className="flex items-center gap-2 flex-shrink-0">
                 <Button
                   variant="contained"
-                  startIcon={<AddIcon />}
+                  startIcon={<AddIcon style={{ fontSize: '16px' }} />}
                   onClick={() => {
                     setFormData({ name: "", description: "" });
                     setFormErrors({});
                     setDialogs((prev) => ({ ...prev, create: true }));
                   }}
-                  className="bg-blue-600 hover:bg-blue-700"
+                  size="small"
+                  className="bg-blue-600 hover:bg-blue-700 whitespace-nowrap"
                 >
                   Add Module
                 </Button>
 
                 <Button
                   variant="outlined"
-                  startIcon={<RefreshIcon />}
+                  startIcon={<RefreshIcon style={{ fontSize: '16px' }} />}
                   onClick={loadModules}
                   disabled={loading}
+                  size="small"
+                  className="whitespace-nowrap"
                 >
                   Refresh
                 </Button>
 
                 <Button
                   variant="outlined"
-                  startIcon={<ExportIcon />}
+                  startIcon={<ExportIcon style={{ fontSize: '16px' }} />}
                   disabled={modules.length === 0}
+                  size="small"
+                  className="whitespace-nowrap"
                 >
                   Export
                 </Button>
@@ -584,19 +555,25 @@ const ModuleManagementClean: React.FC<ModuleManagementCleanProps> = ({
                   <Button
                     variant="outlined"
                     color="error"
-                    startIcon={<BulkDeleteIcon />}
+                    startIcon={<BulkDeleteIcon style={{ fontSize: '16px' }} />}
                     onClick={() =>
                       setDialogs((prev) => ({ ...prev, bulkDelete: true }))
                     }
+                    size="small"
+                    className="whitespace-nowrap"
                   >
                     Delete ({selectedModules.length})
                   </Button>
                 )}
-              </Stack>
+              </div>
             </div>
-          </div>
+          </CardContent>
+        </Card>
 
-          {/* Error Alert */}
+        {/* Main Table Section */}
+        <Paper className="shadow-lg rounded-lg overflow-hidden">
+
+                    {/* Error Alert */}
           {error && (
             <Alert severity="error" className="m-4">
               {error}
