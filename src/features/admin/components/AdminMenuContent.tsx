@@ -49,11 +49,29 @@ const mainListItems = [
     path: "/admin/modules",
     description: "Manage system modules",
   },
-  {
+    {
     text: "Subscriptions",
     icon: <SubscriptionsRoundedIcon />,
     path: "/admin/subscriptions",
     description: "Manage subscription plans",
+  },
+  {
+    text: "Users",
+    icon: <GroupRoundedIcon />,
+    path: "/admin/users",
+    description: "Manage users and assignments",
+  },
+  {
+    text: "Roles",
+    icon: <SecurityRoundedIcon />,
+    path: "/admin/roles",
+    description: "Configure roles and permissions",
+  },
+  {
+    text: "Organization Settings",
+    icon: <AdminPanelSettingsRoundedIcon />,
+    path: "/admin/organization-settings",
+    description: "Organization & subscription management",
   },
   {
     text: "Chat Support",
