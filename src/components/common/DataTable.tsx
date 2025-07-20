@@ -82,7 +82,12 @@ export const DataTable: React.FC<DataTableProps> = ({
   searchTerm: externalSearchTerm,
   onSearchChange,
   sortBy: externalSortBy,
-  onSortChange
+  onSortChange,
+  // Checkbox selection
+  showCheckboxes = true,
+  selectedRows = [],
+  onSelectionChange,
+  rowIdField = 'id'
 }) => {
     const [internalSearchTerm, setInternalSearchTerm] = useState('');
   const [internalSortBy, setInternalSortBy] = useState('');
