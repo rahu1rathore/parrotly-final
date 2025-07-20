@@ -89,7 +89,7 @@ export const DataTable: React.FC<DataTableProps> = ({
   onSelectionChange,
   rowIdField = 'id'
 }) => {
-    const [internalSearchTerm, setInternalSearchTerm] = useState('');
+  const [internalSearchTerm, setInternalSearchTerm] = useState('');
   const [internalSortBy, setInternalSortBy] = useState('');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
@@ -192,11 +192,16 @@ export const DataTable: React.FC<DataTableProps> = ({
     return { paginatedData: filtered, totalItems, totalPages: 1 };
   }, [data, searchTerm, sortBy, sortOrder, searchable, currentPage, currentPageSize, pagination]);
 
+  // Checkbox selection logic
+  const currentPageRowIds = paginatedData.map(row => row[rowIdField]);
+  const allCurrentPageSelected = currentPageRowIds.length > 0 && currentPageRowIds.every(id => selectedRows.includes(id));
+  const someCurrentPageSelected = currentPageRowIds.some(id => selectedRows.includes(id));
+
   const handleSort = (columnKey: string) => {
     if (sortBy === columnKey) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     } else {
-      setSortBy(columnKey);
+      handleSortChange(columnKey);
       setSortOrder('asc');
     }
   };
@@ -213,6 +218,31 @@ export const DataTable: React.FC<DataTableProps> = ({
   const handlePageSizeChange = (newPageSize: number) => {
     setCurrentPageSize(newPageSize);
     setCurrentPage(1);
+  };
+
+  // Checkbox handlers
+  const handleSelectAll = (checked: boolean) => {
+    if (!onSelectionChange) return;
+    
+    if (checked) {
+      // Add all current page rows to selection
+      const newSelection = [...new Set([...selectedRows, ...currentPageRowIds])];
+      onSelectionChange(newSelection);
+    } else {
+      // Remove all current page rows from selection
+      const newSelection = selectedRows.filter(id => !currentPageRowIds.includes(id));
+      onSelectionChange(newSelection);
+    }
+  };
+
+  const handleRowSelect = (rowId: string, checked: boolean) => {
+    if (!onSelectionChange) return;
+    
+    if (checked) {
+      onSelectionChange([...selectedRows, rowId]);
+    } else {
+      onSelectionChange(selectedRows.filter(id => id !== rowId));
+    }
   };
 
   // Generate page numbers for pagination
@@ -237,7 +267,7 @@ export const DataTable: React.FC<DataTableProps> = ({
 
   return (
     <div className={`bg-white rounded-lg shadow-sm border border-gray-200 ${className}`}>
-            {/* Top Bar Controls - Only show if showTopControls is true */}
+      {/* Top Bar Controls - Only show if showTopControls is true */}
       {showTopControls && (
         <div className="p-4 border-b border-gray-200">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -304,18 +334,25 @@ export const DataTable: React.FC<DataTableProps> = ({
         </div>
       )}
 
-      {/* Table */}
-      <div className="overflow-x-auto">
+      {/* Table Container - Fixed max height with scroll */}
+      <div className="max-h-96 overflow-auto">
         <table className="w-full">
-          <thead className="bg-gray-50 border-b border-gray-200">
+          <thead className="bg-gray-50 border-b border-gray-200 sticky top-0">
             <tr>
               {/* Checkbox Column */}
-              <th className="w-12 px-4 py-3 text-left">
-                <input
-                  type="checkbox"
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-              </th>
+              {showCheckboxes && (
+                <th className="w-12 px-4 py-3 text-left">
+                  <input
+                    type="checkbox"
+                    checked={allCurrentPageSelected}
+                    ref={(input) => {
+                      if (input) input.indeterminate = someCurrentPageSelected && !allCurrentPageSelected;
+                    }}
+                    onChange={(e) => handleSelectAll(e.target.checked)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                </th>
+              )}
 
               {/* Data Columns */}
               {columns.map((column) => (
@@ -359,9 +396,11 @@ export const DataTable: React.FC<DataTableProps> = ({
               // Loading State
               Array.from({ length: 5 }).map((_, index) => (
                 <tr key={index} className="animate-pulse">
-                  <td className="px-4 py-4">
-                    <div className="w-4 h-4 bg-gray-200 rounded"></div>
-                  </td>
+                  {showCheckboxes && (
+                    <td className="px-4 py-4">
+                      <div className="w-4 h-4 bg-gray-200 rounded"></div>
+                    </td>
+                  )}
                   {columns.map((column) => (
                     <td key={column.key} className="px-4 py-4">
                       <div className="h-4 bg-gray-200 rounded w-3/4"></div>
@@ -378,7 +417,7 @@ export const DataTable: React.FC<DataTableProps> = ({
               // Empty State
               <tr>
                 <td
-                  colSpan={columns.length + (tableActions.length > 0 ? 2 : 1)}
+                  colSpan={columns.length + (tableActions.length > 0 ? 1 : 0) + (showCheckboxes ? 1 : 0)}
                   className="px-4 py-12 text-center text-gray-500"
                 >
                   {emptyStateMessage}
@@ -386,66 +425,75 @@ export const DataTable: React.FC<DataTableProps> = ({
               </tr>
             ) : (
               // Data Rows
-              paginatedData.map((row, index) => (
-                <tr
-                  key={row.id || index}
-                  className={`hover:bg-gray-50 transition-colors duration-150 ${
-                    rowClassName ? rowClassName(row) : ''
-                  }`}
-                >
-                  {/* Checkbox */}
-                  <td className="px-4 py-4">
-                    <input
-                      type="checkbox"
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                    />
-                  </td>
+              paginatedData.map((row, index) => {
+                const rowId = row[rowIdField];
+                const isSelected = selectedRows.includes(rowId);
+                
+                return (
+                  <tr
+                    key={rowId || index}
+                    className={`hover:bg-gray-50 transition-colors duration-150 ${
+                      isSelected ? 'bg-blue-50' : ''
+                    } ${rowClassName ? rowClassName(row) : ''}`}
+                  >
+                    {/* Checkbox */}
+                    {showCheckboxes && (
+                      <td className="px-4 py-4">
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={(e) => handleRowSelect(rowId, e.target.checked)}
+                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        />
+                      </td>
+                    )}
 
-                  {/* Data Cells */}
-                  {columns.map((column) => (
-                    <td key={column.key} className="px-4 py-4 text-sm text-gray-900">
-                      {column.render
-                        ? column.render(row[column.key], row)
-                        : row[column.key] || '-'}
-                    </td>
-                  ))}
+                    {/* Data Cells */}
+                    {columns.map((column) => (
+                      <td key={column.key} className="px-4 py-4 text-sm text-gray-900">
+                        {column.render
+                          ? column.render(row[column.key], row)
+                          : row[column.key] || '-'}
+                      </td>
+                    ))}
 
-                  {/* Actions */}
-                  {tableActions.length > 0 && (
-                    <td className="px-4 py-4 text-center">
-                      <div className="relative">
-                        <button
-                          onClick={(e) => handleDropdownToggle(index, e)}
-                          className="text-gray-400 hover:text-gray-600 transition-colors duration-150 p-1 rounded-md hover:bg-gray-100"
-                        >
-                          <MoreVertical style={{ fontSize: '16px' }} />
-                        </button>
+                    {/* Actions */}
+                    {tableActions.length > 0 && (
+                      <td className="px-4 py-4 text-center">
+                        <div className="relative">
+                          <button
+                            onClick={(e) => handleDropdownToggle(index, e)}
+                            className="text-gray-400 hover:text-gray-600 transition-colors duration-150 p-1 rounded-md hover:bg-gray-100"
+                          >
+                            <MoreVertical style={{ fontSize: '16px' }} />
+                          </button>
 
-                        {/* Dropdown Menu */}
-                        {openDropdown === index && (
-                          <div className="absolute right-0 top-8 mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
-                            {tableActions.map((action, actionIndex) => (
-                              <button
-                                key={actionIndex}
-                                onClick={() => {
-                                  action.onClick(row);
-                                  setOpenDropdown(null);
-                                }}
-                                className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-50 transition-colors duration-150 ${
-                                  action.className || 'text-gray-700'
-                                }`}
-                              >
-                                {action.icon}
-                                {action.label}
-                              </button>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </td>
-                  )}
-                </tr>
-              ))
+                          {/* Dropdown Menu */}
+                          {openDropdown === index && (
+                            <div className="absolute right-0 top-8 mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+                              {tableActions.map((action, actionIndex) => (
+                                <button
+                                  key={actionIndex}
+                                  onClick={() => {
+                                    action.onClick(row);
+                                    setOpenDropdown(null);
+                                  }}
+                                  className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-50 transition-colors duration-150 ${
+                                    action.className || 'text-gray-700'
+                                  }`}
+                                >
+                                  {action.icon}
+                                  {action.label}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                    )}
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>
@@ -459,6 +507,11 @@ export const DataTable: React.FC<DataTableProps> = ({
             <div className="flex items-center gap-4">
               <span className="text-sm text-gray-700">
                 Showing {((currentPage - 1) * currentPageSize) + 1} to {Math.min(currentPage * currentPageSize, totalItems)} of {totalItems} entries
+                {selectedRows.length > 0 && (
+                  <span className="ml-2 text-blue-600 font-medium">
+                    ({selectedRows.length} selected)
+                  </span>
+                )}
               </span>
               
               {/* Entries per page dropdown */}
@@ -526,6 +579,11 @@ export const DataTable: React.FC<DataTableProps> = ({
           <div className="flex items-center justify-between text-sm text-gray-700">
             <span>
               Showing {paginatedData.length} of {totalItems} records
+              {selectedRows.length > 0 && (
+                <span className="ml-2 text-blue-600 font-medium">
+                  ({selectedRows.length} selected)
+                </span>
+              )}
             </span>
             {searchTerm && (
               <span className="text-blue-600">
