@@ -1,5 +1,10 @@
 import React from 'react';
 import { DataTable, TableColumn } from './DataTable';
+import {
+  Visibility as Eye,
+  Edit as Edit2,
+  Delete as Trash2
+} from '@mui/icons-material';
 
 // Sample customer data that matches the reference image
 const sampleCustomers = [
