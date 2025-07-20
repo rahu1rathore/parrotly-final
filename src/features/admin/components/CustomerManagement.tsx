@@ -688,34 +688,46 @@ const CustomerManagement: React.FC<CustomerManagementProps> = ({
     }
   };
 
-  // Get dynamic table columns based on current form configuration
-  const getTableColumns = () => {
-    const baseColumns = [
-      { id: "phone_number", label: "Phone Number", sortable: true },
-      { id: "organization_name", label: "Organization", sortable: true },
+    // Get dynamic table columns based on current form configuration
+  const getTableColumns = (): TableColumn[] => {
+    const baseColumns: TableColumn[] = [
+      {
+        key: "phone_number",
+        label: "Phone Number",
+        sortable: true,
+        render: (value, row) => (
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-medium">
+              {value.charAt(0)}
+            </div>
+            <div>
+              <div className="font-medium text-gray-900">{value}</div>
+              <div className="text-sm text-gray-500">{row.organization_name}</div>
+            </div>
+          </div>
+        )
+      },
+      {
+        key: "organization_name",
+        label: "Organization",
+        sortable: true
+      },
     ];
 
     if (selectedFormConfig) {
       const dynamicColumns = selectedFormConfig.fields
         .sort((a, b) => a.order - b.order)
-        .map((field) => ({
-          id: field.name,
+        .map((field): TableColumn => ({
+          key: field.name,
           label: field.label,
           sortable: true,
-          type: field.type,
+          render: (value) => renderCellValue(value, field.type),
         }));
 
-      return [
-        ...baseColumns,
-        ...dynamicColumns,
-        { id: "actions", label: "Actions", sortable: false },
-      ];
+      return [...baseColumns, ...dynamicColumns];
     }
 
-    return [
-      ...baseColumns,
-      { id: "actions", label: "Actions", sortable: false },
-    ];
+    return baseColumns;
   };
 
   // Render cell value based on field type
