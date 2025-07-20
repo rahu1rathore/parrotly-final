@@ -968,10 +968,10 @@ const CustomerManagement: React.FC<CustomerManagementProps> = ({
               loading={loading}
               searchable={false} // We have our own search
               sortable={true}
-              actions={[
+                            actions={[
                 {
                   label: 'View',
-                  icon: <ViewIcon className="w-4 h-4" />,
+                  icon: <ViewIcon style={{ fontSize: '16px' }} />,
                   onClick: (row) => {
                     setViewingCustomer(row);
                     setViewDialogOpen(true);
@@ -980,7 +980,7 @@ const CustomerManagement: React.FC<CustomerManagementProps> = ({
                 },
                 {
                   label: 'Edit',
-                  icon: <EditIcon className="w-4 h-4" />,
+                  icon: <EditIcon style={{ fontSize: '16px' }} />,
                   onClick: (row) => {
                     setEditingCustomer(row);
                     setFormData({
@@ -995,7 +995,7 @@ const CustomerManagement: React.FC<CustomerManagementProps> = ({
                 },
                 {
                   label: 'Delete',
-                  icon: <DeleteIcon className="w-4 h-4" />,
+                  icon: <DeleteIcon style={{ fontSize: '16px' }} />,
                   onClick: (row) => {
                     setDeletingCustomer(row);
                     setDeleteDialogOpen(true);
