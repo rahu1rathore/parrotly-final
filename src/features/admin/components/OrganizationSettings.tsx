@@ -44,9 +44,8 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  List,
+    List,
   ListItem,
-  ListItemText,
   ListItemSecondaryAction,
 } from "@mui/material";
 import {
