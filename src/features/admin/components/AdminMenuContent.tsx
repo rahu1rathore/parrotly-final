@@ -20,6 +20,8 @@ import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
 import MessageRoundedIcon from "@mui/icons-material/MessageRounded";
 import CampaignRoundedIcon from "@mui/icons-material/CampaignRounded";
 import SmartToyRoundedIcon from "@mui/icons-material/SmartToyRounded";
+import TrendingUpRoundedIcon from "@mui/icons-material/TrendingUpRounded";
+import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
 import TableViewRoundedIcon from "@mui/icons-material/TableViewRounded";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import HelpOutlineRoundedIcon from "@mui/icons-material/HelpOutlineRounded";
@@ -63,8 +65,26 @@ const mainListItems = [
     path: "/admin/whatsapp-templates",
     description: "Create & manage WhatsApp templates",
   },
+    {
+    text: "Leads",
+    icon: <CampaignRoundedIcon />,
+    path: "/admin/leads",
+    description: "Manage leads and campaigns",
+  },
   {
-    text: "Lead Management",
+    text: "Tasks",
+    icon: <AssignmentRoundedIcon />,
+    path: "/admin/tasks",
+    description: "Track and manage tasks",
+  },
+  {
+    text: "Deals",
+    icon: <TrendingUpRoundedIcon />,
+    path: "/admin/deals",
+    description: "Sales pipeline and opportunities",
+  },
+  {
+    text: "Lead Management System",
     icon: <CampaignRoundedIcon />,
     path: "/admin/lead-management",
     description: "Campaigns, forms & lead tracking",
