@@ -13,7 +13,10 @@ import AdminSideMenu from "../components/AdminSideMenu";
 import ModuleManagementClean from "../components/ModuleManagementClean";
 import SubscriptionManagementStandardized from "../components/SubscriptionManagementStandardized";
 import OrganizationManagementStandardized from "../components/OrganizationManagementStandardized";
-import CustomerManagement from "../components/CustomerManagement";
+import CustomerManagementStandardized from "../components/CustomerManagementStandardized";
+import LeadManagementStandardized from "../components/LeadManagementStandardized";
+import TaskManagementStandardized from "../components/TaskManagementStandardized";
+import DealsManagementStandardized from "../components/DealsManagementStandardized";
 import InterveneAdminChat from "../components/InterveneAdminChat";
 import WhatsAppTemplateManagementStandardized from "../components/WhatsAppTemplateManagementStandardized";
 import LeadManagementSystem from "../components/LeadManagementSystem";
@@ -39,9 +42,12 @@ const getPageTitle = (pathname: string) => {
   if (pathname.includes("/modules")) return "Module Management";
   if (pathname.includes("/subscriptions")) return "Subscription Management";
   if (pathname.includes("/organizations")) return "Organization Management";
-  if (pathname.includes("/customers")) return "Customer Management";
+    if (pathname.includes("/customers")) return "Customer Management";
   if (pathname.includes("/whatsapp-templates")) return "WhatsApp Templates";
-  if (pathname.includes("/lead-management")) return "Lead Management";
+  if (pathname.includes("/leads")) return "Lead Management";
+  if (pathname.includes("/tasks")) return "Task Management";
+  if (pathname.includes("/deals")) return "Deals Management";
+  if (pathname.includes("/lead-management")) return "Lead Management System";
   if (pathname.includes("/chatbot-builder")) return "Chatbot Builder";
   if (pathname.includes("/datatable-demo")) return "DataTable Demo";
   if (pathname.includes("/chat")) return "Admin Chat";
@@ -58,10 +64,16 @@ const getPageSubtitle = (pathname: string) => {
     return "Configure subscription plans and pricing";
   if (pathname.includes("/organizations"))
     return "Manage organizations and their information";
-  if (pathname.includes("/customers"))
+    if (pathname.includes("/customers"))
     return "Manage customers with dynamic forms and configurations";
   if (pathname.includes("/whatsapp-templates"))
     return "Create and manage WhatsApp message templates with live preview";
+  if (pathname.includes("/leads"))
+    return "Manage leads, campaigns, and customer acquisition";
+  if (pathname.includes("/tasks"))
+    return "Track and manage tasks with priority and assignments";
+  if (pathname.includes("/deals"))
+    return "Track sales opportunities and deal pipeline";
   if (pathname.includes("/lead-management"))
     return "Campaigns, dynamic forms, lead tracking, assignments, and tasks";
   if (pathname.includes("/chatbot-builder"))
@@ -245,12 +257,15 @@ export default function AdminDashboard() {
                     path="organizations"
                     element={<OrganizationManagementStandardized />}
                   />
-                  <Route path="customers" element={<CustomerManagement />} />
+                                    <Route path="customers" element={<CustomerManagementStandardized />} />
                                     <Route
                     path="whatsapp-templates"
                     element={<WhatsAppTemplateManagementStandardized />}
                   />
-                                    <Route
+                                                      <Route path="leads" element={<LeadManagementStandardized />} />
+                  <Route path="tasks" element={<TaskManagementStandardized />} />
+                  <Route path="deals" element={<DealsManagementStandardized />} />
+                  <Route
                     path="lead-management"
                     element={<LeadManagementSystem />}
                   />
