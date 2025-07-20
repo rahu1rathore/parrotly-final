@@ -26,6 +26,9 @@ import TableViewRoundedIcon from "@mui/icons-material/TableViewRounded";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import HelpOutlineRoundedIcon from "@mui/icons-material/HelpOutlineRounded";
 import ExitToAppRoundedIcon from "@mui/icons-material/ExitToAppRounded";
+import GroupRoundedIcon from "@mui/icons-material/GroupRounded";
+import SecurityRoundedIcon from "@mui/icons-material/SecurityRounded";
+import AdminPanelSettingsRoundedIcon from "@mui/icons-material/AdminPanelSettingsRounded";
 
 const mainListItems = [
   {
