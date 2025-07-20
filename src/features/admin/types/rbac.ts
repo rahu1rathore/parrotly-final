@@ -75,6 +75,16 @@ export interface UserFormData {
   password?: string;
 }
 
+export interface Organization {
+  id: string;
+  name: string;
+  domain?: string;
+  subscriptionPlanId: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface OrganizationSubscription {
   id: string;
   organizationId: string;
