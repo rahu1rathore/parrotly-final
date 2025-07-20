@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
-  MoreVertical,
-  Eye,
-  Edit2,
-  Trash2,
-  Plus,
+  MoreVert as MoreVertical,
+  Visibility as Eye,
+  Edit as Edit2,
+  Delete as Trash2,
+  Add as Plus,
   Download,
   Search,
-  ChevronDown,
-  ChevronUp,
-  ArrowUpDown
-} from 'lucide-react';
+  KeyboardArrowDown as ChevronDown,
+  KeyboardArrowUp as ChevronUp,
+  UnfoldMore as ArrowUpDown
+} from '@mui/icons-material';
 
 export interface TableColumn {
   key: string;
