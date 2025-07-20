@@ -9,7 +9,9 @@ import {
   Search,
   KeyboardArrowDown as ChevronDown,
   KeyboardArrowUp as ChevronUp,
-  UnfoldMore as ArrowUpDown
+  UnfoldMore as ArrowUpDown,
+  ChevronLeft,
+  ChevronRight
 } from '@mui/icons-material';
 
 export interface TableColumn {
@@ -67,7 +69,7 @@ export const DataTable: React.FC<DataTableProps> = ({
   pageSize = 10,
   pageSizeOptions = [10, 25, 50, 100]
 }) => {
-    const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
@@ -78,19 +80,19 @@ export const DataTable: React.FC<DataTableProps> = ({
   const defaultActions: TableAction[] = [
     {
       label: 'View',
-      icon: <Eye className="w-4 h-4" />,
+      icon: <Eye style={{ fontSize: '16px' }} />,
       onClick: (row) => console.log('View:', row),
       className: 'text-gray-600 hover:text-blue-600'
     },
     {
       label: 'Edit',
-      icon: <Edit2 className="w-4 h-4" />,
+      icon: <Edit2 style={{ fontSize: '16px' }} />,
       onClick: (row) => console.log('Edit:', row),
       className: 'text-gray-600 hover:text-yellow-600'
     },
     {
       label: 'Delete',
-      icon: <Trash2 className="w-4 h-4" />,
+      icon: <Trash2 style={{ fontSize: '16px' }} />,
       onClick: (row) => console.log('Delete:', row),
       className: 'text-gray-600 hover:text-red-600'
     }
@@ -105,8 +107,13 @@ export const DataTable: React.FC<DataTableProps> = ({
     return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
-  // Filter and sort data
-  const processedData = useMemo(() => {
+  // Reset page when search or filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, sortBy, currentPageSize]);
+
+  // Filter, sort and paginate data
+  const { paginatedData, totalItems, totalPages } = useMemo(() => {
     let filtered = data;
 
     // Search filter
@@ -130,8 +137,20 @@ export const DataTable: React.FC<DataTableProps> = ({
       });
     }
 
-    return filtered;
-  }, [data, searchTerm, sortBy, sortOrder, searchable]);
+    // Pagination
+    const totalItems = filtered.length;
+    const totalPages = Math.ceil(totalItems / currentPageSize);
+    
+    if (pagination) {
+      const startIndex = (currentPage - 1) * currentPageSize;
+      const endIndex = startIndex + currentPageSize;
+      const paginatedData = filtered.slice(startIndex, endIndex);
+      
+      return { paginatedData, totalItems, totalPages };
+    }
+
+    return { paginatedData: filtered, totalItems, totalPages: 1 };
+  }, [data, searchTerm, sortBy, sortOrder, searchable, currentPage, currentPageSize, pagination]);
 
   const handleSort = (columnKey: string) => {
     if (sortBy === columnKey) {
@@ -147,6 +166,35 @@ export const DataTable: React.FC<DataTableProps> = ({
     setOpenDropdown(openDropdown === index ? null : index);
   };
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handlePageSizeChange = (newPageSize: number) => {
+    setCurrentPageSize(newPageSize);
+    setCurrentPage(1);
+  };
+
+  // Generate page numbers for pagination
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    const maxPagesToShow = 5;
+    
+    let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+    let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+    
+    // Adjust startPage if endPage is at the limit
+    if (endPage - startPage + 1 < maxPagesToShow) {
+      startPage = Math.max(1, endPage - maxPagesToShow + 1);
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i);
+    }
+    
+    return pageNumbers;
+  };
+
   return (
     <div className={`bg-white rounded-lg shadow-sm border border-gray-200 ${className}`}>
       {/* Top Bar Controls */}
@@ -156,7 +204,7 @@ export const DataTable: React.FC<DataTableProps> = ({
           <div className="flex-1 max-w-md">
             {searchable && (
               <div className="relative">
-                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" style={{ fontSize: '16px' }} />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" style={{ fontSize: '16px' }} />
                 <input
                   type="text"
                   placeholder={searchPlaceholder}
@@ -185,7 +233,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                     </option>
                   ))}
                 </select>
-                                <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" style={{ fontSize: '16px' }} />
+                <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" style={{ fontSize: '16px' }} />
               </div>
             )}
 
@@ -195,7 +243,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                 onClick={onAdd}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-medium transition-colors duration-200"
               >
-                                <Plus style={{ fontSize: '16px' }} />
+                <Plus style={{ fontSize: '16px' }} />
                 {addButtonText}
               </button>
             )}
@@ -207,7 +255,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                 className="border border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900 px-3 py-2 rounded-lg flex items-center transition-colors duration-200"
                 title="Download data"
               >
-                                <Download style={{ fontSize: '16px' }} />
+                <Download style={{ fontSize: '16px' }} />
               </button>
             )}
           </div>
@@ -243,12 +291,12 @@ export const DataTable: React.FC<DataTableProps> = ({
                       <div className="flex flex-col">
                         {sortBy === column.key ? (
                           sortOrder === 'asc' ? (
-                                                        <ChevronUp style={{ fontSize: '12px' }} />
+                            <ChevronUp style={{ fontSize: '12px' }} />
                           ) : (
-                                                        <ChevronDown style={{ fontSize: '12px' }} />
+                            <ChevronDown style={{ fontSize: '12px' }} />
                           )
                         ) : (
-                                                    <ArrowUpDown style={{ fontSize: '12px' }} className="text-gray-300" />
+                          <ArrowUpDown style={{ fontSize: '12px' }} className="text-gray-300" />
                         )}
                       </div>
                     )}
@@ -284,7 +332,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                   )}
                 </tr>
               ))
-            ) : processedData.length === 0 ? (
+            ) : paginatedData.length === 0 ? (
               // Empty State
               <tr>
                 <td
@@ -296,7 +344,7 @@ export const DataTable: React.FC<DataTableProps> = ({
               </tr>
             ) : (
               // Data Rows
-              processedData.map((row, index) => (
+              paginatedData.map((row, index) => (
                 <tr
                   key={row.id || index}
                   className={`hover:bg-gray-50 transition-colors duration-150 ${
@@ -328,7 +376,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                           onClick={(e) => handleDropdownToggle(index, e)}
                           className="text-gray-400 hover:text-gray-600 transition-colors duration-150 p-1 rounded-md hover:bg-gray-100"
                         >
-                                                    <MoreVertical style={{ fontSize: '16px' }} />
+                          <MoreVertical style={{ fontSize: '16px' }} />
                         </button>
 
                         {/* Dropdown Menu */}
@@ -361,19 +409,90 @@ export const DataTable: React.FC<DataTableProps> = ({
         </table>
       </div>
 
-      {/* Table Footer */}
-      <div className="px-4 py-3 border-t border-gray-200 bg-gray-50">
-        <div className="flex items-center justify-between text-sm text-gray-700">
-          <span>
-            Showing {processedData.length} of {data.length} records
-          </span>
-          {searchTerm && (
-            <span className="text-blue-600">
-              Filtered by: "{searchTerm}"
-            </span>
-          )}
+      {/* Pagination */}
+      {pagination && totalPages > 1 && (
+        <div className="px-4 py-3 border-t border-gray-200 bg-gray-50">
+          <div className="flex items-center justify-between">
+            {/* Left side - Entry info and page size */}
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-gray-700">
+                Showing {((currentPage - 1) * currentPageSize) + 1} to {Math.min(currentPage * currentPageSize, totalItems)} of {totalItems} entries
+              </span>
+              
+              {/* Entries per page dropdown */}
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-700">Show</span>
+                <select
+                  value={currentPageSize}
+                  onChange={(e) => handlePageSizeChange(Number(e.target.value))}
+                  className="border border-gray-300 rounded px-2 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                >
+                  {pageSizeOptions.map(size => (
+                    <option key={size} value={size}>{size}</option>
+                  ))}
+                </select>
+                <span className="text-sm text-gray-700">entries</span>
+              </div>
+            </div>
+
+            {/* Right side - Page navigation */}
+            <div className="flex items-center gap-2">
+              {/* Previous button */}
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+              >
+                <ChevronLeft style={{ fontSize: '16px' }} />
+                Previous
+              </button>
+
+              {/* Page numbers */}
+              <div className="flex items-center gap-1">
+                {getPageNumbers().map(pageNum => (
+                  <button
+                    key={pageNum}
+                    onClick={() => handlePageChange(pageNum)}
+                    className={`px-3 py-1 text-sm rounded-md transition-colors ${
+                      currentPage === pageNum
+                        ? 'bg-blue-600 text-white'
+                        : 'text-gray-700 hover:bg-gray-100'
+                    }`}
+                  >
+                    {pageNum}
+                  </button>
+                ))}
+              </div>
+
+              {/* Next button */}
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+              >
+                Next
+                <ChevronRight style={{ fontSize: '16px' }} />
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* Simple footer for non-paginated tables */}
+      {!pagination && (
+        <div className="px-4 py-3 border-t border-gray-200 bg-gray-50">
+          <div className="flex items-center justify-between text-sm text-gray-700">
+            <span>
+              Showing {paginatedData.length} of {totalItems} records
+            </span>
+            {searchTerm && (
+              <span className="text-blue-600">
+                Filtered by: "{searchTerm}"
+              </span>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
