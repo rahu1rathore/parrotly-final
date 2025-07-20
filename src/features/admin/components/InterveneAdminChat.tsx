@@ -432,14 +432,22 @@ const InterveneAdminChat: React.FC<InterveneAdminChatProps> = ({
                     </Avatar>
                   </Badge>
                 </ListItemAvatar>
-                <ListItemText
+                                <ListItemText
                   primary={
-                    <Stack
-                      direction="row"
-                      alignItems="center"
-                      justifyContent="space-between"
+                    <Box
+                      component="span"
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
                     >
-                      <Typography variant="subtitle1" fontWeight={500} noWrap>
+                      <Typography
+                        component="span"
+                        variant="subtitle1"
+                        fontWeight={500}
+                        noWrap
+                      >
                         {chat.user_name}
                       </Typography>
                       {chat.unread_count > 0 && (
@@ -455,15 +463,19 @@ const InterveneAdminChat: React.FC<InterveneAdminChatProps> = ({
                           }}
                         />
                       )}
-                    </Stack>
+                    </Box>
                   }
                   secondary={
-                    <Stack
-                      direction="row"
-                      alignItems="center"
-                      justifyContent="space-between"
+                    <Box
+                      component="span"
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
                     >
                       <Typography
+                        component="span"
                         variant="body2"
                         color="text.secondary"
                         noWrap
@@ -471,10 +483,14 @@ const InterveneAdminChat: React.FC<InterveneAdminChatProps> = ({
                       >
                         {chat.last_message}
                       </Typography>
-                      <Typography variant="caption" color="text.secondary">
+                      <Typography
+                        component="span"
+                        variant="caption"
+                        color="text.secondary"
+                      >
                         {formatMessageTime(chat.last_message_time || "")}
                       </Typography>
-                    </Stack>
+                    </Box>
                   }
                 />
               </ListItemButton>
