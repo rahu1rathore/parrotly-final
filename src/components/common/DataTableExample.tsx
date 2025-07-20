@@ -201,21 +201,21 @@ const DataTableExample: React.FC = () => {
   };
 
   const customActions = [
-    {
+        {
       label: 'View Profile',
-      icon: <div className="w-4 h-4 rounded-full bg-gray-400"></div>,
+      icon: <Eye style={{ fontSize: '16px' }} />,
       onClick: (row: any) => console.log('View profile:', row),
       className: 'text-gray-600 hover:text-blue-600'
     },
     {
       label: 'Edit Customer',
-      icon: <div className="w-4 h-4 bg-yellow-400"></div>,
+      icon: <Edit2 style={{ fontSize: '16px' }} />,
       onClick: (row: any) => console.log('Edit customer:', row),
       className: 'text-gray-600 hover:text-yellow-600'
     },
     {
       label: 'Delete Customer',
-      icon: <div className="w-4 h-4 bg-red-400"></div>,
+      icon: <Trash2 style={{ fontSize: '16px' }} />,
       onClick: (row: any) => {
         if (window.confirm(`Are you sure you want to delete ${row.userName}?`)) {
           console.log('Delete customer:', row);
