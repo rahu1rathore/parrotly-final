@@ -148,7 +148,7 @@ export const DataTable: React.FC<DataTableProps> = ({
           <div className="flex-1 max-w-md">
             {searchable && (
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" style={{ fontSize: '16px' }} />
                 <input
                   type="text"
                   placeholder={searchPlaceholder}
@@ -177,7 +177,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" />
+                                <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" style={{ fontSize: '16px' }} />
               </div>
             )}
 
@@ -187,7 +187,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                 onClick={onAdd}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-medium transition-colors duration-200"
               >
-                <Plus className="w-4 h-4" />
+                                <Plus style={{ fontSize: '16px' }} />
                 {addButtonText}
               </button>
             )}
@@ -199,7 +199,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                 className="border border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900 px-3 py-2 rounded-lg flex items-center transition-colors duration-200"
                 title="Download data"
               >
-                <Download className="w-4 h-4" />
+                                <Download style={{ fontSize: '16px' }} />
               </button>
             )}
           </div>
@@ -235,12 +235,12 @@ export const DataTable: React.FC<DataTableProps> = ({
                       <div className="flex flex-col">
                         {sortBy === column.key ? (
                           sortOrder === 'asc' ? (
-                            <ChevronUp className="w-3 h-3" />
+                                                        <ChevronUp style={{ fontSize: '12px' }} />
                           ) : (
-                            <ChevronDown className="w-3 h-3" />
+                                                        <ChevronDown style={{ fontSize: '12px' }} />
                           )
                         ) : (
-                          <ArrowUpDown className="w-3 h-3 text-gray-300" />
+                                                    <ArrowUpDown style={{ fontSize: '12px' }} className="text-gray-300" />
                         )}
                       </div>
                     )}
@@ -320,7 +320,7 @@ export const DataTable: React.FC<DataTableProps> = ({
                           onClick={(e) => handleDropdownToggle(index, e)}
                           className="text-gray-400 hover:text-gray-600 transition-colors duration-150 p-1 rounded-md hover:bg-gray-100"
                         >
-                          <MoreVertical className="w-4 h-4" />
+                                                    <MoreVertical style={{ fontSize: '16px' }} />
                         </button>
 
                         {/* Dropdown Menu */}
