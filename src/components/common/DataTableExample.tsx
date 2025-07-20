@@ -206,7 +206,7 @@ const DataTableExample: React.FC = () => {
   };
 
   const customActions = [
-        {
+    {
       label: 'View Profile',
       icon: <Eye style={{ fontSize: '16px' }} />,
       onClick: (row: any) => console.log('View profile:', row),
@@ -230,28 +230,31 @@ const DataTableExample: React.FC = () => {
     }
   ];
 
-      return (
-    <div className="p-6 bg-gray-50 h-full">
-      <div className="max-w-7xl mx-auto h-full">
+  return (
+    <div className="p-6 bg-gray-50">
+      <div className="max-w-7xl mx-auto">
         <DataTable
           columns={columns}
           data={sampleCustomers}
           searchable={true}
           sortable={true}
+          pagination={true}
+          pageSize={5}
+          pageSizeOptions={[5, 10, 25, 50]}
           actions={customActions}
           onAdd={handleAddCustomer}
           onDownload={handleDownload}
           addButtonText="+ Add Customer"
           searchPlaceholder="Search 200 records..."
           sortOptions={sortOptions}
-                    className="shadow-lg h-full"
+          className="shadow-lg"
           rowClassName={(row) => 
             row.status === 'Verified' ? 'bg-green-50' : 
             row.status === 'Rejected' ? 'bg-red-50' : 
             'bg-white'
           }
           emptyStateMessage="No customers found. Add your first customer to get started."
-                />
+        />
       </div>
     </div>
   );
