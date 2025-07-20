@@ -63,6 +63,7 @@ import {
   Lock as LockIcon,
 } from "@mui/icons-material";
 import { Role, RoleFormData, ModuleDefinition, ModuleAction, Organization, SubscriptionPlan, User } from "../types/rbac";
+import { format } from "date-fns";
 
 interface RoleManagementProps {
   organizationId?: string;
@@ -1042,7 +1043,517 @@ const RoleManagement: React.FC<RoleManagementProps> = ({
           </Dialog>
         ))}
 
-        {/* Other dialogs would go here... */}
+                {/* View Role Dialog */}
+        <Dialog
+          open={dialogs.view}
+          onClose={() => setDialogs((prev) => ({ ...prev, view: false }))}
+          maxWidth="md"
+          fullWidth
+        >
+          <DialogTitle>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
+                <GroupIcon className="text-purple-600" />
+              </div>
+              <div>
+                <Typography variant="h6">{viewingRole?.name}</Typography>
+                <Typography variant="body2" className="text-gray-600">
+                  Role Details
+                </Typography>
+              </div>
+            </div>
+          </DialogTitle>
+          <DialogContent>
+            {viewingRole && (
+              <Stack spacing={3} sx={{ mt: 1 }}>
+                <div>
+                  <Typography variant="subtitle2" className="font-semibold mb-1">
+                    Description
+                  </Typography>
+                  <Typography variant="body2" className="text-gray-700">
+                    {viewingRole.description || "No description provided"}
+                  </Typography>
+                </div>
+
+                <div>
+                  <Typography variant="subtitle2" className="font-semibold mb-2">
+                    Organization
+                  </Typography>
+                  <Typography variant="body2" className="text-gray-700">
+                    {viewingRole.organizationId}
+                  </Typography>
+                </div>
+
+                <div>
+                  <Typography variant="subtitle2" className="font-semibold mb-2">
+                    Assigned Users ({getUsersWithRole(viewingRole.id).length})
+                  </Typography>
+                  <div className="space-y-2">
+                    {getUsersWithRole(viewingRole.id).length > 0 ? (
+                      getUsersWithRole(viewingRole.id).map((user) => (
+                        <div key={user.id} className="flex items-center gap-3 p-2 bg-gray-50 rounded">
+                          <Avatar className="w-8 h-8">
+                            {user.name.charAt(0).toUpperCase()}
+                          </Avatar>
+                          <div>
+                            <Typography variant="body2" className="font-medium">
+                              {user.name}
+                            </Typography>
+                            <Typography variant="caption" className="text-gray-600">
+                              {user.email}
+                            </Typography>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <Typography variant="body2" className="text-gray-500 italic">
+                        No users assigned to this role
+                      </Typography>
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  <Typography variant="subtitle2" className="font-semibold mb-2">
+                    Permissions Summary
+                  </Typography>
+                  <div className="space-y-2">
+                    {Object.entries(viewingRole.permissions).map(([moduleId, actions]) => {
+                      const module = modules.find(m => m.id === moduleId);
+                      return (
+                        <div key={moduleId} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                          <div className="flex items-center gap-2">
+                            <div className="w-6 h-6 rounded bg-blue-100 flex items-center justify-center">
+                              {getCategoryIcon(module?.category || "Core")}
+                            </div>
+                            <Typography variant="body2" className="font-medium">
+                              {module?.displayName || moduleId}
+                            </Typography>
+                          </div>
+                          <div className="flex gap-1">
+                            {actions.map((action) => (
+                              <Chip
+                                key={action}
+                                label={action}
+                                size="small"
+                                variant="outlined"
+                                className="text-xs"
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div>
+                  <Typography variant="subtitle2" className="font-semibold mb-1">
+                    Status
+                  </Typography>
+                  <Chip
+                    label={viewingRole.isActive ? "Active" : "Inactive"}
+                    color={viewingRole.isActive ? "success" : "default"}
+                    size="small"
+                    icon={viewingRole.isActive ? <CheckCircleIcon style={{ fontSize: 14 }} /> : undefined}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Typography variant="subtitle2" className="font-semibold mb-1">
+                      Created
+                    </Typography>
+                    <Typography variant="body2" className="text-gray-700">
+                      {viewingRole.createdAt ? format(new Date(viewingRole.createdAt), "PPP") : "Unknown"}
+                    </Typography>
+                    <Typography variant="caption" className="text-gray-500">
+                      by {viewingRole.createdBy}
+                    </Typography>
+                  </div>
+                  <div>
+                    <Typography variant="subtitle2" className="font-semibold mb-1">
+                      Last Updated
+                    </Typography>
+                    <Typography variant="body2" className="text-gray-700">
+                      {viewingRole.updatedAt ? format(new Date(viewingRole.updatedAt), "PPP") : "Unknown"}
+                    </Typography>
+                  </div>
+                </div>
+              </Stack>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setDialogs((prev) => ({ ...prev, view: false }))}>
+              Close
+            </Button>
+            <Button
+              variant="outlined"
+              startIcon={<EditIcon />}
+              onClick={() => {
+                if (viewingRole) {
+                  setDialogs((prev) => ({ ...prev, view: false }));
+                  openEditDialog(viewingRole);
+                }
+              }}
+            >
+              Edit
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* Delete Role Dialog */}
+        <Dialog
+          open={dialogs.delete}
+          onClose={() => setDialogs((prev) => ({ ...prev, delete: false }))}
+          maxWidth="sm"
+          fullWidth
+        >
+          <DialogTitle>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center">
+                <WarningIcon className="text-red-600" />
+              </div>
+              <div>
+                <Typography variant="h6">Delete Role</Typography>
+                <Typography variant="body2" className="text-gray-600">
+                  This action cannot be undone
+                </Typography>
+              </div>
+            </div>
+          </DialogTitle>
+          <DialogContent>
+            {viewingRole && (
+              <div className="space-y-4">
+                <Alert severity="warning" className="mb-4">
+                  You are about to delete the role <strong>{viewingRole.name}</strong>.
+                </Alert>
+
+                <div className="bg-gray-50 p-3 rounded">
+                  <Typography variant="subtitle2" className="font-semibold mb-1">
+                    Role Details
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>Name:</strong> {viewingRole.name}
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>Description:</strong> {viewingRole.description || "No description"}
+                  </Typography>
+                  <Typography variant="body2">
+                    <strong>Permissions:</strong> {getRolePermissionSummary(viewingRole)}
+                  </Typography>
+                </div>
+
+                {getUsersWithRole(viewingRole.id).length > 0 && (
+                  <Alert severity="error">
+                    <Typography variant="body2">
+                      <strong>Warning:</strong> This role is currently assigned to {getUsersWithRole(viewingRole.id).length} user(s).
+                      You must reassign these users to another role before deleting this role.
+                    </Typography>
+                    <div className="mt-2">
+                      {getUsersWithRole(viewingRole.id).map((user) => (
+                        <div key={user.id} className="flex items-center gap-2 mt-1">
+                          <PersonIcon style={{ fontSize: 16 }} />
+                          <Typography variant="caption">
+                            {user.name} ({user.email})
+                          </Typography>
+                        </div>
+                      ))}
+                    </div>
+                  </Alert>
+                )}
+              </div>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setDialogs((prev) => ({ ...prev, delete: false }))}>
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              startIcon={<DeleteIcon />}
+              onClick={() => viewingRole && handleDeleteRole(viewingRole)}
+              disabled={viewingRole ? getUsersWithRole(viewingRole.id).length > 0 : false}
+            >
+              Delete Role
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* Bulk Delete Dialog */}
+        <Dialog
+          open={dialogs.bulkDelete}
+          onClose={() => setDialogs((prev) => ({ ...prev, bulkDelete: false }))}
+          maxWidth="sm"
+          fullWidth
+        >
+          <DialogTitle>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center">
+                <BulkDeleteIcon className="text-red-600" />
+              </div>
+              <div>
+                <Typography variant="h6">Delete Multiple Roles</Typography>
+                <Typography variant="body2" className="text-gray-600">
+                  This action cannot be undone
+                </Typography>
+              </div>
+            </div>
+          </DialogTitle>
+          <DialogContent>
+            <div className="space-y-4">
+              <Alert severity="warning">
+                You are about to delete <strong>{selectedRoles.length}</strong> role(s).
+              </Alert>
+
+              <div className="bg-gray-50 p-3 rounded max-h-64 overflow-y-auto">
+                <Typography variant="subtitle2" className="font-semibold mb-2">
+                  Roles to be deleted:
+                </Typography>
+                <div className="space-y-2">
+                  {roles
+                    .filter((role) => selectedRoles.includes(role.id))
+                    .map((role) => {
+                      const assignedUsers = getUsersWithRole(role.id);
+                      const hasUsers = assignedUsers.length > 0;
+                      return (
+                        <div
+                          key={role.id}
+                          className={`flex items-center justify-between p-2 rounded ${
+                            hasUsers ? "bg-red-50 border border-red-200" : "bg-white"
+                          }`}
+                        >
+                          <div className="flex items-center gap-2">
+                            <GroupIcon className="text-gray-400" style={{ fontSize: 16 }} />
+                            <div>
+                              <Typography variant="body2" className="font-medium">
+                                {role.name}
+                              </Typography>
+                              <Typography variant="caption" className="text-gray-600">
+                                {role.description || "No description"}
+                              </Typography>
+                            </div>
+                          </div>
+                          {hasUsers && (
+                            <div className="flex items-center gap-1 text-red-600">
+                              <WarningIcon style={{ fontSize: 16 }} />
+                              <Typography variant="caption">
+                                {assignedUsers.length} user(s)
+                              </Typography>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+
+              {roles
+                .filter((role) => selectedRoles.includes(role.id))
+                .some((role) => getUsersWithRole(role.id).length > 0) && (
+                <Alert severity="error">
+                  <Typography variant="body2">
+                    <strong>Warning:</strong> Some roles have assigned users. You must reassign these users before deleting the roles.
+                  </Typography>
+                </Alert>
+              )}
+            </div>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setDialogs((prev) => ({ ...prev, bulkDelete: false }))}>
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              startIcon={<BulkDeleteIcon />}
+              onClick={handleBulkDelete}
+              disabled={roles
+                .filter((role) => selectedRoles.includes(role.id))
+                .some((role) => getUsersWithRole(role.id).length > 0)}
+            >
+              Delete {selectedRoles.length} Roles
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* Permissions Dialog */}
+        <Dialog
+          open={dialogs.permissions}
+          onClose={() => setDialogs((prev) => ({ ...prev, permissions: false }))}
+          maxWidth="lg"
+          fullWidth
+        >
+          <DialogTitle>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
+                <SecurityIcon className="text-green-600" />
+              </div>
+              <div>
+                <Typography variant="h6">Manage Permissions</Typography>
+                <Typography variant="body2" className="text-gray-600">
+                  {viewingRole?.name} - Configure module access and actions
+                </Typography>
+              </div>
+            </div>
+          </DialogTitle>
+          <DialogContent>
+            {viewingRole && (
+              <div className="space-y-4 mt-2">
+                {/* Subscription Plan Info */}
+                {subscriptionPlan && (
+                  <Alert severity="info" className="mb-4">
+                    <Typography variant="body2">
+                      <strong>Subscription Plan:</strong> {subscriptionPlan.planName} ({subscriptionPlan.version})
+                      <br />
+                      Permissions are limited by the organization's subscription plan.
+                    </Typography>
+                  </Alert>
+                )}
+
+                {/* Current Permissions Summary */}
+                <Card variant="outlined" className="mb-4">
+                  <CardContent>
+                    <Typography variant="subtitle1" className="font-semibold mb-2">
+                      Current Permissions Summary
+                    </Typography>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                      {Object.entries(viewingRole.permissions).map(([moduleId, actions]) => {
+                        const module = modules.find(m => m.id === moduleId);
+                        return (
+                          <div key={moduleId} className="bg-gray-50 p-3 rounded">
+                            <div className="flex items-center gap-2 mb-2">
+                              <div className="w-6 h-6 rounded bg-blue-100 flex items-center justify-center">
+                                {getCategoryIcon(module?.category || "Core")}
+                              </div>
+                              <Typography variant="body2" className="font-medium">
+                                {module?.displayName || moduleId}
+                              </Typography>
+                            </div>
+                            <div className="flex flex-wrap gap-1">
+                              {actions.map((action) => (
+                                <Chip
+                                  key={action}
+                                  label={action}
+                                  size="small"
+                                  variant="outlined"
+                                  className="text-xs"
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Module Permissions Grid */}
+                <div className="space-y-3">
+                  <Typography variant="subtitle1" className="font-semibold">
+                    Module Permissions
+                  </Typography>
+                  <div className="space-y-3">
+                    {modules.map((module) => {
+                      const roleActions = viewingRole.permissions[module.id] || [];
+                      const subscriptionActions = subscriptionPlan?.modules[module.id] || [];
+                      return (
+                        <Card key={module.id} variant="outlined">
+                          <CardContent className="py-3">
+                            <div className="flex items-center gap-3 mb-3">
+                              <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
+                                {getCategoryIcon(module.category)}
+                              </div>
+                              <div className="flex-1">
+                                <Typography variant="subtitle2" className="font-semibold">
+                                  {module.displayName}
+                                </Typography>
+                                <Typography variant="caption" className="text-gray-600">
+                                  {module.description}
+                                </Typography>
+                              </div>
+                              <div className="text-right">
+                                <Typography variant="caption" className="text-gray-500">
+                                  {roleActions.length} / {module.availableActions.length} actions
+                                </Typography>
+                              </div>
+                            </div>
+
+                            {/* Action Grid */}
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                              {module.availableActions.map((action) => {
+                                const hasRolePermission = roleActions.includes(action);
+                                const hasSubscriptionAccess = subscriptionActions.includes(action);
+                                const isRestricted = !hasSubscriptionAccess;
+
+                                return (
+                                  <div
+                                    key={action}
+                                    className={`p-2 rounded border ${
+                                      hasRolePermission && hasSubscriptionAccess
+                                        ? "bg-green-50 border-green-200"
+                                        : hasRolePermission && !hasSubscriptionAccess
+                                        ? "bg-yellow-50 border-yellow-200"
+                                        : isRestricted
+                                        ? "bg-gray-50 border-gray-200"
+                                        : "bg-white border-gray-200"
+                                    }`}
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      {getActionIcon(action)}
+                                      <Typography variant="body2" className="capitalize flex-1">
+                                        {action}
+                                      </Typography>
+                                      {isRestricted && (
+                                        <LockIcon style={{ fontSize: 12 }} className="text-gray-400" />
+                                      )}
+                                    </div>
+                                    <div className="mt-1 text-xs">
+                                      {hasRolePermission && hasSubscriptionAccess && (
+                                        <span className="text-green-600 font-medium">✓ Allowed</span>
+                                      )}
+                                      {hasRolePermission && !hasSubscriptionAccess && (
+                                        <span className="text-yellow-600 font-medium">⚠ Restricted</span>
+                                      )}
+                                      {!hasRolePermission && hasSubscriptionAccess && (
+                                        <span className="text-gray-500">Available</span>
+                                      )}
+                                      {!hasRolePermission && !hasSubscriptionAccess && (
+                                        <span className="text-gray-400">Not available</span>
+                                      )}
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </CardContent>
+                        </Card>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setDialogs((prev) => ({ ...prev, permissions: false }))}>
+              Close
+            </Button>
+            <Button
+              variant="outlined"
+              startIcon={<EditIcon />}
+              onClick={() => {
+                if (viewingRole) {
+                  setDialogs((prev) => ({ ...prev, permissions: false }));
+                  openEditDialog(viewingRole);
+                }
+              }}
+            >
+              Edit Permissions
+            </Button>
+          </DialogActions>
+        </Dialog>
 
         {/* Snackbar */}
         <Snackbar
