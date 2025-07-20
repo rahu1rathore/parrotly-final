@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import RouteGuard from "./RouteGuard";
-import CrmDashboard from "../features/dashboard/crm/CrmDashboard";
+import LandingPage from "../components/LandingPage";
 import AdminDashboard from "../features/admin/pages/AdminDashboard";
 import SignIn from "../features/auth/sign-in/SignIn";
 import SignInSide from "../features/auth/sign-in-side/SignInSide";
@@ -67,20 +67,15 @@ export default function AppRoutes() {
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/demo" element={<DemoAccess />} />
 
+            {/* Landing page */}
+      <Route path="/" element={<LandingPage />} />
+
       {/* Protected routes */}
       <Route
         path="/admin/*"
         element={
           <RouteGuard requireAuth={true}>
             <AdminDashboard />
-          </RouteGuard>
-        }
-      />
-      <Route
-        path="/*"
-        element={
-          <RouteGuard requireAuth={true}>
-            <CrmDashboard />
           </RouteGuard>
         }
       />
