@@ -61,6 +61,8 @@ export interface User {
   roleName?: string;
   isActive: boolean;
   lastLogin?: string;
+  emailVerified?: boolean;
+  twoFactorEnabled?: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -69,6 +71,7 @@ export interface UserFormData {
   name: string;
   email: string;
   roleId: string;
+  organizationId: string;
   password?: string;
 }
 
