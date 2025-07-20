@@ -10,7 +10,7 @@ import Stack from "@mui/material/Stack";
 import AdminAppNavbar from "../components/AdminAppNavbar";
 import AdminHeader from "../components/AdminHeader";
 import AdminSideMenu from "../components/AdminSideMenu";
-import ModuleManagementEnhanced from "../components/ModuleManagementEnhanced";
+import ModuleManagementClean from "../components/ModuleManagementClean";
 import SubscriptionManagementEnhanced from "../components/SubscriptionManagementEnhanced";
 import OrganizationManagementEnhanced from "../components/OrganizationManagementEnhanced";
 import CustomerManagement from "../components/CustomerManagement";
@@ -233,9 +233,9 @@ export default function AdminDashboard() {
               ) : (
                 <Routes>
                   <Route index element={<AdminOverview />} />
-                  <Route
+                                    <Route
                     path="modules"
-                    element={<ModuleManagementEnhanced />}
+                    element={<ModuleManagementClean />}
                   />
                   <Route
                     path="subscriptions"
