@@ -20,6 +20,7 @@ import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
 import MessageRoundedIcon from "@mui/icons-material/MessageRounded";
 import CampaignRoundedIcon from "@mui/icons-material/CampaignRounded";
 import SmartToyRoundedIcon from "@mui/icons-material/SmartToyRounded";
+import TableViewRoundedIcon from "@mui/icons-material/TableViewRounded";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import HelpOutlineRoundedIcon from "@mui/icons-material/HelpOutlineRounded";
 import ExitToAppRoundedIcon from "@mui/icons-material/ExitToAppRounded";
@@ -74,11 +75,17 @@ const mainListItems = [
     path: "/admin/chatbot-builder",
     description: "Visual conversation flow builder",
   },
-  {
+    {
     text: "Customer Management",
     icon: <PersonRoundedIcon />,
     path: "/admin/customers",
     description: "Dynamic forms & customer data",
+  },
+  {
+    text: "DataTable Demo",
+    icon: <TableViewRoundedIcon />,
+    path: "/admin/datatable-demo",
+    description: "Responsive table component showcase",
   },
 ];
 
