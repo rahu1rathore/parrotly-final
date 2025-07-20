@@ -148,13 +148,13 @@ export default function CrmUpcomingTasks() {
                         {task.task}
                       </Typography>
                     }
-                    secondary={
-                      <Box
-                        sx={{
+                                        secondary={
+                      <span
+                        style={{
                           display: "flex",
                           alignItems: "center",
-                          gap: 1,
-                          mt: 0.5,
+                          gap: "4px",
+                          marginTop: "4px",
                         }}
                       >
                         <Chip
@@ -167,10 +167,14 @@ export default function CrmUpcomingTasks() {
                             "& .MuiChip-label": { px: 1, py: 0 },
                           }}
                         />
-                        <Typography variant="caption" color="text.secondary">
+                        <Typography
+                          variant="caption"
+                          color="text.secondary"
+                          component="span"
+                        >
                           {task.dueDate}
                         </Typography>
-                      </Box>
+                      </span>
                     }
                   />
                 </ListItemButton>
