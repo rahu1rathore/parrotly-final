@@ -64,6 +64,7 @@ import {
   AddCircle as AddFieldIcon,
   RemoveCircle as RemoveFieldIcon,
 } from "@mui/icons-material";
+import { DataTable, TableColumn } from "../../../components/common/DataTable";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -948,138 +949,94 @@ const CustomerManagement: React.FC<CustomerManagementProps> = ({
               </CardContent>
             </Card>
 
-            {/* Dynamic Customers Table */}
-            <Card sx={{ boxShadow: 1 }}>
-              <TableContainer>
-                <Table>
-                  <TableHead>
-                    <TableRow sx={{ backgroundColor: "grey.50" }}>
-                      {getTableColumns().map((column) => (
-                        <TableCell key={column.id} sx={{ fontWeight: 600 }}>
-                          {column.label}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {loading ? (
-                      <TableRow>
-                        <TableCell
-                          colSpan={getTableColumns().length}
-                          align="center"
-                          sx={{ py: 4 }}
-                        >
-                          <Typography>Loading customers...</Typography>
-                        </TableCell>
-                      </TableRow>
-                    ) : customers.length === 0 ? (
-                      <TableRow>
-                        <TableCell
-                          colSpan={getTableColumns().length}
-                          align="center"
-                          sx={{ py: 4 }}
-                        >
-                          <Typography variant="body2" color="text.secondary">
-                            {Object.values(filters).some(
-                              (f) => f !== "all" && f !== "",
-                            )
-                              ? "No customers found matching your criteria"
-                              : "No customers available. Add your first customer to get started."}
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
-                    ) : (
-                      customers.map((customer) => {
-                        const columns = getTableColumns();
-                        return (
-                          <TableRow
-                            key={customer.id}
-                            hover
-                            sx={{ "&:hover": { backgroundColor: "grey.50" } }}
-                          >
-                            {columns.map((column) => {
-                              if (column.id === "actions") {
-                                return (
-                                  <TableCell key={column.id}>
-                                    <IconButton
-                                      size="small"
-                                      onClick={(e) =>
-                                        handleActionClick(e, customer)
-                                      }
-                                      sx={{ color: "text.secondary" }}
-                                    >
-                                      <MoreVertIcon />
-                                    </IconButton>
-                                  </TableCell>
-                                );
-                              } else if (column.id === "phone_number") {
-                                return (
-                                  <TableCell key={column.id}>
-                                    <Stack
-                                      direction="row"
-                                      alignItems="center"
-                                      spacing={1}
-                                    >
-                                      <Avatar
-                                        sx={{
-                                          width: 32,
-                                          height: 32,
-                                          backgroundColor: "primary.main",
-                                        }}
-                                      >
-                                        <PersonIcon sx={{ fontSize: 18 }} />
-                                      </Avatar>
-                                      <Typography
-                                        variant="body2"
-                                        fontWeight={500}
-                                      >
-                                        {customer.phone_number}
-                                      </Typography>
-                                    </Stack>
-                                  </TableCell>
-                                );
-                              } else if (column.id === "organization_name") {
-                                return (
-                                  <TableCell key={column.id}>
-                                    <Typography variant="body2">
-                                      {customer.organization_name || "-"}
-                                    </Typography>
-                                  </TableCell>
-                                );
-                              } else {
-                                // Dynamic field
-                                const value = customer.data[column.id];
-                                return (
-                                  <TableCell key={column.id}>
-                                    {renderCellValue(
-                                      value,
-                                      column.type || "text",
-                                    )}
-                                  </TableCell>
-                                );
-                              }
-                            })}
-                          </TableRow>
-                        );
-                      })
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                        {/* Modern DataTable */}
+            <DataTable
+              columns={getTableColumns()}
+              data={customers}
+              loading={loading}
+              searchable={false} // We have our own search
+              sortable={true}
+              actions={[
+                {
+                  label: 'View',
+                  icon: <ViewIcon className="w-4 h-4" />,
+                  onClick: (row) => {
+                    setViewingCustomer(row);
+                    setViewDialogOpen(true);
+                  },
+                  className: 'text-gray-600 hover:text-blue-600'
+                },
+                {
+                  label: 'Edit',
+                  icon: <EditIcon className="w-4 h-4" />,
+                  onClick: (row) => {
+                    setEditingCustomer(row);
+                    setFormData({
+                      organization_id: row.organization_id,
+                      form_configuration_id: row.form_configuration_id,
+                      phone_number: row.phone_number,
+                      data: row.data,
+                    });
+                    setEditDialogOpen(true);
+                  },
+                  className: 'text-gray-600 hover:text-yellow-600'
+                },
+                {
+                  label: 'Delete',
+                  icon: <DeleteIcon className="w-4 h-4" />,
+                  onClick: (row) => {
+                    setDeletingCustomer(row);
+                    setDeleteDialogOpen(true);
+                  },
+                  className: 'text-gray-600 hover:text-red-600'
+                }
+              ]}
+              onAdd={() => setCreateDialogOpen(true)}
+              onDownload={() => {
+                // Generate CSV download
+                const csvData = customers.map(customer => {
+                  const row = {
+                    phone_number: customer.phone_number,
+                    organization: customer.organization_name,
+                    ...customer.data
+                  };
+                  return Object.values(row).join(',');
+                }).join('\n');
 
-              {/* Pagination */}
-              <TablePagination
-                component="div"
-                count={pagination.total}
-                page={pagination.page}
-                onPageChange={handlePageChange}
-                rowsPerPage={pagination.rowsPerPage}
-                onRowsPerPageChange={handleRowsPerPageChange}
-                rowsPerPageOptions={[5, 10, 25, 50]}
-                showFirstButton
-                showLastButton
-              />
-            </Card>
+                const headers = getTableColumns()
+                  .filter(col => col.id !== 'actions')
+                  .map(col => col.label)
+                  .join(',');
+
+                const csvContent = `${headers}\n${csvData}`;
+                const blob = new Blob([csvContent], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'customers.csv';
+                a.click();
+                window.URL.revokeObjectURL(url);
+              }}
+              addButtonText="+ Add Customer"
+              searchPlaceholder="Search customers..."
+              sortOptions={[
+                { label: 'Phone Number', value: 'phone_number' },
+                { label: 'Organization', value: 'organization_name' },
+                ...selectedFormConfig?.fields.map(field => ({
+                  label: field.label,
+                  value: field.name
+                })) || []
+              ]}
+              className="shadow-lg"
+              rowClassName={(row) =>
+                row.status === 'active' ? 'bg-green-50' : 'bg-white'
+              }
+              emptyStateMessage={Object.values(filters).some(
+                (f) => f !== "all" && f !== "",
+              )
+                ? "No customers found matching your criteria"
+                : "No customers available. Add your first customer to get started."}
+            />
           </>
         )}
 
