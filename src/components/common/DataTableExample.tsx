@@ -101,6 +101,37 @@ const sampleCustomers = [
     age: 61,
     country: 'Togo',
     status: 'Verified'
+  },
+  // Add more customers to test scrolling
+  {
+    id: '200',
+    avatar: 'https://ui-avatars.com/api/?name=John+Doe&background=6366f1&color=fff',
+    userName: 'John Doe',
+    email: 'john@example.com',
+    contact: '+1 (555) 123-4567',
+    age: 28,
+    country: 'United States',
+    status: 'Verified'
+  },
+  {
+    id: '201',
+    avatar: 'https://ui-avatars.com/api/?name=Jane+Smith&background=f59e0b&color=fff',
+    userName: 'Jane Smith',
+    email: 'jane@example.com',
+    contact: '+1 (555) 987-6543',
+    age: 35,
+    country: 'Canada',
+    status: 'Pending'
+  },
+  {
+    id: '202',
+    avatar: 'https://ui-avatars.com/api/?name=Bob+Wilson&background=10b981&color=fff',
+    userName: 'Bob Wilson',
+    email: 'bob@example.com',
+    contact: '+1 (555) 456-7890',
+    age: 41,
+    country: 'United Kingdom',
+    status: 'Verified'
   }
 ];
 
@@ -108,6 +139,7 @@ const DataTableExample: React.FC = () => {
   // State for external controls
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('');
+  const [selectedRows, setSelectedRows] = useState<string[]>([]);
 
   // Define columns matching the reference image
   const columns: TableColumn[] = [
@@ -213,6 +245,31 @@ const DataTableExample: React.FC = () => {
     window.URL.revokeObjectURL(url);
   };
 
+  const handleBulkAction = (action: string) => {
+    console.log(`Bulk ${action} on:`, selectedRows);
+    // Implement bulk actions here
+    if (selectedRows.length === 0) {
+      alert('Please select some rows first');
+      return;
+    }
+    
+    switch (action) {
+      case 'delete':
+        if (window.confirm(`Are you sure you want to delete ${selectedRows.length} customers?`)) {
+          console.log('Bulk delete confirmed');
+          setSelectedRows([]);
+        }
+        break;
+      case 'export':
+        console.log('Bulk export');
+        break;
+      case 'verify':
+        console.log('Bulk verify');
+        setSelectedRows([]);
+        break;
+    }
+  };
+
   const customActions = [
     {
       label: 'View Profile',
@@ -239,7 +296,7 @@ const DataTableExample: React.FC = () => {
   ];
 
   return (
-    <div className="p-6 bg-gray-50">
+    <div className="p-6 bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Separated Top Controls */}
         <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
@@ -304,29 +361,73 @@ const DataTableExample: React.FC = () => {
           </div>
         </div>
 
-        {/* DataTable without top controls */}
-        <DataTable
-          columns={columns}
-          data={sampleCustomers}
-          searchable={false} // We handle search externally
-          sortable={true}
-          pagination={true}
-          pageSize={5}
-          pageSizeOptions={[5, 10, 25, 50]}
-          actions={customActions}
-          showTopControls={false} // Hide built-in controls
-          searchTerm={searchTerm} // Pass external search state
-          onSearchChange={setSearchTerm}
-          sortBy={sortBy} // Pass external sort state  
-          onSortChange={setSortBy}
-          className="shadow-lg"
-          rowClassName={(row) => 
-            row.status === 'Verified' ? 'bg-green-50' : 
-            row.status === 'Rejected' ? 'bg-red-50' : 
-            'bg-white'
-          }
-          emptyStateMessage="No customers found. Try adjusting your search or filters."
-        />
+        {/* Bulk Actions Bar - Show when rows are selected */}
+        {selectedRows.length > 0 && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="flex items-center justify-between">
+              <span className="text-blue-800 font-medium">
+                {selectedRows.length} customer{selectedRows.length === 1 ? '' : 's'} selected
+              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => handleBulkAction('verify')}
+                  className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm font-medium transition-colors duration-200"
+                >
+                  Verify Selected
+                </button>
+                <button
+                  onClick={() => handleBulkAction('export')}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm font-medium transition-colors duration-200"
+                >
+                  Export Selected
+                </button>
+                <button
+                  onClick={() => handleBulkAction('delete')}
+                  className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm font-medium transition-colors duration-200"
+                >
+                  Delete Selected
+                </button>
+                <button
+                  onClick={() => setSelectedRows([])}
+                  className="text-gray-500 hover:text-gray-700 px-2 py-1 text-sm transition-colors duration-200"
+                >
+                  Clear Selection
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* DataTable with fixed container height and proper scrolling */}
+        <div className="bg-white rounded-lg shadow-lg">
+          <DataTable
+            columns={columns}
+            data={sampleCustomers}
+            searchable={false} // We handle search externally
+            sortable={true}
+            pagination={true}
+            pageSize={5}
+            pageSizeOptions={[5, 10, 25, 50]}
+            actions={customActions}
+            showTopControls={false} // Hide built-in controls
+            searchTerm={searchTerm} // Pass external search state
+            onSearchChange={setSearchTerm}
+            sortBy={sortBy} // Pass external sort state  
+            onSortChange={setSortBy}
+            // Checkbox selection
+            showCheckboxes={true}
+            selectedRows={selectedRows}
+            onSelectionChange={setSelectedRows}
+            rowIdField="id"
+            className=""
+            rowClassName={(row) => 
+              row.status === 'Verified' ? '' : 
+              row.status === 'Rejected' ? '' : 
+              ''
+            }
+            emptyStateMessage="No customers found. Try adjusting your search or filters."
+          />
+        </div>
       </div>
     </div>
   );
