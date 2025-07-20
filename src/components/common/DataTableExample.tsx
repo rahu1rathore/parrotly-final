@@ -230,9 +230,9 @@ const DataTableExample: React.FC = () => {
     }
   ];
 
-    return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      <div className="max-w-7xl mx-auto">
+      return (
+    <div className="p-6 bg-gray-50 h-full">
+      <div className="max-w-7xl mx-auto h-full">
         <DataTable
           columns={columns}
           data={sampleCustomers}
@@ -244,7 +244,7 @@ const DataTableExample: React.FC = () => {
           addButtonText="+ Add Customer"
           searchPlaceholder="Search 200 records..."
           sortOptions={sortOptions}
-          className="shadow-lg"
+                    className="shadow-lg h-full"
           rowClassName={(row) => 
             row.status === 'Verified' ? 'bg-green-50' : 
             row.status === 'Rejected' ? 'bg-red-50' : 
