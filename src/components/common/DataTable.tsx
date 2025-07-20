@@ -53,6 +53,11 @@ export interface DataTableProps {
   onSearchChange?: (value: string) => void;
   sortBy?: string;
   onSortChange?: (value: string) => void;
+  // Checkbox selection
+  showCheckboxes?: boolean;
+  selectedRows?: string[];
+  onSelectionChange?: (selectedIds: string[]) => void;
+  rowIdField?: string;
 }
 
 export const DataTable: React.FC<DataTableProps> = ({
