@@ -71,7 +71,15 @@ export default function AppRoutes() {
             {/* Landing page */}
       <Route path="/" element={<LandingPage />} />
 
-      {/* Protected routes */}
+            {/* Protected routes */}
+      <Route
+        path="/crm/*"
+        element={
+          <RouteGuard requireAuth={true}>
+            <CrmDashboard />
+          </RouteGuard>
+        }
+      />
       <Route
         path="/admin/*"
         element={
